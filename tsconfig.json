@@ -1,43 +1,53 @@
 {
+	"version": "2.1.4",
+	"compileOnSave": true,
 	"compilerOptions": {
-		"outDir": "dist",
-		"sourceMap": true,
-		"module": "commonjs",
 		"target": "es6",
-		"jsx": "react",
-		"emitDecoratorMetadata": true,
-		"experimentalDecorators": true,
+		"module": "commonjs",
 		"moduleResolution": "node",
-		"esModuleInterop": true,
-		"noImplicitAny": false,
 		"allowSyntheticDefaultImports": true,
+		"skipDefaultLibCheck": true,
+		"experimentalDecorators": true,
+		"jsx": "react",
 		"allowJs": true,
-		"noUnusedParameters": false,
-		"noUnusedLocals": false,
+		"checkJs": false,
+		"sourceMap": true,
+		// "noImplicitAny": true,
+		// "noUnusedLocals": true,
+		// "noUnusedParameters": true,
+		// "strictNullChecks": true,
+		"pretty": true,
+		"downlevelIteration": true,
+		"emitDecoratorMetadata": true,
+		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"resolveJsonModule": true,
-		"baseUrl": ".",
-		"paths": {
-			"*": [
-				"node_modules/*",
-				"src/typings/*",
-			]
-		},
-		"types": [
-			"react",
-			"jest",
-			"node"
-		]
+		"outDir": "dist",
+		"rootDirs": [
+			"src/client",
+			"src/server",
+			"config"
+		],
+		"preserveConstEnums": true,
+		"removeComments": true,
+		"importHelpers": false,
+		"typeRoots": [
+			"node_modules/json-d-ts",
+			"node_modules/@types",
+			"./types"
+		],
 	},
-	"types": [
-		"react",
-		"jest",
-		"node"
+	"exclude": [
+		"node_modules",
+		"src/client/**/*.test.tsx",
+		"src/server/**/*.test.tsx"
 	],
 	"include": [
-		"src/**/*"
+		"src/**/*",
 	],
-	"exclude": [
-		"node_modules"
+	"files": [
+		"./types/index.d.ts",
+		"types/express-flash/index.d.ts",
+		"types/react-loadable/webpack/index.d.ts"
 	]
 }

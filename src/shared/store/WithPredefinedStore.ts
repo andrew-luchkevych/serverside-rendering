@@ -1,11 +1,8 @@
-import { Store, AnyAction } from "redux";
-import { PersistedState, Persistor } from "redux-persist";
+import { ReduxStore, ReduxPersistor } from ".";
 export interface WithPredefinedStore {
 	predefinedStore?: {
-		store: Store<PersistedState, AnyAction> & {
-			dispatch: {};
-		};
-		persistor: Persistor;
+		store: ReduxStore;
+		persistor: ReduxPersistor;
 	};
 }
 

@@ -1,8 +1,49 @@
-import * as React from "react";
-import Boot from "./boot";
-import { WithPredefinedStore } from "../shared/store/WithPredefinedStore";
-export interface AppProps extends WithPredefinedStore { }
-const App = (props: AppProps) => (
-	<Boot {...props} />
-);
-export default App;
+import * as React from 'react';
+import { hydrate } from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import Loadable from "react-loadable";
+import configureStore from './redux/configureStore';
+import App from './App';
+
+declare global {
+	interface IWindow {
+		__INITIAL_STATE__: any;
+		main: any;
+	}
+}
+
+window.__INITIAL_STATE__ = window.__INITIAL_STATE__;
+const initaliState = window.__INITIAL_STATE__;
+delete window.__INITIAL_STATE__;
+const store = configureStore(initaliState);
+
+const renderApp = (Comp?: any) => {
+	return hydrate(
+		<Provider store={store}>
+			<BrowserRouter>
+				<Comp />
+			</BrowserRouter>
+		</Provider>,
+		document.getElementById('app'),
+	);
+};
+
+if ((module as any).hot) {
+	(window as IWindow).main = () => {
+		Loadable.preloadReady().then(() => {
+			renderApp(App);
+		});
+	};
+
+	(module as any).hot.accept('./App', () => {
+		const NewApp = require('./App').default;
+		renderApp(NewApp);
+	});
+} else {
+	(window as IWindow).main = () => {
+		Loadable.preloadReady().then(() => {
+			renderApp(App);
+		});
+	};
+}

@@ -1,9 +1,15 @@
 import bcrypt from "bcrypt-nodejs";
 import crypto from "crypto";
 import mongoose from "mongoose";
-import { User as IUser } from "../../types/User";
-export { AuthToken } from "../../types/Auth";
+import { User as IUser } from "../../shared/types/User";
+import { AuthToken } from "../types/Auth";
+export { AuthToken } from "../types/Auth";
 export type UserModel = mongoose.Document & IUser & {
+	password: string;
+	passwordResetToken: string;
+	passwordResetExpires: Date;
+	facebook: string;
+	tokens: Array<AuthToken>;
 	comparePassword: comparePasswordFunction,
 	gravatar: (size: number) => string;
 };
