@@ -17,13 +17,12 @@ import webpack from "webpack";
 import webpackDevMiddleware from "webpack-dev-middleware";
 import webpackHotMiddleware from "webpack-hot-middleware";
 import webpackDev from "../../config/webpack.dev.js";
-import Routes from "./handlerDev";
-import ProdRoutes from "./handlerProd";
-
+import RequestWithStore from "./types/RequestWithStore";
+import configureStore from "../client/redux/configureStore";
+import populateWithRoutes from "./routes/index";
 dotenv.config({
 	path: ".env.server." + (process.env.NODE_ENV === "production" ? "production" : "development"),
 });
-console.log({ env: process.env });
 const normalizePort = (port: string) => parseInt(port, 10);
 const PORT = normalizePort(process.env.PORT || "3000");
 const isProd = process.env.NODE_ENV === "production";
@@ -84,6 +83,15 @@ app.use((req: Request, _res: Response, next) => {
 	}
 	next();
 });
+app.use((req: Request, _res: Response, next) => {
+	if (!req.path.match(/^\/api/)) {
+		(req as RequestWithStore).reduxStore = configureStore();
+	}
+	next();
+});
+
+populateWithRoutes(app);
+
 process.stdin.resume(); // so the program will not close instantly
 
 function exitHandler(options: any, err: any) {
@@ -122,14 +130,11 @@ if (!isProd && !isServer) {
 	};
 	app.use(webpackDevMiddleware(compiler, options));
 	app.use(webpackHotMiddleware(compiler));
-	app.use("/", Routes);
 	Loadable.preloadAll().then(() => {
 		app.listen(PORT, () => process.stdout.write(`Server started with port: ${PORT} \n`));
 	});
 } else {
 	app.use(express.static(path.join(__dirname, "..", "..", "dist"), { redirect: false }));
-	app.use("/", ProdRoutes);
-
 	Loadable.preloadAll().then(() => {
 		app.listen(PORT, () => process.stdout.write(`Started production with port: ${PORT} \n`));
 	});
