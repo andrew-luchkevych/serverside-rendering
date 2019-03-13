@@ -14,7 +14,7 @@ declare global {
 	}
 }
 
-export default ({ content, data, bundles = [], helmet, styles = '' }: IInfo) => {
+export default ({ content, data, bundles = [], helmet, styles = "" }: IInfo) => {
 	return `<!doctype html>
     <html lang="en">
     <head>
@@ -24,15 +24,15 @@ export default ({ content, data, bundles = [], helmet, styles = '' }: IInfo) => 
       <meta name="msapplication-config" content="none">
       ${helmet.title.toString()}
       ${helmet.meta.toString()}
-      ${styles}
+      <style>${styles}</style>
     </head>
     <body ${helmet.bodyAttributes.toString()}>
       <div id="app">${content}</div>
       <script>window.__INITIAL_STATE__ = ${serialize(data, { isJSON: true })}</script>
       <script src="/js/vendor.js"></script>
       <script src="/js/client.js"></script>
-      ${bundles.map((bundle: any) => (bundle ? `<script src="/${bundle.file}"></script>` : '')).join('\n')}
-      ${'<script>window.main();</script>'}
+      ${bundles.map((bundle: any) => (bundle ? `<script src="/${bundle.file}"></script>` : "")).join("\n")}
+      <script>window.main();</script>
       <link href="/css/global.css" rel="stylesheet" />
     </body>
     </html>`;

@@ -11,6 +11,7 @@ const plugins = () => {
 	const array = [
 		new webpack.optimize.OccurrenceOrderPlugin(true),
 		new CopyWebpackPlugin([
+			{ from: 'static/fonts/', to: `${distPath}/fonts/` },
 			{ from: 'static/css/*', to: `${distPath}/css/[name].[ext]` },
 			{ from: 'static/images/*', to: `${distPath}/images/[name].[ext]` },
 		]),

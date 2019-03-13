@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import Loadable from "react-loadable";
 
 function loading(props: any) {
@@ -14,35 +14,30 @@ function loading(props: any) {
 
 const Error404 = Loadable({
 	loading,
-	loader: () => import('./components/errors/Error404'),
+	loader: () => import("./components/errors/Error404"),
 	delay: 300,
 });
 
-const About = Loadable({
-	loading,
-	loader: () => import('./pages/about/About'),
-	delay: 300,
-});
+// const About = Loadable({
+// 	loading,
+// 	loader: () => import("./pages/about/About"),
+// 	delay: 300,
+// });
 
-const List = Loadable({
+const Home = Loadable({
 	loading,
-	loader: () => import('./pages/list/ListPage'),
+	loader: () => import("./pages/Home"),
 	delay: 300,
 });
 
 const routes = [
 	{
-		path: '/',
+		path: "/",
 		exact: true,
-		component: List,
+		component: Home,
 	},
 	{
-		path: '/about',
-		exact: true,
-		component: About,
-	},
-	{
-		path: '*',
+		path: "*",
 		component: Error404,
 		status: 404,
 	},

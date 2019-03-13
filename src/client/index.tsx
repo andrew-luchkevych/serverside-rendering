@@ -1,31 +1,31 @@
-import * as React from 'react';
-import { hydrate } from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
+import * as React from "react";
+import { hydrate } from "react-dom";
+import { BrowserRouter } from "react-router-dom";
+import { MuiThemeProvider } from "@material-ui/core/styles";
+import { Provider } from "react-redux";
 import Loadable from "react-loadable";
-import configureStore from './redux/configureStore';
-import App from './App';
-
+import configureStore from "./redux/configureStore";
+import App from "./App";
+import theme from "./theme";
 declare global {
 	interface IWindow {
 		__INITIAL_STATE__: any;
 		main: any;
 	}
 }
-
-window.__INITIAL_STATE__ = window.__INITIAL_STATE__;
 const initaliState = window.__INITIAL_STATE__;
 delete window.__INITIAL_STATE__;
 const store = configureStore(initaliState);
-
 const renderApp = (Comp?: any) => {
 	return hydrate(
-		<Provider store={store}>
-			<BrowserRouter>
-				<Comp />
-			</BrowserRouter>
-		</Provider>,
-		document.getElementById('app'),
+		<MuiThemeProvider theme={theme}>
+			<Provider store={store}>
+				<BrowserRouter>
+					<Comp />
+				</BrowserRouter>
+			</Provider>
+		</MuiThemeProvider>,
+		document.getElementById("app"),
 	);
 };
 
@@ -36,8 +36,8 @@ if ((module as any).hot) {
 		});
 	};
 
-	(module as any).hot.accept('./App', () => {
-		const NewApp = require('./App').default;
+	(module as any).hot.accept("./App", () => {
+		const NewApp = require("./App").default;
 		renderApp(NewApp);
 	});
 } else {
