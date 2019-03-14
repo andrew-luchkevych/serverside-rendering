@@ -1,4 +1,5 @@
 import * as React from "react";
+import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Hidden from "@material-ui/core/Hidden";
@@ -9,9 +10,11 @@ import Header from "./Header";
 import Navigator from "./Navigator";
 export interface RootLayoutStyleProps {
 	classes: {
-		root: string,
-		drawer: string,
-		appContent: string,
+		root: string;
+		nav: string;
+		navHidden: string;
+		drawer: string;
+		appContent: string;
 	};
 }
 export interface RootLayoutProps extends RootLayoutStyleProps {
@@ -20,28 +23,34 @@ export interface RootLayoutProps extends RootLayoutStyleProps {
 }
 
 export interface RootLayoutState {
-	showMenu: boolean;
+	showDrawer: boolean;
 }
 
 export class RootLayout extends React.Component<RootLayoutProps, RootLayoutState> {
-	state = { showMenu: false };
-	toggleMenu = () => this.setState(({ showMenu }) => ({ showMenu: !showMenu }));
+	state = { showDrawer: false };
+	toggleMenu = () => this.setState(({ showDrawer }) => ({ showDrawer: !showDrawer }));
 	render() {
-		const { classes, children, title } = this.props;
+		const { props: { classes, children, title }, state: { showDrawer } } = this;
 		return (
 			<div className={classes.root}>
 				<CssBaseline />
-				<nav className={classes.drawer}>
+				<nav className={classNames(classes.nav, { [classes.navHidden]: !showDrawer })}>
 					<Hidden smUp implementation="js">
 						<Navigator
 							PaperProps={{ style: { width: drawerWidth } }}
-							open={this.state.showMenu}
-							onClose={this.toggleMenu}
 							variant="temporary"
+							open={showDrawer}
+							onClose={this.toggleMenu}
 						/>
 					</Hidden>
 					<Hidden xsDown implementation="css">
-						<Navigator PaperProps={{ style: { width: drawerWidth } }} />
+						<Navigator
+							PaperProps={{ style: { width: drawerWidth } }}
+							open={this.state.showDrawer}
+							onClose={this.toggleMenu}
+							className={classes.drawer}
+							variant="persistent" anchor="left"
+						/>
 					</Hidden>
 				</nav>
 				<div id="root-content" className={classes.appContent}>

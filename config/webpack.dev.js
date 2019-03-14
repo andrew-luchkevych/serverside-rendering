@@ -35,7 +35,7 @@ const plugins = () => {
 
 module.exports = {
 	mode: 'development',
-	devtool: 'eval', // eval
+	devtool: 'inline-source-map', // eval
 	entry: {
 		client: ['webpack-hot-middleware/client?name=client', './src/client/index'],
 		vendor: ['react', 'react-dom', 'react-router-dom', 'react-redux', 'react-router', 'redux'],
@@ -79,4 +79,5 @@ module.exports = {
 		'sinon-restore': 'empty',
 		child_process: 'empty',
 	},
+	watch: true,
 };

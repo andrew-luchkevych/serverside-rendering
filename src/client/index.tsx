@@ -4,19 +4,21 @@ import { BrowserRouter } from "react-router-dom";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 import { Provider } from "react-redux";
 import Loadable from "react-loadable";
-import configureStore from "./redux/configureStore";
 import App from "./App";
 import theme from "./theme";
+import configureStore from "../shared/redux/configureStore";
 declare global {
 	interface IWindow {
 		__INITIAL_STATE__: any;
 		main: any;
 	}
 }
-const initaliState = window.__INITIAL_STATE__;
+const initialState = { ...window.__INITIAL_STATE__ };
 delete window.__INITIAL_STATE__;
-const store = configureStore(initaliState);
+console.log({ initialState });
+const store = configureStore(initialState);
 const renderApp = (Comp?: any) => {
+	console.log("hydrating");
 	return hydrate(
 		<MuiThemeProvider theme={theme}>
 			<Provider store={store}>

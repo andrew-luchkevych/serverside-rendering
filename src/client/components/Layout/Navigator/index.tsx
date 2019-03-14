@@ -6,7 +6,7 @@ import PrimaryItem from "./primaryItem";
 import menuItems from "./menu";
 const Navigator = (props: DrawerProps) => {
 	return (
-		<Drawer variant="permanent" {...props}>
+		<Drawer {...props}>
 			<List disablePadding>
 				<MenuTitle />
 				{

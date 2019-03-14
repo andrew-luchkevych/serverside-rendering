@@ -18,7 +18,6 @@ import webpackDevMiddleware from "webpack-dev-middleware";
 import webpackHotMiddleware from "webpack-hot-middleware";
 import webpackDev from "../../config/webpack.dev.js";
 import RequestWithStore from "./types/RequestWithStore";
-import configureStore from "../client/redux/configureStore";
 import populateWithRoutes from "./routes/index";
 dotenv.config({
 	path: ".env.server." + (process.env.NODE_ENV === "production" ? "production" : "development"),
@@ -67,26 +66,6 @@ app.use(lusca.xframe("SAMEORIGIN"));
 app.use(lusca.xssProtection(true));
 app.use((req, res, next) => {
 	res.locals.user = req.user;
-	next();
-});
-app.use((req: Request, _res: Response, next) => {
-	// After successful login, redirect back to the intended page
-	if (!req.user &&
-		req.path !== "/login" &&
-		req.path !== "/signup" &&
-		!req.path.match(/^\/auth/) &&
-		!req.path.match(/\./)
-	) {
-		req.session.returnTo = req.path;
-	} else if (req.user && req.path === "/account") {
-		req.session.returnTo = req.path;
-	}
-	next();
-});
-app.use((req: Request, _res: Response, next) => {
-	if (!req.path.match(/^\/api/)) {
-		(req as RequestWithStore).reduxStore = configureStore();
-	}
 	next();
 });
 

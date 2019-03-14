@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt-nodejs";
 import crypto from "crypto";
 import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
 import { User as IUser } from "../../shared/types/User";
 import { AuthToken } from "../types/Auth";
 export { AuthToken } from "../types/Auth";
@@ -11,11 +12,13 @@ export type UserModel = mongoose.Document & IUser & {
 	facebook: string;
 	tokens: Array<AuthToken>;
 	comparePassword: comparePasswordFunction,
+	toAuthJSON: toAuthJSONFunction;
+	generateJWT: generateJWTFunction;
 	gravatar: (size: number) => string;
 };
-
-type comparePasswordFunction = (candidatePassword: string, cb: (err: any, isMatch: any) => {}) => void;
-
+type generateJWTFunction = () => string;
+type comparePasswordFunction = (candidatePassword: string, cb: (err: any, isMatch: any) => any) => void;
+type toAuthJSONFunction = () => { id: string; email: string; token: string };
 const userSchema = new mongoose.Schema({
 	email: { type: String, unique: true },
 	password: String,
@@ -51,14 +54,32 @@ userSchema.pre("save", function save(next) {
 	});
 });
 
-const comparePassword: comparePasswordFunction = function (candidatePassword, cb) {
+const comparePassword: comparePasswordFunction = function (candidatePassword, cb): any {
 	bcrypt.compare(candidatePassword, this.password, (err: mongoose.Error, isMatch: boolean) => {
 		cb(err, isMatch);
 	});
 };
 
-userSchema.methods.comparePassword = comparePassword;
+const generateJWT: generateJWTFunction = function () {
+	const user = this as UserModel;
+	return jwt.sign({
+		email: user.email,
+		id: user._id,
+	}, "secret", { expiresIn: "1d" });
+};
 
+const toAuthJSON: toAuthJSONFunction = function () {
+	const user = this as UserModel;
+	return {
+		id: user._id,
+		email: user.email,
+		token: user.generateJWT(),
+	};
+};
+
+userSchema.methods.generateJWT = generateJWT;
+userSchema.methods.comparePassword = comparePassword;
+userSchema.methods.toAuthJSON = toAuthJSON;
 /**
  * Helper method for getting user's gravatar.
  */

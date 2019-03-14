@@ -1,6 +1,7 @@
 import { createMuiTheme } from "@material-ui/core/styles";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
 export const drawerWidth = 256;
+const drawerBg = "#18202c";
 const sharedTheme = createMuiTheme({
 	typography: {
 		useNextVariants: true,
@@ -27,7 +28,7 @@ export const theme = createMuiTheme({
 	overrides: {
 		MuiDrawer: {
 			paper: {
-				backgroundColor: "#18202c",
+				backgroundColor: drawerBg,
 			},
 		},
 		MuiButton: {
@@ -122,11 +123,21 @@ export const styles = {
 		display: "flex",
 		minHeight: "100vh",
 	},
+	nav: <CSSProperties>{
+		width: drawerWidth,
+		overflowX: "hidden",
+		backgroundColor: drawerBg,
+		flexShrink: 0,
+		// transition: theme.transitions.create(["width"], {
+		// 	easing: theme.transitions.easing.sharp,
+		// 	duration: theme.transitions.duration.leavingScreen,
+		// }),
+	},
+	navHidden: <CSSProperties>{
+		width: 0,
+	},
 	drawer: <CSSProperties>{
-		[theme.breakpoints.up("sm")]: {
-			width: drawerWidth,
-			flexShrink: 0,
-		},
+		width: drawerWidth,
 	},
 	appContent: <CSSProperties>{
 		flex: 1,

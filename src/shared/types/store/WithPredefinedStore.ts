@@ -1,8 +1,7 @@
-import { ReduxStore, ReduxPersistor } from ".";
+import { ReduxStore } from ".";
 export interface WithPredefinedStore {
 	predefinedStore?: {
 		store: ReduxStore;
-		persistor: ReduxPersistor;
 	};
 }
 

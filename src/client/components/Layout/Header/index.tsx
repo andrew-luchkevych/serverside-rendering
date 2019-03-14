@@ -33,87 +33,39 @@ export interface HeaderProps extends HeaderStylesProps {
 function Header(props: HeaderProps) {
 	const { classes, onDrawerToggle } = props;
 	return (
-		<React.Fragment>
-			<AppBar color="primary" position="sticky" elevation={0}>
-				<Toolbar>
-					<Grid container spacing={8} alignItems="center">
-						<Hidden smUp>
-							<Grid item>
-								<IconButton
-									color="inherit"
-									aria-label="Open drawer"
-									onClick={onDrawerToggle}
-									className={classes.menuButton}
-								>
-									<MenuIcon />
-								</IconButton>
-							</Grid>
-						</Hidden>
-						<Grid item xs />
-						<Grid item>
-							<Typography className={classes.link} component="a">
-								Go to docs
+		<AppBar color="primary" position="sticky" elevation={0} style={{ minWidth: 320 }}>
+			<Toolbar>
+				<Grid container spacing={8} alignItems="center">
+					<Grid item>
+						<IconButton
+							color="inherit"
+							aria-label="Open drawer"
+							onClick={onDrawerToggle}
+							className={classes.menuButton}
+						>
+							<MenuIcon />
+						</IconButton>
+					</Grid>
+					<Grid item xs>
+						<Typography color="inherit" variant="h6">
+							Authentication
               				</Typography>
-						</Grid>
-						<Grid item>
-							<Tooltip title="Alerts • No alters">
-								<IconButton color="inherit">
-									<NotificationsIcon />
-								</IconButton>
-							</Tooltip>
-						</Grid>
-						<Grid item>
-							<IconButton color="inherit" className={classes.iconButtonAvatar}>
-								<Avatar className={classes.avatar} src="/static/images/avatar/1.jpg" />
+					</Grid>
+					<Grid item>
+						<Tooltip title="Alerts • No alters">
+							<IconButton color="inherit">
+								<NotificationsIcon />
 							</IconButton>
-						</Grid>
+						</Tooltip>
 					</Grid>
-				</Toolbar>
-			</AppBar>
-			<AppBar
-				component="div"
-				className={classes.secondaryBar}
-				color="primary"
-				position="static"
-				elevation={0}
-			>
-				<Toolbar>
-					<Grid container alignItems="center" spacing={8}>
-						<Grid item xs>
-							<Typography color="inherit" variant="h5">
-								Authentication
-              </Typography>
-						</Grid>
-						<Grid item>
-							<Button className={classes.button} variant="outlined" color="inherit" size="small">
-								Web setup
-              </Button>
-						</Grid>
-						<Grid item>
-							<Tooltip title="Help">
-								<IconButton color="inherit">
-									<HelpIcon />
-								</IconButton>
-							</Tooltip>
-						</Grid>
+					<Grid item>
+						<IconButton color="inherit" className={classes.iconButtonAvatar}>
+							<Avatar className={classes.avatar} src="/static/images/avatar/1.jpg" />
+						</IconButton>
 					</Grid>
-				</Toolbar>
-			</AppBar>
-			<AppBar
-				component="div"
-				className={classes.secondaryBar}
-				color="primary"
-				position="static"
-				elevation={0}
-			>
-				<Tabs value={0} textColor="inherit">
-					<Tab textColor="inherit" label="Users" />
-					<Tab textColor="inherit" label="Sign-in method" />
-					<Tab textColor="inherit" label="Templates" />
-					<Tab textColor="inherit" label="Usage" />
-				</Tabs>
-			</AppBar>
-		</React.Fragment>
+				</Grid>
+			</Toolbar>
+		</AppBar>
 	);
 }
 

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 
 export const withError = (WrappedComponent: any) => {
 	return class ErrorBoundary extends React.Component<{}, any> {
@@ -19,7 +19,7 @@ export const withError = (WrappedComponent: any) => {
 				return (
 					<div>
 						<h2>Something went wrong.</h2>
-						<details style={{ whiteSpace: 'pre-wrap' }}>
+						<details style={{ whiteSpace: "pre-wrap" }}>
 							{this.state.error && this.state.error.toString()}
 							<br />
 							{this.state.errorInfo.componentStack}

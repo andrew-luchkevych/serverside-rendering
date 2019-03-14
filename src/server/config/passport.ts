@@ -1,21 +1,27 @@
+import _ from "lodash";
+import dotenv from "dotenv";
 import passport from "passport";
 import passportLocal from "passport-local";
 import passportFacebook from "passport-facebook";
-import _ from "lodash";
-
-// import { User, UserType } from '../models/User';
-import { default as User } from "../models/User";
+import passportJWT from "passport-jwt";
+import { default as User, UserModel } from "../models/User";
 import { Request, Response, NextFunction } from "express";
 
 const LocalStrategy = passportLocal.Strategy;
+const JWTStrategy = passportJWT.Strategy;
 const FacebookStrategy = passportFacebook.Strategy;
 
+dotenv.config({
+	path: ".env.server." + (process.env.NODE_ENV === "production" ? "production" : "development"),
+});
+
 passport.serializeUser<any, any>((user, done) => {
-	done(undefined, user.id);
+	console.log({ user });
+	done(undefined, user._id);
 });
 
 passport.deserializeUser((id, done) => {
-	User.findById(id, (err: any, user: {}) => {
+	User.findById(id, (err: any, user: any) => {
 		done(err, user);
 	});
 });
@@ -24,7 +30,7 @@ passport.deserializeUser((id, done) => {
  * Sign in using Email and Password.
  */
 passport.use(new LocalStrategy({ usernameField: "email" }, (email, password, done) => {
-	User.findOne({ email: email.toLowerCase() }, (err: any, user: any) => {
+	User.findOne({ email: email.toLowerCase() }, (err, user?: UserModel) => {
 		if (err) { return done(err); }
 		if (!user) {
 			return done(undefined, false, { message: `Email ${email} not found.` });
@@ -36,6 +42,24 @@ passport.use(new LocalStrategy({ usernameField: "email" }, (email, password, don
 			}
 			return done(undefined, false, { message: "Invalid email or password." });
 		});
+	});
+}));
+
+/**
+ * Sign in with JWT
+ */
+
+passport.use(new JWTStrategy({
+	jwtFromRequest: passportJWT.ExtractJwt.fromAuthHeaderAsBearerToken(),
+	secretOrKey: process.env.JWT_SECRET,
+}, (payload, done) => {
+	const { email } = payload;
+	User.findOne({ email: email.toLowerCase() }, (err, user: any) => {
+		if (err) { return done(err); }
+		if (!user) {
+			return done(undefined, false, { message: `Email ${email} not found.` });
+		}
+		return done(undefined, user);
 	});
 }));
 
@@ -123,7 +147,11 @@ passport.use(new FacebookStrategy({
  */
 export let isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
 	if (req.isAuthenticated()) {
-		return next();
+		if (req.path === "/login" && req.method === "GET") {
+			res.redirect("/");
+		} else {
+			return next();
+		}
 	}
 	res.redirect("/login");
 };
