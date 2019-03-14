@@ -9,9 +9,7 @@ const withReduxStore = (req: RequestWithStore & RequestWithUser, res: Response, 
 	if (req.user) {
 		initialState.user = {
 			logged: true,
-			data: {
-				email: (req.user as UserModel).email,
-			},
+			data: (req.user as UserModel).getData(),
 		};
 	}
 	req.reduxStore = configureStore(initialState, true);

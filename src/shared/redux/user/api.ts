@@ -11,7 +11,7 @@ export const login = async (data: ApiLoginProps) => axios
 		if (response.status === 200) {
 			const { data }: { data: UserLoginResponse } = response;
 			localStorage.setItem("token", data.token);
-			return data;
+			return data.user;
 		} else {
 			if (response.data.error) {
 				throw new Error(response.data.error);

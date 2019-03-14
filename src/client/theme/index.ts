@@ -1,3 +1,4 @@
+import { Theme } from "@material-ui/core";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
 export const drawerWidth = 256;
@@ -150,4 +151,10 @@ export const styles = {
 		background: "#eaeff1",
 	},
 };
+
+export const formControlStyles = (theme: Theme) => ({
+	formControl: <CSSProperties>{
+		margin: theme.spacing.unit,
+	},
+});
 export default theme;

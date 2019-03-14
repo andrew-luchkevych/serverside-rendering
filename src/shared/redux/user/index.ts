@@ -1,9 +1,8 @@
 import ReduxReducer from "../../types/store/reducer";
+import UserProps from "../../types/User";
 
 export interface UserState {
-	data?: {
-		email: string;
-	};
+	data?: UserProps;
 	logged: boolean;
 }
 

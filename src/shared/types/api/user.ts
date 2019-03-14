@@ -1,5 +1,6 @@
+import UserProps from "../User";
+
 export interface UserLoginResponse {
-	id: string;
-	email: string;
+	user: UserProps;
 	token: string;
 }

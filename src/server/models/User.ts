@@ -2,10 +2,10 @@ import bcrypt from "bcrypt-nodejs";
 import crypto from "crypto";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
-import { User as IUser } from "../../shared/types/User";
+import UserProps from "../../shared/types/User";
 import { AuthToken } from "../types/Auth";
 export { AuthToken } from "../types/Auth";
-export type UserModel = mongoose.Document & IUser & {
+export type UserModel = mongoose.Document & UserProps & {
 	password: string;
 	passwordResetToken: string;
 	passwordResetExpires: Date;
@@ -14,11 +14,13 @@ export type UserModel = mongoose.Document & IUser & {
 	comparePassword: comparePasswordFunction,
 	toAuthJSON: toAuthJSONFunction;
 	generateJWT: generateJWTFunction;
-	gravatar: (size: number) => string;
+	getData: getUserDataFunction;
+	gravatar: (size?: number) => string;
 };
 type generateJWTFunction = () => string;
 type comparePasswordFunction = (candidatePassword: string, cb: (err: any, isMatch: any) => any) => void;
-type toAuthJSONFunction = () => { id: string; email: string; token: string };
+type toAuthJSONFunction = () => { user: UserProps, token: string };
+type getUserDataFunction = () => UserProps;
 const userSchema = new mongoose.Schema({
 	email: { type: String, unique: true },
 	password: String,
@@ -31,9 +33,6 @@ const userSchema = new mongoose.Schema({
 
 	profile: {
 		name: String,
-		gender: String,
-		location: String,
-		website: String,
 		picture: String,
 	},
 }, { timestamps: true });
@@ -71,22 +70,30 @@ const generateJWT: generateJWTFunction = function () {
 const toAuthJSON: toAuthJSONFunction = function () {
 	const user = this as UserModel;
 	return {
-		id: user._id,
-		email: user.email,
+		user: user.getData(),
 		token: user.generateJWT(),
+	};
+};
+
+const getData: getUserDataFunction = function () {
+	const user = this as UserModel;
+	return {
+		email: user.email,
+		profile: {
+			name: user.profile.name,
+			picture: user.gravatar(),
+		},
 	};
 };
 
 userSchema.methods.generateJWT = generateJWT;
 userSchema.methods.comparePassword = comparePassword;
 userSchema.methods.toAuthJSON = toAuthJSON;
+userSchema.methods.getData = getData;
 /**
  * Helper method for getting user's gravatar.
  */
-userSchema.methods.gravatar = function (size: number) {
-	if (!size) {
-		size = 200;
-	}
+userSchema.methods.gravatar = function (size: number = 200) {
 	if (!this.email) {
 		return `https://gravatar.com/avatar/?s=${size}&d=retro`;
 	}

@@ -1,9 +1,10 @@
-import { AuthToken } from "../../server/types/Auth";
-export interface UserProfile {
+export interface UserProfileProps {
 	name: string;
 	picture: string;
 }
-export interface User {
+export interface UserProps {
 	email: string;
-	profile: UserProfile;
+	profile: UserProfileProps;
 }
+
+export default UserProps;
