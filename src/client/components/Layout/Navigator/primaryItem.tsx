@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import LinkedListItem from "../../../components/LinkedListItem";
+import LinkedListItem from "../../Linked/LinkedListItem/index";
 import { itemStyles } from "./styles";
 export interface PrimaryItemProps {
 	classes: {

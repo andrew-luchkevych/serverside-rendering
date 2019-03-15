@@ -1,8 +1,14 @@
 import * as React from "react";
+import { withStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import "./style.scss";
+import styles from "./styles";
 
-export interface LoaderProps {
+export interface LoaderStyleProps {
+	classes: {
+		loader: string;
+	};
+}
+export interface LoaderProps extends LoaderStyleProps {
 	nopadding?: boolean;
 }
 
@@ -12,7 +18,7 @@ export const Loader = (props: LoaderProps) => {
 		padding = 0;
 	}
 	return (
-		<div className="loader" style={{ padding }}>
+		<div className={props.classes.loader} style={{ padding }}>
 			<CircularProgress />
 		</div>
 	);
@@ -20,4 +26,5 @@ export const Loader = (props: LoaderProps) => {
 
 Loader.displayName = "Loader";
 
-export default Loader;
+const StyledLoader = withStyles(styles)(Loader);
+export default StyledLoader;

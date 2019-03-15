@@ -7,17 +7,17 @@ import { Request, Response, NextFunction } from "express";
 import { IVerifyOptions } from "passport-local";
 import { WriteError } from "mongodb";
 import "../config/passport";
+import RequestWithStore from "../types/RequestWithStore";
+import ssr from "../utils/ssr/index";
 /**
  * GET /login
  * Login page.
  */
-export let getLogin = (req: Request, res: Response) => {
+export let getLogin = (req: RequestWithStore, res: Response) => {
 	if (req.user) {
 		return res.redirect("/");
 	}
-	res.render("account/login", {
-		title: "Login",
-	});
+	res.send(ssr(req));
 };
 
 /**
@@ -40,7 +40,7 @@ export let postLogin = (req: Request, res: Response, next: NextFunction) => {
 		if (err) { return next(err); }
 		if (!user) {
 			req.flash("errors", info.message);
-			return res.json({ code: 400, error: info.message });
+			return res.status(404).json({ error: info.message });
 		}
 		req.logIn(user, (err) => {
 			if (err) { return next(err); }
@@ -56,7 +56,7 @@ export let postLogin = (req: Request, res: Response, next: NextFunction) => {
  */
 export let logout = (req: Request, res: Response) => {
 	req.logout();
-	res.redirect("/");
+	res.json({ success: true });
 };
 
 /**

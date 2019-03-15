@@ -1,4 +1,4 @@
-import { UserState } from ".";
-export const logged = ({ user: { logged } }: { user: UserState }) => logged;
-export const user = ({ user: { data } }: { user: UserState }) => data;
-export const userState = ({ user }: { user: UserState }) => user;
+import { ReduxStoreState } from "../../types/store/RootReducer";
+export const loggedSelector = ({ user: { logged } }: ReduxStoreState) => ({ logged });
+export const userSelector = ({ user: { data: user } }: ReduxStoreState) => ({ user });
+export const userStateSelector = ({ user: userState }: ReduxStoreState) => ({ userState });

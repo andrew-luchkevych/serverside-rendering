@@ -6,8 +6,8 @@ import * as ContactController from "../controllers/contact";
 const populateWithApiRoutes = (app: Express): void => {
 	app.get("/api", ApiController.getApi);
 	app.post("/api/login", UserController.postLogin);
-	app.post("/api/forgot", UserController.postForgot);
 	app.put("/api/logout", UserController.logout);
+	app.post("/api/forgot", UserController.postForgot);
 	app.post("/api/reset/:token", UserController.postReset);
 	app.post("/api/signup", UserController.postSignup);
 	app.post("/api/contact", ContactController.postContact);

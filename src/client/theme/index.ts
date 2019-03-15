@@ -105,6 +105,11 @@ export const theme = createMuiTheme({
 				height: 32,
 			},
 		},
+		MuiFormControl: {
+			root: {
+				marginBottom: 20,
+			},
+		},
 	},
 	props: {
 		MuiTab: {

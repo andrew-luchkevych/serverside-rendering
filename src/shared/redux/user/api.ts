@@ -1,5 +1,6 @@
 import axios from "axios";
 import { UserLoginResponse } from "../../../shared/types/api/user";
+import { response } from "express";
 
 export type ApiLoginProps = {
 	email: string;
@@ -20,6 +21,12 @@ export const login = async (data: ApiLoginProps) => axios
 		}
 	});
 
+export const logout = () => {
+	axios.put(`/api/logout`);
+	localStorage.removeItem("token");
+};
+
 export default {
 	login,
+	logout,
 };

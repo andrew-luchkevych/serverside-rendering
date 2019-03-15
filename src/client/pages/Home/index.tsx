@@ -10,6 +10,8 @@ export const Home = () => (
 		</Helmet>
 		<Padder>
 			Hello
-				</Padder>
+		</Padder>
 	</PaperWrapper>
 );
+
+export default Home;

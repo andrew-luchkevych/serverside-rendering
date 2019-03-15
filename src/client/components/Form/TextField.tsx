@@ -8,13 +8,17 @@ export interface FormTextFieldProps {
 	meta: WrappedFieldMetaProps;
 }
 export const FormTextField = (props: FormTextFieldProps) => {
-	const { input, label, meta: { touched, error } } = props;
+	const { input, label, meta: { touched, error }, ...rest } = props;
 	return (
 		<TextField
+			{...rest}
+			{...input}
 			label={label}
 			error={touched && error}
 			helperText={touched && error}
-			{...input}
+			defaultValue={input.defaultValue}
+			value={input.value}
+			onChange={input.onChange}
 		/>
 	);
 };
