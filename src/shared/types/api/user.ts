@@ -1,6 +1,7 @@
 import UserProps from "../User";
+import { ApiResponse } from "./response";
 
-export interface UserLoginResponse {
-	user: UserProps;
-	token: string;
+export interface UserLoginResponse extends ApiResponse {
+	user?: UserProps;
+	token?: string;
 }

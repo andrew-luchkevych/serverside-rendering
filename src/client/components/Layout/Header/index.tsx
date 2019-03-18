@@ -54,10 +54,6 @@ export class Header extends React.PureComponent<HeaderProps, HeaderState> {
 		this.setState(({ userMenuOpen }) => ({ userMenuOpen: !userMenuOpen }));
 	}
 	handleMenuClose = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-		if (this.menuAnchor.contains(event.target)) {
-			return;
-		}
-
 		this.setState({ userMenuOpen: false });
 	}
 	logout = () => this.props.dispatch(logout.trigger());
@@ -118,7 +114,7 @@ export class Header extends React.PureComponent<HeaderProps, HeaderState> {
 								</React.Fragment>
 							) || (
 								<Grid item>
-									<LinkedButton to="/login" color="inherit">
+									<LinkedButton to="/signin" color="inherit">
 										Login
 									</LinkedButton>
 								</Grid>

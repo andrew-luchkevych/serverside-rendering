@@ -34,6 +34,24 @@ const UserReducer: ReduxReducer<UserState> = (state = userInitialState, action) 
 			...state,
 			processing: false,
 		};
+		case routines.signup.REQUEST: return {
+			...state,
+			processing: true,
+		};
+		case routines.signup.SUCCESS: return {
+			...state,
+			logged: true,
+			data: action.payload.data,
+		};
+		case routines.signup.FAILURE: return {
+			...state,
+			logged: false,
+			data: undefined,
+		};
+		case routines.signup.FULFILL: return {
+			...state,
+			processing: false,
+		};
 		case routines.logout.SUCCESS: return {
 			...userInitialState,
 		};

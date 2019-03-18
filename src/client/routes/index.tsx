@@ -2,8 +2,8 @@ import { AppRouteProps } from "../types/RouteProps";
 import LoadableComponent from "./loadable";
 const Error404 = LoadableComponent(() => import("../components/errors/Error404"));
 const Home = LoadableComponent(() => import("../pages/Home"));
-const Login = LoadableComponent(() => import("../pages/Login"));
-
+const SignIn = LoadableComponent(() => import("../pages/SignIn"));
+const SignUp = LoadableComponent(() => import("../pages/SignUp"));
 const routes: Array<AppRouteProps> = [
 	{
 		path: "/",
@@ -11,9 +11,14 @@ const routes: Array<AppRouteProps> = [
 		component: Home,
 	},
 	{
-		path: "/login",
+		path: "/signin",
 		exact: true,
-		component: Login,
+		component: SignIn,
+	},
+	{
+		path: "/signup",
+		exact: true,
+		component: SignUp,
 	},
 	{
 		path: "*",

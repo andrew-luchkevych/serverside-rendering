@@ -19,6 +19,7 @@ import theme from "../../../client/theme";
 import App from "../../../client/App";
 import template from "../../template";
 import RequestWithStore from "../../types/RequestWithStore";
+import configureStore from "../../../shared/redux/configureStore";
 const isProd = process.env.NODE_ENV === "production";
 const modules: Array<string> = [];
 const getModules = (moduleName: string) => modules.push(moduleName);
@@ -36,10 +37,11 @@ export const ssr = (req: RequestWithStore) => {
 	const sheetsRegistry = new SheetsRegistry();
 	const sheetsManager = new Map();
 	const generateClassName = createGenerateClassName();
+	const store = req.reduxStore || configureStore({}, true);
 	const component = (
 		<JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
 			<MuiThemeProvider theme={theme} sheetsManager={sheetsManager}>
-				<Provider store={req.reduxStore}>
+				<Provider store={store}>
 					<StaticRouter location={req.url} context={context}>
 						<App />
 					</StaticRouter>
@@ -59,9 +61,9 @@ export const ssr = (req: RequestWithStore) => {
 	if (isProd) {
 		const bundles = getBundles(stats, modules);
 		const helmet = Helmet.renderStatic();
-		return template({ bundles, helmet, data: req.reduxStore.getState(), content: appHtml, styles });
+		return template({ bundles, helmet, data: store.getState(), content: appHtml, styles });
 	} else {
-		const t = template({ helmet, content: appHtml, data: req.reduxStore.getState(), styles });
+		const t = template({ helmet, content: appHtml, data: store.getState(), styles });
 		return t;
 	}
 };

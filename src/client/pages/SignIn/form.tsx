@@ -1,17 +1,26 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { reduxForm, Field, InjectedFormProps } from "redux-form";
-import { FormTextField } from "../../components/Form/TextField";
-import validator from "../../services/validator";
-import { ApiLoginProps } from "../../../shared/redux/user/api";
-import SubmitButton from "../../components/Form/SubmitButton";
+import { withRouter, RouteComponentProps } from "react-router";
+import { NavLink } from "react-router-dom";
+import { Typography } from "@material-ui/core";
 import WithDispatch from "../../../shared/types/store/dispatch";
-import { login } from "../../../shared/redux/user/routines";
 import { createSubmisisonPromise } from "../../../shared/utils/formSubmission";
-
-export class LoginForm extends React.PureComponent<InjectedFormProps & WithDispatch> {
+import { ApiLoginProps } from "../../../shared/redux/user/api";
+import { login } from "../../../shared/redux/user/routines";
+import { FormTextField } from "../../components/Form/TextField";
+import SubmitButton from "../../components/Form/SubmitButton";
+import validator from "../../services/validator";
+export class LoginForm extends React.PureComponent<InjectedFormProps & WithDispatch & RouteComponentProps> {
 	onSubmit = (data: ApiLoginProps) => {
 		const { submission, success, failure } = createSubmisisonPromise();
+		submission.then(() => {
+			if (this.props.location.state.from) {
+				this.props.history.replace(this.props.location.state.from);
+			} else {
+				this.props.history.replace("/");
+			}
+		});
 		this.props.dispatch(login.trigger({ data, controller: { success, failure } }));
 		return submission;
 	}
@@ -41,6 +50,10 @@ export class LoginForm extends React.PureComponent<InjectedFormProps & WithDispa
 					disabled={this.props.submitting}
 					text="Sign in"
 				/>
+				<Typography style={{ textAlign: "center" }}>
+					Have not account?
+					<NavLink to="signup"> Sign Up </NavLink>
+				</Typography>
 			</form>
 		);
 	}
@@ -50,4 +63,4 @@ const ConnectedLoginForm = connect(null)(LoginForm);
 
 export default reduxForm({
 	form: "login",
-})(ConnectedLoginForm);
+})(withRouter(ConnectedLoginForm));

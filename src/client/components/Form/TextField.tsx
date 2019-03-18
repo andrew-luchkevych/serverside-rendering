@@ -14,7 +14,7 @@ export const FormTextField = (props: FormTextFieldProps) => {
 			{...rest}
 			{...input}
 			label={label}
-			error={touched && error}
+			error={touched && !!error}
 			helperText={touched && error}
 			defaultValue={input.defaultValue}
 			value={input.value}

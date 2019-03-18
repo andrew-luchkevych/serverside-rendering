@@ -4,7 +4,7 @@
 	"description": "App with Node JS server-side rendering using React with Typescript",
 	"main": "index.js",
 	"scripts": {
-		"dev": "export NODE_ENV=dev&& npm run clean && nodemon ./src/server/serverDev.ts",
+		"dev": "export NODE_ENV=dev&& npm run clean && nodemon ./src/server/server.ts",
 		"prebuild": "rimraf dist && mkdir dist",
 		"build:client": "export NODE_ENV=production&& export BABEL_ENV=production&& npm run prebuild && webpack --config webpack.config.js",
 		"build:server": "export NODE_ENV=server&& npm run tslint && rimraf server.min.js && webpack --config webpack.config.js",

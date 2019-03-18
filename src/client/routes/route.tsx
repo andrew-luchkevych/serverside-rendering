@@ -15,7 +15,7 @@ export const AppRoute = (props: AppRouteProps & WithAuthState) => {
 				{...rest}
 				render={routeProps => logged
 					? <Component {...routeProps} />
-					: <Redirect to={{ pathname: "/login", state: { from: routeProps.location } }} />
+					: <Redirect to={{ pathname: "/signin", state: { from: routeProps.location } }} />
 				}
 			/>
 		);

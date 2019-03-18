@@ -18,7 +18,7 @@ const email = (value: string) => {
 };
 const alphaNumeric = (value: string) => (value && /[^a-zA-Z0-9 ]/i.test(value) ? "Only alphanumeric characters" : undefined);
 const letters = (value: string) => (value && /[^a-zA-Z]/i.test(value) ? "Only letters allowed" : undefined);
-
+const match = (matchValue: string, message: string) => (value: string) => matchValue === value ? undefined : message;
 export default {
 	required,
 	maxLength,
@@ -31,4 +31,5 @@ export default {
 	email,
 	alphaNumeric,
 	letters,
-}
+	match,
+};

@@ -5,7 +5,7 @@ import * as UserController from "../controllers/user";
 import * as ContactController from "../controllers/contact";
 const populateWithApiRoutes = (app: Express): void => {
 	app.get("/api", ApiController.getApi);
-	app.post("/api/login", UserController.postLogin);
+	app.post("/api/signin", UserController.postLogin);
 	app.put("/api/logout", UserController.logout);
 	app.post("/api/forgot", UserController.postForgot);
 	app.post("/api/reset/:token", UserController.postReset);

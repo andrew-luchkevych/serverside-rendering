@@ -15,7 +15,6 @@ const withReduxStore = (req: RequestWithStore & RequestWithUser, res: Response, 
 		};
 	}
 	req.reduxStore = configureStore(initialState, true);
-	console.log({ reduxStore: req.reduxStore });
 	next();
 };
 

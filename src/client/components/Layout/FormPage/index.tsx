@@ -1,40 +1,44 @@
 import * as React from "react";
 import { Helmet } from "react-helmet";
 import Avatar from "@material-ui/core/Avatar";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
-import LoginForm from "./form";
+import { SvgIconProps } from "@material-ui/core/SvgIcon";
 import { styles } from "./styles";
-import { ApiLoginProps } from "../../../shared/redux/user/api";
-export interface LoginStyleProps {
+export interface FormPageStyleProps {
 	classes: {
 		main: string;
 		paper: string;
 		avatar: string;
 	};
 }
-export class Login extends React.PureComponent<LoginStyleProps> {
+
+export interface FormPageOwnProps {
+	title: string;
+	icon?: React.ReactNode;
+	form: React.ReactNode;
+}
+export class FormPage extends React.PureComponent<FormPageStyleProps & FormPageOwnProps> {
 	render() {
-		const { classes } = this.props;
+		const { classes, title, icon, form } = this.props;
 		return (
 			<div className={classes.main}>
 				<Helmet>
-					<title>Login</title>
+					<title>{title}</title>
 				</Helmet>
 				<Paper className={classes.paper}>
 					<Avatar className={classes.avatar}>
-						<LockOutlinedIcon />
+						{icon}
 					</Avatar>
 					<Typography component="h1" variant="h5">
-						Sign in
+						{title}
 					</Typography>
-					<LoginForm />
+					{form}
 				</Paper>
 			</div>
 
 		);
 	}
 }
-export default withStyles(styles)(Login);
+export default withStyles(styles)(FormPage);

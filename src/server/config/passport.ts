@@ -147,13 +147,13 @@ passport.use(new FacebookStrategy({
  */
 export let isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
 	if (req.isAuthenticated()) {
-		if (req.path === "/login" && req.method === "GET") {
+		if (req.path === "/signin" && req.method === "GET") {
 			res.redirect("/");
 		} else {
 			return next();
 		}
 	}
-	res.redirect("/login");
+	res.redirect("/signin");
 };
 
 /**

@@ -9,8 +9,9 @@ import { WriteError } from "mongodb";
 import "../config/passport";
 import RequestWithStore from "../types/RequestWithStore";
 import ssr from "../utils/ssr/index";
+import { error, success } from "../utils/api";
 /**
- * GET /login
+ * GET /signin
  * Login page.
  */
 export let getLogin = (req: RequestWithStore, res: Response) => {
@@ -21,7 +22,7 @@ export let getLogin = (req: RequestWithStore, res: Response) => {
 };
 
 /**
- * POST /login
+ * POST /signin
  * Sign in using email and password.
  */
 export let postLogin = (req: Request, res: Response, next: NextFunction) => {
@@ -30,22 +31,18 @@ export let postLogin = (req: Request, res: Response, next: NextFunction) => {
 	req.sanitize("email").normalizeEmail({ gmail_remove_dots: false });
 
 	const errors = req.validationErrors();
-
 	if (errors) {
-		req.flash("errors", errors);
-		return res.redirect("/login");
+		return error(res, errors);
 	}
 
 	passport.authenticate("local", (err: Error, user: UserModel, info: IVerifyOptions) => {
 		if (err) { return next(err); }
 		if (!user) {
-			req.flash("errors", info.message);
-			return res.status(404).json({ error: info.message });
+			return error(res, info.message);
 		}
 		req.logIn(user, (err) => {
 			if (err) { return next(err); }
-			req.flash("success", { msg: "Success! You are logged in." });
-			res.json(user.toAuthJSON());
+			return success(res, user.toAuthJSON());
 		});
 	})(req, res, next);
 };
@@ -56,20 +53,18 @@ export let postLogin = (req: Request, res: Response, next: NextFunction) => {
  */
 export let logout = (req: Request, res: Response) => {
 	req.logout();
-	res.json({ success: true });
+	return success(res);
 };
 
 /**
  * GET /signup
  * Signup page.
  */
-export let getSignup = (req: Request, res: Response) => {
+export let getSignup = (req: RequestWithStore, res: Response) => {
 	if (req.user) {
 		return res.redirect("/");
 	}
-	res.render("account/signup", {
-		title: "Create Account",
-	});
+	res.send(ssr(req));
 };
 
 /**
@@ -78,27 +73,30 @@ export let getSignup = (req: Request, res: Response) => {
  */
 export let postSignup = (req: Request, res: Response, next: NextFunction) => {
 	req.assert("email", "Email is not valid").isEmail();
-	req.assert("password", "Password must be at least 4 characters long").len({ min: 4 });
+	req.assert("password", "Password must be at least 5 characters long").len({ min: 5 });
 	req.assert("confirmPassword", "Passwords do not match").equals(req.body.password);
+	// req.assert(req.body.name, "Name is not valid").isAlpha().len({ min: 2, max: 128 });
 	req.sanitize("email").normalizeEmail({ gmail_remove_dots: false });
 
 	const errors = req.validationErrors();
 
 	if (errors) {
-		req.flash("errors", errors);
-		return res.redirect("/signup");
+		return error(res, errors);
 	}
-
-	const user = new User({
+	const userData: Partial<UserModel> = {
 		email: req.body.email,
 		password: req.body.password,
-	});
+		profile: {
+			name: req.body.profile.name,
+			picture: "",
+		},
+	};
+	const user = new User(userData) as UserModel;
 
 	User.findOne({ email: req.body.email }, (err, existingUser) => {
 		if (err) { return next(err); }
 		if (existingUser) {
-			req.flash("errors", { msg: "Account with that email address already exists." });
-			return res.redirect("/signup");
+			return error(res, "Account with that email address already exists.");
 		}
 		user.save((err) => {
 			if (err) { return next(err); }
@@ -106,7 +104,7 @@ export let postSignup = (req: Request, res: Response, next: NextFunction) => {
 				if (err) {
 					return next(err);
 				}
-				res.redirect("/");
+				return success(res, user.toAuthJSON());
 			});
 		});
 	});
@@ -133,8 +131,7 @@ export let postUpdateProfile = (req: Request, res: Response, next: NextFunction)
 	const errors = req.validationErrors();
 
 	if (errors) {
-		req.flash("errors", errors);
-		return res.redirect("/account");
+		return error(res, errors);
 	}
 
 	User.findById(req.user.id, (err, user: UserModel) => {
@@ -144,13 +141,11 @@ export let postUpdateProfile = (req: Request, res: Response, next: NextFunction)
 		user.save((err: WriteError) => {
 			if (err) {
 				if (err.code === 11000) {
-					req.flash("errors", { msg: "The email address you have entered is already associated with an account." });
-					return res.redirect("/account");
+					return error(res, "The email address you have entered is already associated with an account.");
 				}
 				return next(err);
 			}
-			req.flash("success", { msg: "Profile information has been updated." });
-			res.redirect("/account");
+			success(res);
 		});
 	});
 };
@@ -166,8 +161,7 @@ export let postUpdatePassword = (req: Request, res: Response, next: NextFunction
 	const errors = req.validationErrors();
 
 	if (errors) {
-		req.flash("errors", errors);
-		return res.redirect("/account");
+		return error(res, errors);
 	}
 
 	User.findById(req.user.id, (err, user: UserModel) => {
@@ -175,8 +169,7 @@ export let postUpdatePassword = (req: Request, res: Response, next: NextFunction
 		user.password = req.body.password;
 		user.save((err: WriteError) => {
 			if (err) { return next(err); }
-			req.flash("success", { msg: "Password has been changed." });
-			res.redirect("/account");
+			return success(res, undefined, "Password has been changed.");
 		});
 	});
 };
@@ -189,8 +182,7 @@ export let postDeleteAccount = (req: Request, res: Response, next: NextFunction)
 	User.remove({ _id: req.user.id }, (err) => {
 		if (err) { return next(err); }
 		req.logout();
-		req.flash("info", { msg: "Your account has been deleted." });
-		res.redirect("/");
+		return success(res, undefined, "Your account has been deleted.");
 	});
 };
 
@@ -206,8 +198,7 @@ export let getOauthUnlink = (req: Request, res: Response, next: NextFunction) =>
 		user.tokens = user.tokens.filter((token: AuthToken) => token.kind !== provider);
 		user.save((err: WriteError) => {
 			if (err) { return next(err); }
-			req.flash("info", { msg: `${provider} account has been unlinked.` });
-			res.redirect("/account");
+			return success(res, undefined, `${provider} account has been unlinked.`);
 		});
 	});
 };

@@ -1,19 +1,26 @@
 import * as React from "react";
 import { Switch } from "react-router-dom";
-import Layout from "./components/Layout";
-import routes from "./routes";
+import { SnackbarProvider } from "notistack";
 import { AppRouteProps } from "./types/RouteProps";
+import Layout from "./components/Layout";
 import AppRoute from "./routes/route";
+import routes from "./routes";
+import "./config/http";
 export default class App extends React.Component {
 	render() {
 		return (
-			<Layout>
-				<Switch>
-					{
-						routes.map((r: AppRouteProps, i) => <AppRoute {...r} key={i} />)
-					}
-				</Switch>
-			</Layout>
+			<SnackbarProvider maxSnack={5} anchorOrigin={{
+				vertical: "top",
+				horizontal: "right",
+			}}>
+				<Layout>
+					<Switch>
+						{
+							routes.map((r: AppRouteProps, i) => <AppRoute {...r} key={i} />)
+						}
+					</Switch>
+				</Layout>
+			</SnackbarProvider>
 		);
 	}
 }

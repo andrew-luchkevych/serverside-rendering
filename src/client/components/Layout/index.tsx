@@ -3,12 +3,13 @@ import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Hidden from "@material-ui/core/Hidden";
-import { SnackbarProvider, withSnackbar, withSnackbarProps } from "notistack";
+import { withSnackbar, withSnackbarProps } from "notistack";
 import { drawerWidth, styles } from "../../theme";
 import { ErrorBoundary } from "../errors/ErrorBoundary";
 import ContentWrapper from "./ContentWrapper";
 import Header from "./Header";
 import Navigator from "./Navigator";
+import SnackService from "../../../shared/services/SnackService";
 export interface RootLayoutStyleProps {
 	classes: {
 		root: string;
@@ -30,7 +31,11 @@ export interface RootLayoutState {
 export class RootLayout extends React.Component<RootLayoutProps, RootLayoutState> {
 	state = { showDrawer: false };
 	componentDidMount() {
-
+		const { enqueueSnackbar } = this.props;
+		SnackService.install(enqueueSnackbar);
+	}
+	componentWillUnmount() {
+		SnackService.uninstall();
 	}
 	toggleMenu = () => this.setState(({ showDrawer }) => ({ showDrawer: !showDrawer }));
 	render() {
@@ -60,15 +65,13 @@ export class RootLayout extends React.Component<RootLayoutProps, RootLayoutState
 				<div id="root-content" className={classes.appContent}>
 					<Header onDrawerToggle={this.toggleMenu} />
 					<ContentWrapper>
-						<SnackbarProvider maxSnack={5}>
-							<ErrorBoundary>
-								{children}
-							</ErrorBoundary>
-						</SnackbarProvider>
+						<ErrorBoundary>
+							{children}
+						</ErrorBoundary>
 					</ContentWrapper>
 				</div>
 			</div>
 		);
 	}
 }
-export default withStyles(styles)(withSnackbar(RootLayout));
+export default withSnackbar(withStyles(styles)(RootLayout));

@@ -37,9 +37,6 @@ const userSchema = new mongoose.Schema({
 	},
 }, { timestamps: true });
 
-/**
- * Password hash middleware.
- */
 userSchema.pre("save", function save(next) {
 	const user = this as UserModel;
 	if (!user.isModified("password")) { return next(); }
@@ -51,6 +48,14 @@ userSchema.pre("save", function save(next) {
 			next();
 		});
 	});
+});
+
+userSchema.pre("save", function (next) {
+	const user = this as UserModel;
+	if (!user.profile.picture) {
+		user.profile.picture = user.gravatar();
+	}
+	next();
 });
 
 const comparePassword: comparePasswordFunction = function (candidatePassword, cb): any {
@@ -79,10 +84,7 @@ const getData: getUserDataFunction = function () {
 	const user = this as UserModel;
 	return {
 		email: user.email,
-		profile: {
-			name: user.profile.name,
-			picture: user.gravatar(),
-		},
+		profile: user.profile,
 	};
 };
 
@@ -94,8 +96,12 @@ userSchema.methods.getData = getData;
  * Helper method for getting user's gravatar.
  */
 userSchema.methods.gravatar = function (size: number = 200) {
-	if (!this.email) {
+	const user = this as UserModel;
+	if (!user.email) {
 		return `https://gravatar.com/avatar/?s=${size}&d=retro`;
+	}
+	if (user.profile.picture) {
+		return user.profile.picture;
 	}
 	const md5 = crypto.createHash("md5").update(this.email).digest("hex");
 	return `https://gravatar.com/avatar/${md5}?s=${size}&d=retro`;
