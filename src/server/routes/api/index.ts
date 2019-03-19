@@ -1,10 +1,14 @@
-import { Express } from "express";
-import * as PassportConfig from "../config/passport";
-import * as ApiController from "../controllers/api";
-import * as UserController from "../controllers/user";
-import * as ContactController from "../controllers/contact";
+import { Express, Router } from "express";
+import restify from "express-restify-mongoose";
+import FoodTypes from "../../models/FoodTypes";
+import * as PassportConfig from "../../config/passport";
+import * as ApiController from "../../controllers/api";
+import * as UserController from "../../controllers/user";
+import * as ContactController from "../../controllers/contact";
+import passport = require("passport");
+const router = Router();
 const populateWithApiRoutes = (app: Express): void => {
-	app.get("/api", ApiController.getApi);
+	app.get("/api", PassportConfig.isAuthenticated, ApiController.getApi);
 	app.post("/api/signin", UserController.postLogin);
 	app.put("/api/logout", UserController.logout);
 	app.post("/api/forgot", UserController.postForgot);
@@ -15,6 +19,8 @@ const populateWithApiRoutes = (app: Express): void => {
 	app.post("/api/account/password", PassportConfig.isAuthenticated, UserController.postUpdatePassword);
 	app.delete("/api/account", PassportConfig.isAuthenticated, UserController.postDeleteAccount);
 	app.delete("/api/account/provider", PassportConfig.isAuthenticated, UserController.getOauthUnlink);
+	restify.serve(router, FoodTypes, { middleware: PassportConfig.isAuthenticated });
+	app.use(router);
 };
 
 export default populateWithApiRoutes;

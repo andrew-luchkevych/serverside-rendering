@@ -4,6 +4,7 @@ const Error404 = LoadableComponent(() => import("../components/errors/Error404")
 const Home = LoadableComponent(() => import("../pages/Home"));
 const SignIn = LoadableComponent(() => import("../pages/SignIn"));
 const SignUp = LoadableComponent(() => import("../pages/SignUp"));
+const FoodTypes = LoadableComponent(() => import("../pages/FoodTypes"));
 const routes: Array<AppRouteProps> = [
 	{
 		path: "/",
@@ -19,6 +20,12 @@ const routes: Array<AppRouteProps> = [
 		path: "/signup",
 		exact: true,
 		component: SignUp,
+	},
+	{
+		path: "/food-types",
+		exact: true,
+		component: FoodTypes,
+		isPrivate: true,
 	},
 	{
 		path: "*",

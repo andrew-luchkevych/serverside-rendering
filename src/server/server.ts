@@ -14,10 +14,10 @@ import passport from "passport";
 import expressValidator from "express-validator";
 import bluebird from "bluebird";
 import webpack from "webpack";
+import listEndpoints from "express-list-endpoints";
 import webpackDevMiddleware from "webpack-dev-middleware";
 import webpackHotMiddleware from "webpack-hot-middleware";
 import webpackDev from "../../config/webpack.dev.js";
-import RequestWithStore from "./types/RequestWithStore";
 import populateWithRoutes from "./routes/index";
 dotenv.config({
 	path: ".env.server." + (process.env.NODE_ENV === "production" ? "production" : "development"),
@@ -59,18 +59,18 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressValidator());
 app.use(mongoSession);
-app.use(passport.initialize());
-app.use(passport.session());
 app.use(flash());
 app.use(lusca.xframe("SAMEORIGIN"));
 app.use(lusca.xssProtection(true));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use((req, res, next) => {
 	res.locals.user = req.user;
 	next();
 });
 
 populateWithRoutes(app);
-
+console.log(listEndpoints(app));
 process.stdin.resume(); // so the program will not close instantly
 
 function exitHandler(options: any, err: any) {

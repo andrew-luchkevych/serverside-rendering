@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import UserProps from "../../shared/types/User";
 import { AuthToken } from "../types/Auth";
+import generateGravatar from "../utils/gravatar";
 export { AuthToken } from "../types/Auth";
 export type UserModel = mongoose.Document & UserProps & {
 	password: string;
@@ -15,13 +16,14 @@ export type UserModel = mongoose.Document & UserProps & {
 	toAuthJSON: toAuthJSONFunction;
 	generateJWT: generateJWTFunction;
 	getData: getUserDataFunction;
-	gravatar: (size?: number) => string;
+	gravatar: gravatarFunction;
 };
+type gravatarFunction = (size?: number) => string;
 type generateJWTFunction = () => string;
 type comparePasswordFunction = (candidatePassword: string, cb: (err: any, isMatch: any) => any) => void;
 type toAuthJSONFunction = () => { user: UserProps, token: string };
 type getUserDataFunction = () => UserProps;
-const userSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
 	email: { type: String, unique: true },
 	password: String,
 	passwordResetToken: String,
@@ -37,7 +39,7 @@ const userSchema = new mongoose.Schema({
 	},
 }, { timestamps: true });
 
-userSchema.pre("save", function save(next) {
+UserSchema.pre("save", function save(next) {
 	const user = this as UserModel;
 	if (!user.isModified("password")) { return next(); }
 	bcrypt.genSalt(10, (err, salt) => {
@@ -50,7 +52,7 @@ userSchema.pre("save", function save(next) {
 	});
 });
 
-userSchema.pre("save", function (next) {
+UserSchema.pre("save", function (next) {
 	const user = this as UserModel;
 	if (!user.profile.picture) {
 		user.profile.picture = user.gravatar();
@@ -66,10 +68,10 @@ const comparePassword: comparePasswordFunction = function (candidatePassword, cb
 
 const generateJWT: generateJWTFunction = function () {
 	const user = this as UserModel;
+	console.log("jwt_secret", process.env.JWT_SECRET);
 	return jwt.sign({
 		email: user.email,
-		id: user._id,
-	}, "secret", { expiresIn: "1d" });
+	}, process.env.JWT_SECRET, { expiresIn: "1d" });
 };
 
 const toAuthJSON: toAuthJSONFunction = function () {
@@ -87,15 +89,7 @@ const getData: getUserDataFunction = function () {
 		profile: user.profile,
 	};
 };
-
-userSchema.methods.generateJWT = generateJWT;
-userSchema.methods.comparePassword = comparePassword;
-userSchema.methods.toAuthJSON = toAuthJSON;
-userSchema.methods.getData = getData;
-/**
- * Helper method for getting user's gravatar.
- */
-userSchema.methods.gravatar = function (size: number = 200) {
+const gravatar: gravatarFunction = function (size: number = 200) {
 	const user = this as UserModel;
 	if (!user.email) {
 		return `https://gravatar.com/avatar/?s=${size}&d=retro`;
@@ -103,10 +97,15 @@ userSchema.methods.gravatar = function (size: number = 200) {
 	if (user.profile.picture) {
 		return user.profile.picture;
 	}
-	const md5 = crypto.createHash("md5").update(this.email).digest("hex");
-	return `https://gravatar.com/avatar/${md5}?s=${size}&d=retro`;
+	return generateGravatar(user.email);
 };
 
-// export const User: UserType = mongoose.model<UserType>('User', userSchema);
-const User = mongoose.model("User", userSchema);
+UserSchema.methods.generateJWT = generateJWT;
+UserSchema.methods.comparePassword = comparePassword;
+UserSchema.methods.toAuthJSON = toAuthJSON;
+UserSchema.methods.getData = getData;
+UserSchema.methods.gravatar = gravatar;
+
+// export const User: UserType = mongoose.model<UserType>('User', UserSchema);
+const User = mongoose.model("User", UserSchema);
 export default User;

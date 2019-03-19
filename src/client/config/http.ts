@@ -2,7 +2,7 @@ import axios from "axios";
 import { ApiResponse } from "../../shared/types/api/response";
 
 try {
-	const authToken = localStorage.getItem("auth");
+	const authToken = localStorage.getItem("token");
 	axios.defaults.headers = {
 		Authorization: `Bearer ${authToken}`,
 		"Content-Type": "application/json",

@@ -35,7 +35,7 @@ export let postLogin = (req: Request, res: Response, next: NextFunction) => {
 		return error(res, errors);
 	}
 
-	passport.authenticate("local", (err: Error, user: UserModel, info: IVerifyOptions) => {
+	passport.authenticate(["local", "jwt"], (err: Error, user: UserModel, info: IVerifyOptions) => {
 		if (err) { return next(err); }
 		if (!user) {
 			return error(res, info.message);
@@ -52,8 +52,9 @@ export let postLogin = (req: Request, res: Response, next: NextFunction) => {
  * Log out.
  */
 export let logout = (req: Request, res: Response) => {
-	req.logout();
-	return success(res);
+	req.session.destroy(function (err) {
+		return err ? error(res, err) : success(res);
+	});
 };
 
 /**

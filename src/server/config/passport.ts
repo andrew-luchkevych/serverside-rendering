@@ -6,6 +6,7 @@ import passportFacebook from "passport-facebook";
 import passportJWT from "passport-jwt";
 import { default as User, UserModel } from "../models/User";
 import { Request, Response, NextFunction } from "express";
+import { error } from "../utils/api/index";
 
 const LocalStrategy = passportLocal.Strategy;
 const JWTStrategy = passportJWT.Strategy;
@@ -146,14 +147,25 @@ passport.use(new FacebookStrategy({
  * Login Required middleware.
  */
 export let isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
-	if (req.isAuthenticated()) {
-		if (req.path === "/signin" && req.method === "GET") {
-			res.redirect("/");
+	if (req.headers.authorization) {
+		passport.authenticate("jwt", { session: false }, function (err, user, info) {
+			if ((!err || !info) && user) {
+				req.user = user;
+				return next();
+			}
+			error(res, "Session expired", 401);
+		})(req, res, next);
+	} else {
+		if (req.isAuthenticated()) {
+			if (req.path === "/signin" && req.method === "GET") {
+				res.redirect("/");
+			} else {
+				return next();
+			}
 		} else {
-			return next();
+			res.redirect("/signin");
 		}
 	}
-	res.redirect("/signin");
 };
 
 /**

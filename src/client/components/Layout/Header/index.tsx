@@ -53,7 +53,7 @@ export class Header extends React.PureComponent<HeaderProps, HeaderState> {
 	handleMenuToggle = () => {
 		this.setState(({ userMenuOpen }) => ({ userMenuOpen: !userMenuOpen }));
 	}
-	handleMenuClose = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+	handleMenuClose = () => {
 		this.setState({ userMenuOpen: false });
 	}
 	logout = () => this.props.dispatch(logout.trigger());

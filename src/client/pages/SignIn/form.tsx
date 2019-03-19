@@ -15,8 +15,9 @@ export class LoginForm extends React.PureComponent<InjectedFormProps & WithDispa
 	onSubmit = (data: ApiLoginProps) => {
 		const { submission, success, failure } = createSubmisisonPromise();
 		submission.then(() => {
-			if (this.props.location.state.from) {
-				this.props.history.replace(this.props.location.state.from);
+			const { state: locationState } = this.props.location;
+			if (locationState && locationState.from) {
+				this.props.history.replace(locationState.from);
 			} else {
 				this.props.history.replace("/");
 			}
