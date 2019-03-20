@@ -1,6 +1,6 @@
 import * as React from "react";
 import HomeIcon from "@material-ui/icons/Home";
-import RestaurantIcon from "@material-ui/icons/Restaurant";
+import FastfoodIcon from "@material-ui/icons/Fastfood";
 export interface NavigatorMenuItem {
 	to: string;
 	icon: JSX.Element;
@@ -17,7 +17,7 @@ export const publicPreRoutes: Array<NavigatorMenuItem> = [
 export const privateRoutes: Array<NavigatorMenuItem> = [
 	{
 		to: "/food-types",
-		icon: <RestaurantIcon />,
+		icon: <FastfoodIcon />,
 		text: "Food Types",
 	},
 ];

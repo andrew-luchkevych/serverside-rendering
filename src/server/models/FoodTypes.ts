@@ -1,17 +1,26 @@
 import mongoose from "mongoose";
 import { FoodTypeProps } from "../../shared/types/FoodType";
 import generateGravatar from "../utils/gravatar";
+import transformMongooseErrors from "../utils/models/errors";
 
 export type gravatarFunction = () => string;
 
 export type FoodTypeModel = mongoose.Document & FoodTypeProps & {
 	gravatar: gravatarFunction;
 };
-
 const FoodTypeSchema = new mongoose.Schema({
 	name: {
 		type: String,
 		unique: true,
+		required: [true, "Food Type Name is required"],
+		minlength: [2, "Food Type Name is shorter than the minimum allowed length"],
+		maxlength: [20, "Food Type Name is longer than the maximum allowed length"],
+		validate: {
+			validator: function (v: string) {
+				return !(/[^a-zA-Z]/i.test(v));
+			},
+			message: "Only letters allowed for name",
+		},
 	},
 	picture: String,
 });
@@ -23,6 +32,13 @@ FoodTypeSchema.pre("save", function save(next) {
 	}
 	next();
 });
+FoodTypeSchema.pre("findOneAndUpdate", function (next) {
+	(this as any).options.runValidators = true;
+	next();
+});
+FoodTypeSchema.post("save", transformMongooseErrors("Food Type Name should be unique"));
+FoodTypeSchema.post("findOneAndUpdate", transformMongooseErrors("Food Type Name should be unique"));
+
 const gravatar: gravatarFunction = function () {
 	const food = this as FoodTypeModel;
 	return generateGravatar(food.name);

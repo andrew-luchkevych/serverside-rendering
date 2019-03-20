@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ApiResponse } from "../../shared/types/api/response";
+import { ApiResponse } from "../../shared/types/api/responses";
 
 try {
 	const authToken = localStorage.getItem("token");

@@ -31,7 +31,7 @@ export class FormPage extends React.PureComponent<FormPageStyleProps & FormPageO
 					<Avatar className={classes.avatar}>
 						{icon}
 					</Avatar>
-					<Typography component="h1" variant="h5">
+					<Typography component="h1" variant="h5" gutterBottom>
 						{title}
 					</Typography>
 					{form}

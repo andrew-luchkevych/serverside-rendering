@@ -42,7 +42,7 @@ export let postLogin = (req: Request, res: Response, next: NextFunction) => {
 		}
 		req.logIn(user, (err) => {
 			if (err) { return next(err); }
-			return success(res, user.toAuthJSON());
+			return success<any>(res, user.toAuthJSON());
 		});
 	})(req, res, next);
 };
@@ -53,7 +53,7 @@ export let postLogin = (req: Request, res: Response, next: NextFunction) => {
  */
 export let logout = (req: Request, res: Response) => {
 	req.session.destroy(function (err) {
-		return err ? error(res, err) : success(res);
+		return err ? error(res, err) : success<any>(res);
 	});
 };
 

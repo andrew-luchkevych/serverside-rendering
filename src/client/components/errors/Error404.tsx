@@ -5,14 +5,15 @@ export interface IError404Props {
 }
 
 export default class Error404 extends React.Component<IError404Props, any> {
-	componentWillMount() {
-		const { staticContext }: any = this.props;
+	constructor(props: IError404Props) {
+		super(props);
+		const { staticContext }: any = props;
 		if (staticContext) {
 			staticContext.status = 404;
 		}
 	}
 
 	render() {
-		return <h1>Sorry, can’t find that. 404</h1>;
+		return <h1>Sorry, can’t find that. 404.</h1>;
 	}
 }

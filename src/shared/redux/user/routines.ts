@@ -10,9 +10,9 @@ export interface SignUpTriggerProps {
 	data: ApiSignUpProps;
 	controller: SubmissionControlProps;
 }
-export const login: BasicRoutine<LoginTriggerProps> = createRoutine("USER_LOGIN");
-export const signup: BasicRoutine<SignUpTriggerProps> = createRoutine("USER_SIGNUP");
-export const logout: BasicRoutine<void> = createRoutine("USER_LOGOUT");
+export const login: BasicRoutine<LoginTriggerProps> = createRoutine("USER/LOGIN");
+export const signup: BasicRoutine<SignUpTriggerProps> = createRoutine("USER/SIGNUP");
+export const logout: BasicRoutine<void> = createRoutine("USER/LOGOUT");
 export default {
 	login,
 	signup,

@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { UserLoginResponse } from "../../../shared/types/api/user";
+import { UserLoginResponse } from "../../types/api/responses/user";
 export interface ApiLoginProps {
 	email: string;
 	password: string;

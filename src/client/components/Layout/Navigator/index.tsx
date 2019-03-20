@@ -6,11 +6,18 @@ import MenuTitle from "./title";
 import PrimaryItem from "./primaryItem";
 import { publicPreRoutes, privateRoutes, publicPostRoutes, NavigatorMenuItem } from "./menu";
 import { loggedSelector } from "../../../../shared/redux/user/selectors";
-const Navigator = (props: DrawerProps & { logged: boolean }) => {
+
+export interface NavigatorOwnProps {
+	drawer: DrawerProps;
+}
+export interface NavigatorConnectedProps {
+	logged: boolean;
+}
+const Navigator = (props: NavigatorOwnProps & NavigatorConnectedProps) => {
 	const mapper = (m: NavigatorMenuItem, i: number) => <PrimaryItem {...m} key={i} />;
-	const { logged, ...drawerProps } = props;
+	const { logged, drawer } = props;
 	return (
-		<Drawer {...drawerProps}>
+		<Drawer {...drawer}>
 			<List disablePadding>
 				<MenuTitle />
 				{publicPreRoutes.map(mapper)}
@@ -20,4 +27,4 @@ const Navigator = (props: DrawerProps & { logged: boolean }) => {
 		</Drawer>
 	);
 };
-export default connect(loggedSelector)(Navigator) as React.ComponentType<DrawerProps>;
+export default connect(loggedSelector)(Navigator) as React.ComponentType<NavigatorOwnProps>;

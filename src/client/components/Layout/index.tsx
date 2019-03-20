@@ -46,19 +46,24 @@ export class RootLayout extends React.Component<RootLayoutProps, RootLayoutState
 				<nav className={classNames(classes.nav, { [classes.navHidden]: !showDrawer })}>
 					<Hidden smUp implementation="js">
 						<Navigator
-							PaperProps={{ style: { width: drawerWidth } }}
-							variant="temporary"
-							open={showDrawer}
-							onClose={this.toggleMenu}
+							drawer={{
+								PaperProps: { style: { width: drawerWidth } },
+								variant: "temporary",
+								open: showDrawer,
+								onClose: this.toggleMenu,
+							}}
 						/>
 					</Hidden>
 					<Hidden xsDown implementation="css">
 						<Navigator
-							PaperProps={{ style: { width: drawerWidth } }}
-							open={this.state.showDrawer}
-							onClose={this.toggleMenu}
-							className={classes.drawer}
-							variant="persistent" anchor="left"
+							drawer={{
+								PaperProps: { style: { width: drawerWidth } },
+								open: this.state.showDrawer,
+								onClose: this.toggleMenu,
+								className: classes.drawer,
+								variant: "persistent",
+								anchor: "left",
+							}}
 						/>
 					</Hidden>
 				</nav>

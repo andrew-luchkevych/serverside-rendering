@@ -7,5 +7,4 @@ export interface ApiErrorResponse extends ApiResponse {
 	errors?: Array<MappedError> | Dictionary<MappedError>;
 }
 export interface ApiSuccessResponse extends ApiResponse {
-	[k: string]: any;
 }
