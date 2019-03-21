@@ -1,11 +1,15 @@
+import { reducer as form } from "redux-form";
+import { RootReduser } from "../types/store/RootReducer";
 import user from "./user";
 import foodTypes from "./foodTypes";
-import { RootReduser } from "../types/store/RootReducer";
-import { reducer as form } from "redux-form";
+import foodProviders from "./foodProviders";
+import forceReloadData from "./forceReloadData";
 const rootReducer: RootReduser = {
+	form,
 	user,
 	foodTypes,
-	form,
+	foodProviders,
+	forceReloadData,
 };
 
 export default rootReducer;

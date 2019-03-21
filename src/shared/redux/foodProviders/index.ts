@@ -1,21 +1,21 @@
 import ReduxReducer from "../../types/store/reducer";
-import FoodTypeProps from "../../types/FoodType";
+import FoodProviderProps from "../../types/FoodProvider";
 import { findAndReplaceImmutable, findAndRemoveImmutable } from "../../utils/array";
 import routines from "./routines";
 
-export interface FoodTypesState {
-	data: Array<FoodTypeProps>;
+export interface FoodProvidersState {
+	data: Array<FoodProviderProps>;
 	processing: boolean;
 	loaded: boolean;
 }
 
-export const foodTypeInitialState: FoodTypesState = {
+export const foodTypeInitialState: FoodProvidersState = {
 	data: [],
 	processing: false,
 	loaded: false,
 };
 
-const FoodTypeReducer: ReduxReducer<FoodTypesState> = (state = foodTypeInitialState, action) => {
+const FoodProviderReducer: ReduxReducer<FoodProvidersState> = (state = foodTypeInitialState, action) => {
 	switch (action.type) {
 		case routines.get.REQUEST: return {
 			...state,
@@ -49,7 +49,7 @@ const FoodTypeReducer: ReduxReducer<FoodTypesState> = (state = foodTypeInitialSt
 		case routines.edit.SUCCESS:
 			return {
 				...state,
-				data: findAndReplaceImmutable<FoodTypeProps>(action.payload.data, state.data, el => el._id === action.payload.data._id),
+				data: findAndReplaceImmutable<FoodProviderProps>(action.payload.data, state.data, el => el._id === action.payload.data._id),
 			};
 		case routines.edit.FULFILL: return {
 			...state,
@@ -61,7 +61,7 @@ const FoodTypeReducer: ReduxReducer<FoodTypesState> = (state = foodTypeInitialSt
 		};
 		case routines.remove.SUCCESS: return {
 			...state,
-			data: findAndRemoveImmutable<FoodTypeProps>(state.data, el => el._id === action.payload.data._id),
+			data: findAndRemoveImmutable<FoodProviderProps>(state.data, el => el._id === action.payload.data._id),
 		};
 		case routines.remove.FULFILL: return {
 			...state,
@@ -71,4 +71,4 @@ const FoodTypeReducer: ReduxReducer<FoodTypesState> = (state = foodTypeInitialSt
 	}
 };
 
-export default FoodTypeReducer;
+export default FoodProviderReducer;

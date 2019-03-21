@@ -1,9 +1,8 @@
 import * as React from "react";
-import { WrappedFieldMetaProps } from "redux-form";
+import { WrappedFieldMetaProps, WrappedFieldInputProps } from "redux-form";
 import { TextField } from "@material-ui/core";
-import { StandardTextFieldProps } from "@material-ui/core/TextField";
 export interface FormTextFieldProps {
-	input: StandardTextFieldProps;
+	input: WrappedFieldInputProps;
 	label: string;
 	meta: WrappedFieldMetaProps;
 }
@@ -16,7 +15,6 @@ export const FormTextField = (props: FormTextFieldProps) => {
 			label={label}
 			error={touched && !!error}
 			helperText={touched && error}
-			defaultValue={input.defaultValue}
 			value={input.value}
 			onChange={input.onChange}
 		/>

@@ -24,3 +24,9 @@ export const styles = (theme: Theme) => ({
 		backgroundColor: theme.palette.secondary.main,
 	},
 });
+
+export const formStyles = () => ({
+	form: <CSSProperties>{
+		maxWidth: 305,
+	},
+});

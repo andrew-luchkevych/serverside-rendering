@@ -14,7 +14,7 @@ const FoodTypeSchema = new mongoose.Schema({
 		unique: true,
 		required: [true, "Food Type Name is required"],
 		minlength: [2, "Food Type Name is shorter than the minimum allowed length"],
-		maxlength: [20, "Food Type Name is longer than the maximum allowed length"],
+		maxlength: [30, "Food Type Name is longer than the maximum allowed length"],
 		validate: {
 			validator: function (v: string) {
 				return !(/[^a-zA-Z]/i.test(v));

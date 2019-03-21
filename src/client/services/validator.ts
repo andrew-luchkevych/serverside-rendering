@@ -1,5 +1,6 @@
 const required = (value: string) => (value ? undefined : "Required");
 const maxLength = (max: number) => (value: string) => (value && value.length > max ? `Must be ${max} characters or less` : undefined);
+const maxLength30 = maxLength(30);
 const maxLength128 = maxLength(128);
 const minLength = (min: number) => (value: string) => (value && value.length < min ? `Must be ${min} characters or more` : undefined);
 const minLength1 = minLength(1);
@@ -22,6 +23,7 @@ const match = (matchValue: string, message: string) => (value: string) => matchV
 export default {
 	required,
 	maxLength,
+	maxLength30,
 	maxLength128,
 	minLength,
 	minLength1,

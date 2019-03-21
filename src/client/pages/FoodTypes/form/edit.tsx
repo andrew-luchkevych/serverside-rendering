@@ -7,7 +7,6 @@ import Form from "./form";
 import { ReduxStoreState } from "../../../../shared/types/store/RootReducer";
 import { byId } from "../../../../shared/redux/foodTypes/selectors";
 import FoodTypeProps from "../../../../shared/types/FoodType";
-import Error404 from "../../../components/errors/Error404";
 export interface EditFoodTypePageProps {
 	foodType?: FoodTypeProps;
 }

@@ -32,7 +32,7 @@ export class FoodType extends React.PureComponent<InjectedFormProps & WithDispat
 				<Field
 					name="name"
 					label="Name"
-					validate={[validator.required, validator.minLength2]}
+					validate={[validator.required, validator.minLength2, validator.maxLength30]}
 					component={FormTextField}
 					required
 					fullWidth

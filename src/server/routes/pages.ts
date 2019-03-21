@@ -3,6 +3,7 @@ import * as passportConfig from "../config/passport";
 import * as UserController from "../controllers/user";
 import * as ContactController from "../controllers/contact";
 import * as FoodTypesContoroller from "../controllers/foodType";
+import * as FoodProviderContoroller from "../controllers/foodProvider";
 import HomeController from "../controllers/home";
 import withReduxStore from "./middleware/store";
 import { ssrPage } from "../utils/ssr/response";
@@ -17,6 +18,9 @@ const populateWithPagesRoutes = (app: Express): void => {
 	app.get("/food-types", passportConfig.isAuthenticated, withReduxStore, FoodTypesContoroller.getAll);
 	app.get("/food-types/create", passportConfig.isAuthenticated, withReduxStore, FoodTypesContoroller.createPage);
 	app.get("/food-types/:id", passportConfig.isAuthenticated, withReduxStore, FoodTypesContoroller.editPage);
+	app.get("/food-providers", passportConfig.isAuthenticated, withReduxStore, FoodProviderContoroller.getAll);
+	app.get("/food-providers/create", passportConfig.isAuthenticated, withReduxStore, FoodProviderContoroller.createPage);
+	app.get("/food-providers/:id", passportConfig.isAuthenticated, withReduxStore, FoodProviderContoroller.editPage);
 	app.get("/404", withReduxStore, ssrPage);
 };
 

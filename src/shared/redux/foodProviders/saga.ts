@@ -1,10 +1,10 @@
 import { put, call, all, takeLatest, takeEvery } from "redux-saga/effects";
 import SnackService from "../../services/SnackService";
 import { ApiSuccessResponse } from "../../types/api/responses";
-import FoodTypeProps from "../../types/FoodType";
+import FoodProviderProps from "../../types/FoodProvider";
 import createPayload from "../createPayload";
-import routines, { CreateFoodTypeTriggerProps, EditFoodTypeTriggerProps, RemoveFoodTypeTriggerProps } from "./routines";
-import forceReloadDataRoutines from "../forceReloadData/routines";
+import routines, { CreateFoodProviderTriggerProps, EditFoodProviderTriggerProps, RemoveFoodProviderTriggerProps } from "./routines";
+import { remove as reloaded } from "../forceReloadData/routines";
 import api from "./api";
 import DataTypes from "../forceReloadData/types";
 
@@ -12,8 +12,9 @@ export function* get() {
 	const { get: routine } = routines;
 	try {
 		yield put(routine.request());
-		const data: Array<FoodTypeProps> = yield call(api.get);
+		const data: Array<FoodProviderProps> = yield call(api.get);
 		yield put(routine.success(createPayload(data)));
+		yield put(reloaded.trigger({ dataType: DataTypes.foodType }));
 	} catch (e) {
 		yield put(routine.failure(createPayload(undefined, e)));
 		SnackService.error(e.message);
@@ -22,11 +23,11 @@ export function* get() {
 	}
 }
 
-export function* create({ payload }: { payload: CreateFoodTypeTriggerProps }) {
+export function* create({ payload }: { payload: CreateFoodProviderTriggerProps }) {
 	const { create: routine } = routines;
 	try {
 		yield put(routine.request());
-		const foodType: FoodTypeProps = yield call(api.create, payload.data);
+		const foodType: FoodProviderProps = yield call(api.create, payload.data);
 		yield put(routine.success(createPayload(foodType)));
 		payload.controller.success();
 	} catch (e) {
@@ -38,15 +39,13 @@ export function* create({ payload }: { payload: CreateFoodTypeTriggerProps }) {
 	}
 }
 
-export function* edit({ payload }: { payload: EditFoodTypeTriggerProps }) {
+export function* edit({ payload }: { payload: EditFoodProviderTriggerProps }) {
 	const { edit: routine } = routines;
-	const { add: forceReload } = forceReloadDataRoutines;
 	try {
 		yield put(routine.request());
-		const foodType: FoodTypeProps = yield call(api.edit, payload.data);
+		const foodType: FoodProviderProps = yield call(api.edit, payload.data);
 		yield put(routine.success(createPayload(foodType)));
 		payload.controller.success();
-		yield put(forceReload.trigger({ dataType: DataTypes.foodType }));
 	} catch (e) {
 		yield put(routine.failure(createPayload(undefined, e)));
 		SnackService.error(e.message);
@@ -56,15 +55,13 @@ export function* edit({ payload }: { payload: EditFoodTypeTriggerProps }) {
 	}
 }
 
-export function* remove({ payload }: { payload: RemoveFoodTypeTriggerProps }) {
+export function* remove({ payload }: { payload: RemoveFoodProviderTriggerProps }) {
 	const { remove: routine } = routines;
-	const { add: forceReload } = forceReloadDataRoutines;
 	try {
 		yield put(routine.request());
 		const response: ApiSuccessResponse = yield call(api.remove, payload.data);
 		SnackService.success(response.msg);
 		yield put(routine.success(payload));
-		yield put(forceReload.trigger({ dataType: DataTypes.foodType }));
 	} catch (e) {
 		yield put(routine.failure(createPayload(undefined, e)));
 		SnackService.error(e.message);

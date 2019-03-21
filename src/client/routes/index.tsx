@@ -7,6 +7,9 @@ const SignUp = LoadableComponent(() => import("../pages/SignUp"));
 const FoodTypes = LoadableComponent(() => import("../pages/FoodTypes"));
 const CreateFoodTypes = LoadableComponent(() => import("../pages/FoodTypes/form/create"));
 const EditFoodTypes = LoadableComponent(() => import("../pages/FoodTypes/form/edit"));
+const FoodProviders = LoadableComponent(() => import("../pages/FoodProviders"));
+const CreateFoodProviders = LoadableComponent(() => import("../pages/FoodProviders/form/create"));
+const EditFoodProviders = LoadableComponent(() => import("../pages/FoodProviders/form/edit"));
 const routes: Array<AppRouteProps> = [
 	{
 		path: "/",
@@ -39,6 +42,24 @@ const routes: Array<AppRouteProps> = [
 		path: "/food-types",
 		exact: true,
 		component: FoodTypes,
+		isPrivate: true,
+	},
+	{
+		path: "/food-providers/create",
+		exact: true,
+		component: CreateFoodProviders,
+		isPrivate: true,
+	},
+	{
+		path: "/food-providers/:id",
+		exact: true,
+		component: EditFoodProviders,
+		isPrivate: true,
+	},
+	{
+		path: "/food-providers",
+		exact: true,
+		component: FoodProviders,
 		isPrivate: true,
 	},
 	{

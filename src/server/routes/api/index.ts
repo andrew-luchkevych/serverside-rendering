@@ -1,6 +1,7 @@
 import { Express, Router, Request, Response } from "express";
 import restify from "express-restify-mongoose";
 import FoodTypes from "../../models/FoodTypes";
+import FoodProvider from "../../models/FoodProvider";
 import * as PassportConfig from "../../config/passport";
 import * as ApiController from "../../controllers/api";
 import * as UserController from "../../controllers/user";
@@ -8,6 +9,7 @@ import * as ContactController from "../../controllers/contact";
 import { error, success } from "../../utils/api";
 import { RequestWithErm } from "../../types/RequestWithErm";
 import FoodTypeProps from "../../../shared/types/FoodType";
+import FoodProviderProps from "../../../shared/types/FoodProvider";
 const router = Router();
 const populateWithApiRoutes = (app: Express): void => {
 	app.get("/api", PassportConfig.isAuthenticated, ApiController.getApi);
@@ -31,6 +33,18 @@ const populateWithApiRoutes = (app: Express): void => {
 		},
 		postDelete: (_req: RequestWithErm, res: Response) => {
 			success<any>(res, {}, "Food Type removed successfully");
+		},
+	});
+	restify.serve(router, FoodProvider, {
+		middleware: PassportConfig.isAuthenticated,
+		onError: (err: any, _req: Request, res: Response) => {
+			error(res, err);
+		},
+		postCreate: (req: RequestWithErm, res: Response) => {
+			success<FoodProviderProps>(res, { ...req.erm.result.toObject() }, "Food Provider created successfully");
+		},
+		postDelete: (_req: RequestWithErm, res: Response) => {
+			success<any>(res, {}, "Food Provider removed successfully");
 		},
 	});
 	app.use(router);
