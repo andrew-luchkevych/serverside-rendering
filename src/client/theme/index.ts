@@ -2,7 +2,7 @@ import { Theme } from "@material-ui/core";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
 export const drawerWidth = 256;
-const drawerBg = "#18202c";
+const drawerBg = "#232f3f";
 const sharedTheme = createMuiTheme({
 	typography: {
 		useNextVariants: true,
@@ -162,4 +162,12 @@ export const formControlStyles = (theme: Theme) => ({
 		margin: theme.spacing.unit,
 	},
 });
+
+export const listItemStyles = {
+	avatar: <CSSProperties>{
+		width: 64,
+		height: 64,
+	},
+};
+
 export default theme;

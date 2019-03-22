@@ -5,6 +5,7 @@ export interface FoodProviderProps {
 	name: string;
 	picture: string;
 	description: string;
+	minOrderCost: number;
 	foodTypes: Array<FoodTypeProps>;
 }
 

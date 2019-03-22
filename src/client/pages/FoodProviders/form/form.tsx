@@ -57,6 +57,24 @@ export class FoodProviderForm extends React.PureComponent<InjectedFormProps & Fo
 					fullWidth
 				/>
 				<Field
+					name="description"
+					label="Description"
+					validate={[validator.maxLength100]}
+					component={FormTextField}
+					multiline={true}
+					rows={1}
+					rowsMax={6}
+					fullWidth
+				/>
+				<Field
+					name="minOrderCost"
+					label="Minimum Order Cost"
+					validate={[validator.required, validator.numeric]}
+					component={FormTextField}
+					required
+					fullWidth
+				/>
+				<Field
 					name="foodTypes"
 					label="Food Types"
 					component={FormSelectField}

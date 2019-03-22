@@ -10,6 +10,7 @@ import { error, success } from "../../utils/api";
 import { RequestWithErm } from "../../types/RequestWithErm";
 import FoodTypeProps from "../../../shared/types/FoodType";
 import FoodProviderProps from "../../../shared/types/FoodProvider";
+import { isArray } from "../../../shared/utils/types";
 const router = Router();
 const populateWithApiRoutes = (app: Express): void => {
 	app.get("/api", PassportConfig.isAuthenticated, ApiController.getApi);
@@ -36,6 +37,7 @@ const populateWithApiRoutes = (app: Express): void => {
 		},
 	});
 	restify.serve(router, FoodProvider, {
+		lean: false,
 		middleware: PassportConfig.isAuthenticated,
 		onError: (err: any, _req: Request, res: Response) => {
 			error(res, err);

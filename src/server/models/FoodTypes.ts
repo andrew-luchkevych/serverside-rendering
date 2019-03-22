@@ -12,12 +12,13 @@ const FoodTypeSchema = new mongoose.Schema({
 	name: {
 		type: String,
 		unique: true,
+		trim: true,
 		required: [true, "Food Type Name is required"],
 		minlength: [2, "Food Type Name is shorter than the minimum allowed length"],
 		maxlength: [30, "Food Type Name is longer than the maximum allowed length"],
 		validate: {
 			validator: function (v: string) {
-				return !(/[^a-zA-Z]/i.test(v));
+				return !(/[^a-zA-Z ]/i.test(v));
 			},
 			message: "Only letters allowed for name",
 		},

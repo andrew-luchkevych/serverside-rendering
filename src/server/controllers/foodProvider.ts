@@ -28,6 +28,7 @@ export const editPage = (req: RequestWithStore, res: Response) => {
 		} else {
 			const state = req.reduxStore.getState();
 			state.foodProviders.data = [foodType.toObject()];
+			state.foodProviders.loaded = false;
 			req.reduxStore = configureStore(state, true);
 			return res.send(ssr(req));
 		}
