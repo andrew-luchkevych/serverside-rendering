@@ -1,17 +1,15 @@
 import * as React from "react";
-import { Helmet } from "react-helmet";
-import PaperWrapper from "../../components/Layout/PaperWrapper";
-import Padder from "../../components/Layout/Padder/index";
+import { connect } from "react-redux";
+import { loggedSelector } from "../../../shared/redux/user/selectors";
+import PrivateHome from "./private";
+import PublicHome from "./public";
+export interface HomeProps {
+	logged: boolean;
+}
+export const Home = (props: HomeProps) => {
+	return props.logged
+		? <PrivateHome />
+		: <PublicHome />;
+};
 
-export const Home = () => (
-	<PaperWrapper>
-		<Helmet>
-			<title>Home</title>
-		</Helmet>
-		<Padder>
-			Hello
-		</Padder>
-	</PaperWrapper>
-);
-
-export default Home;
+export default connect<HomeProps>(loggedSelector)(Home);

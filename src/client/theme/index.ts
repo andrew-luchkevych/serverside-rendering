@@ -170,4 +170,28 @@ export const listItemStyles = {
 	},
 };
 
+export const layout = (theme: Theme) => ({
+	fullheight: <CSSProperties>{
+		height: "100%",
+	},
+	fullsize: <CSSProperties>{
+		height: "100%",
+		width: "100%",
+	},
+	flex: <CSSProperties>{
+		display: "flex",
+	},
+	flexColumn: <CSSProperties>{
+		display: "flex",
+		flexDirection: "column",
+	},
+	flexRowCenter: <CSSProperties>{
+		display: "flex",
+		flexDirection: "row",
+		alignContent: "center",
+		alignItems: "center",
+		justifyContent: "center",
+	},
+});
+
 export default theme;
