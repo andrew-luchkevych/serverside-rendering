@@ -2,7 +2,7 @@ import { Document, NativeError } from "mongoose";
 interface WithErrors extends Error {
 	errors?: Array<string>;
 }
-const transformMongooseErrors = (uniqueMessage: string) => (error: any, doc: Document, next: (err?: NativeError) => void) => {
+const transformMongooseErrors = (uniqueMessage: string = "Should be Unique") => (error: any, doc: Document, next: (err?: NativeError) => void) => {
 	if (error) {
 		if (error.name === "MongoError" && error.code === 11000) {
 			return next(new Error(uniqueMessage));

@@ -3,7 +3,6 @@ import { Helmet } from "react-helmet";
 import { withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import Padder from "../../../components/Layout/Padder";
 import Order from "./Order";
 import Chat from "./Chat/index";
 import styles from "./styles";

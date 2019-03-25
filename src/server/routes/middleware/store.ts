@@ -1,6 +1,6 @@
 import { Response } from "express";
-import RequestWithStore from "../../types/RequestWithStore";
-import { RequestWithUser } from "../../types/RequestWithUser";
+import RequestWithStore from "../../types/request/RequestWithStore";
+import { RequestWithUser } from "../../types/request/RequestWithUser";
 import { ReduxStoreState } from "../../../shared/types/store/RootReducer";
 import { UserModel } from "../../models/User";
 import configureStore from "../../../shared/redux/configureStore";

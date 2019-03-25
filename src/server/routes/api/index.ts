@@ -6,11 +6,12 @@ import * as PassportConfig from "../../config/passport";
 import * as ApiController from "../../controllers/api";
 import * as UserController from "../../controllers/user";
 import * as ContactController from "../../controllers/contact";
+import * as OrderController from "../../controllers/order";
+import * as OrderRollController from "../../controllers/orderRoll";
 import { error, success } from "../../utils/api";
-import { RequestWithErm } from "../../types/RequestWithErm";
+import { RequestWithErm } from "../../types/request/RequestWithErm";
 import FoodTypeProps from "../../../shared/types/FoodType";
 import FoodProviderProps from "../../../shared/types/FoodProvider";
-import { isArray } from "../../../shared/utils/types";
 const router = Router();
 const populateWithApiRoutes = (app: Express): void => {
 	app.get("/api", PassportConfig.isAuthenticated, ApiController.getApi);
@@ -24,6 +25,8 @@ const populateWithApiRoutes = (app: Express): void => {
 	app.post("/api/account/password", PassportConfig.isAuthenticated, UserController.postUpdatePassword);
 	app.delete("/api/account", PassportConfig.isAuthenticated, UserController.postDeleteAccount);
 	app.delete("/api/account/provider", PassportConfig.isAuthenticated, UserController.getOauthUnlink);
+	app.get("/api/v1/order", PassportConfig.isAuthenticated, OrderController.apiGet);
+	app.get("/api/v1/orderRoll", PassportConfig.isAuthenticated, OrderController.withOrderMiddleware, OrderRollController.apiGet);
 	restify.serve(router, FoodTypes, {
 		middleware: PassportConfig.isAuthenticated,
 		onError: (err: any, _req: Request, res: Response) => {

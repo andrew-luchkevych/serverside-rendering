@@ -1,5 +1,5 @@
 import { Response } from "express";
-import RequestWithStore from "../types/RequestWithStore";
+import RequestWithStore from "../types/request/RequestWithStore";
 import ssr from "../utils/ssr/index";
 import FoodTypes from "../models/FoodTypes";
 import configureStore from "../../shared/redux/configureStore";

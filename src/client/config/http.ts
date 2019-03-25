@@ -1,10 +1,9 @@
 import axios from "axios";
 import { ApiResponse } from "../../shared/types/api/responses";
-
-try {
-	const authToken = localStorage.getItem("token");
+export function config() {
+	const getToken = () => localStorage.getItem("token");
 	axios.defaults.headers = {
-		Authorization: `Bearer ${authToken}`,
+		Authorization: `Bearer ${getToken()}`,
 		"Content-Type": "application/json",
 	};
 
@@ -18,6 +17,4 @@ try {
 			return Promise.reject(new Error(data.msg));
 		}
 	});
-} catch (e) {
-	console.log(e);
 }

@@ -172,7 +172,7 @@ export const listItemStyles = {
 
 export const layout = (theme: Theme) => ({
 	fullheight: <CSSProperties>{
-		height: "100%",
+		minHeight: "100%",
 	},
 	fullsize: <CSSProperties>{
 		height: "100%",
@@ -192,6 +192,11 @@ export const layout = (theme: Theme) => ({
 		alignItems: "center",
 		justifyContent: "center",
 	},
+	flexColumnVerticalCenter: <CSSProperties>{
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "center",
+	}
 });
 
 export default theme;

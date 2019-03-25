@@ -1,7 +1,6 @@
 import * as React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
 import DailyStats from "./daily";
 import ParticipatingStats from "./participating";
 import { layout } from "../../../../../theme";
@@ -15,14 +14,10 @@ export const OrderStats = (props: OrderStatsStyleProps) => {
 	return (
 		<Grid container spacing={16}>
 			<Grid item md={6} sm={12} xs={12}>
-				<Paper className={fullheight}>
-					<DailyStats />
-				</Paper>
+				<DailyStats />
 			</Grid>
 			<Grid item md={6} sm={12} xs={12}>
-				<Paper className={fullheight}>
-					<ParticipatingStats />
-				</Paper>
+				<ParticipatingStats />
 			</Grid>
 		</Grid>
 	);

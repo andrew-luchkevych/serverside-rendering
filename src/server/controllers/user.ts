@@ -7,7 +7,7 @@ import { Request, Response, NextFunction } from "express";
 import { IVerifyOptions } from "passport-local";
 import { WriteError } from "mongodb";
 import "../config/passport";
-import RequestWithStore from "../types/RequestWithStore";
+import RequestWithStore from "../types/request/RequestWithStore";
 import ssr from "../utils/ssr/index";
 import { error, success } from "../utils/api";
 /**

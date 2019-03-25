@@ -18,7 +18,7 @@ import { getBundles } from "react-loadable/webpack";
 import theme from "../../../client/theme";
 import App from "../../../client/App";
 import template from "../../template";
-import RequestWithStore from "../../types/RequestWithStore";
+import RequestWithStore from "../../types/request/RequestWithStore";
 import configureStore from "../../../shared/redux/configureStore";
 const isProd = process.env.NODE_ENV === "production";
 const modules: Array<string> = [];
