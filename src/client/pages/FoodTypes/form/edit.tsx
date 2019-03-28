@@ -5,7 +5,7 @@ import FastfoodIcon from "@material-ui/icons/Fastfood";
 import FormPage from "../../../components/Layout/FormPage";
 import Form from "./form";
 import { ReduxStoreState } from "../../../../shared/types/store/RootReducer";
-import { byId } from "../../../../shared/redux/foodTypes/selectors";
+import { getFoodTypeById } from "../../../../shared/redux/foodTypes/selectors";
 import FoodTypeProps from "../../../../shared/types/FoodType";
 export interface EditFoodTypePageProps {
 	foodType?: FoodTypeProps;
@@ -18,7 +18,7 @@ export const EditFoodTypePage = (props: EditFoodTypePageProps & RouteComponentPr
 const mapStateToProps = (state: ReduxStoreState, props: RouteComponentProps): EditFoodTypePageProps => {
 	const r: EditFoodTypePageProps = {};
 	const { id } = props.match.params as any;
-	const f = byId(id)(state);
+	const f = getFoodTypeById(id)(state);
 	if (id && f) {
 		r.foodType = { ...f };
 	}

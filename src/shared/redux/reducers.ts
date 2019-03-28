@@ -6,6 +6,8 @@ import foodProviders from "./foodProviders";
 import forceReloadData from "./forceReloadData";
 import order from "./order";
 import orderRoll from "./orderRoll";
+import orderRollStats from "./orderRollStats";
+import orderFoodProviderVotes from "./orderFoodProviderVotes";
 const rootReducer: RootReduser = {
 	form,
 	user,
@@ -14,6 +16,8 @@ const rootReducer: RootReduser = {
 	forceReloadData,
 	order,
 	orderRoll,
+	orderRollStats,
+	orderFoodProviderVotes,
 };
 
 export default rootReducer;

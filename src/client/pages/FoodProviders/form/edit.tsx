@@ -5,7 +5,7 @@ import RestaurantIcon from "@material-ui/icons/Restaurant";
 import FormPage from "../../../components/Layout/FormPage";
 import Form from "./form";
 import { ReduxStoreState } from "../../../../shared/types/store/RootReducer";
-import { byId } from "../../../../shared/redux/foodProviders/selectors";
+import { getFoodProviderById } from "../../../../shared/redux/foodProviders/selectors";
 import FoodProviderProps from "../../../../shared/types/FoodProvider";
 import FoodTypeProps from "../../../../shared/types/FoodType";
 export interface EditFoodProviderPageProps {
@@ -22,9 +22,9 @@ export const EditFoodProviderPage = (props: EditFoodProviderPageProps & RouteCom
 const mapStateToProps = (state: ReduxStoreState, props: RouteComponentProps): EditFoodProviderPageProps => {
 	const r: EditFoodProviderPageProps = {};
 	const { id } = props.match.params as any;
-	const f = byId(id)(state);
+	const f = getFoodProviderById(id)(state);
 	if (id && f) {
-		r.foodProvider = { ...f };
+		r.foodProvider = f;
 	}
 	return r;
 };

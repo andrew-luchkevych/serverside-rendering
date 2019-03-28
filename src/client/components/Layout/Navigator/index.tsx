@@ -5,7 +5,8 @@ import List from "@material-ui/core/List";
 import MenuTitle from "./title";
 import PrimaryItem from "./primaryItem";
 import { publicPreRoutes, privateRoutes, publicPostRoutes, NavigatorMenuItem } from "./menu";
-import { loggedSelector } from "../../../../shared/redux/user/selectors";
+import { isUserLogged } from "../../../../shared/redux/user/selectors";
+import { ReduxStoreState } from "../../../../shared/types/store/RootReducer";
 
 export interface NavigatorOwnProps {
 	drawer: DrawerProps;
@@ -27,4 +28,5 @@ const Navigator = (props: NavigatorOwnProps & NavigatorConnectedProps) => {
 		</Drawer>
 	);
 };
-export default connect(loggedSelector)(Navigator) as React.ComponentType<NavigatorOwnProps>;
+const mapStateToProps = (state: ReduxStoreState): NavigatorConnectedProps => ({ logged: isUserLogged(state) });
+export default connect(mapStateToProps)(Navigator) as React.ComponentType<NavigatorOwnProps>;

@@ -9,7 +9,7 @@ export interface BasicRoutine<InputParams> {
 	FAILURE: string;
 	FULFILL: string;
 	trigger: (params: InputParams) => ReduxAction;
-	request: () => ReduxAction;
+	request: (payload?: ReduxActionPayload) => ReduxAction;
 	success: (payload?: ReduxActionPayload) => ReduxAction;
 	failure: (payload?: ReduxActionPayload) => ReduxAction;
 	fulfill: () => ReduxAction;

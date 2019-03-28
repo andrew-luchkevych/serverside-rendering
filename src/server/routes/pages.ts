@@ -5,7 +5,8 @@ import * as ContactController from "../controllers/contact";
 import * as FoodTypesContoroller from "../controllers/foodType";
 import * as FoodProviderContoroller from "../controllers/foodProvider";
 import * as OrderController from "../controllers/order";
-import * as OrderRollController from "../controllers/order";
+import * as OrderRollController from "../controllers/orderRoll";
+import * as OrderFoodProviderVoteController from "../controllers/orderFoodProviderVote";
 import HomeController from "../controllers/home";
 import withReduxStore from "./middleware/store";
 import { ssrPage } from "../utils/ssr/response";
@@ -15,6 +16,9 @@ const populateWithPagesRoutes = (app: Express): void => {
 		withReduxStore,
 		FoodProviderContoroller.withFoodProvidersMiddleware,
 		OrderController.withOrderMiddleware,
+		OrderRollController.withOrderRollMiddleware,
+		OrderRollController.withOrderRollStatsMiddleware,
+		OrderFoodProviderVoteController.withOrderFoodProviderVotesMiddleware,
 		HomeController.index,
 	);
 	app.get("/signin", UserController.getLogin);

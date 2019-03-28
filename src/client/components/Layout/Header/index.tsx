@@ -18,11 +18,12 @@ import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import MenuList from "@material-ui/core/MenuList";
 import MenuItem from "@material-ui/core/MenuItem";
 import WithDispatch from "../../../../shared/types/store/dispatch";
-import { userStateSelector } from "../../../../shared/redux/user/selectors";
-import { UserState } from "../../../../shared/redux/user";
-import styles from "./styles";
-import LinkedButton from "../../Linked/LinkedButton/index";
 import { logout } from "../../../../shared/redux/user/routines";
+import UserProps from "../../../../shared/types/User";
+import { ReduxStoreState } from "../../../../shared/types/store/RootReducer";
+import { isUserLogged, getUserData } from "../../../../shared/redux/user/selectors";
+import LinkedButton from "../../Linked/LinkedButton/index";
+import styles from "./styles";
 export interface HeaderStylesProps {
 	classes: {
 		menuButton: string;
@@ -34,7 +35,8 @@ export interface HeaderStylesProps {
 	};
 }
 export interface HeaderConnectedProps {
-	userState: UserState;
+	logged: boolean;
+	user?: UserProps;
 }
 export interface HeaderOwnProps {
 	onDrawerToggle: () => void;
@@ -56,9 +58,12 @@ export class Header extends React.PureComponent<HeaderProps, HeaderState> {
 	handleMenuClose = () => {
 		this.setState({ userMenuOpen: false });
 	}
-	logout = () => this.props.dispatch(logout.trigger());
+	logout = () => {
+		this.handleMenuClose();
+		this.props.dispatch(logout.trigger());
+	}
 	render() {
-		const { classes, onDrawerToggle, userState: { logged, data: user } } = this.props;
+		const { classes, onDrawerToggle, logged, user } = this.props;
 		return (
 			<AppBar color="primary" position="sticky" elevation={0} style={{ minWidth: 320 }}>
 				<Helmet onChangeClientState={this.updateTitle} />
@@ -80,7 +85,7 @@ export class Header extends React.PureComponent<HeaderProps, HeaderState> {
 							</Typography>
 						</Grid>
 						{
-							logged && (
+							logged && user && (
 								<React.Fragment>
 									<Grid item>
 										<Tooltip title="Alerts • No alters">
@@ -127,5 +132,10 @@ export class Header extends React.PureComponent<HeaderProps, HeaderState> {
 	}
 }
 
-const StyledHeader = withStyles(styles)(Header);
-export default connect<HeaderConnectedProps, WithDispatch, HeaderOwnProps>(userStateSelector)(StyledHeader) as React.ComponentType<HeaderOwnProps>;
+const mapStateToProps = (state: ReduxStoreState): HeaderConnectedProps => ({
+	logged: isUserLogged(state),
+	user: getUserData(state),
+});
+export default connect<HeaderConnectedProps, WithDispatch, HeaderOwnProps>(mapStateToProps)(
+	withStyles(styles)(Header),
+) as React.ComponentType<HeaderOwnProps>;

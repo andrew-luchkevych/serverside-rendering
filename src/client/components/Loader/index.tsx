@@ -26,5 +26,4 @@ export const Loader = (props: LoaderProps) => {
 
 Loader.displayName = "Loader";
 
-const StyledLoader = withStyles(styles)(Loader);
-export default StyledLoader;
+export default withStyles(styles)(Loader);

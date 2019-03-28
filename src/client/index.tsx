@@ -5,7 +5,6 @@ import { MuiThemeProvider } from "@material-ui/core/styles";
 import { Provider } from "react-redux";
 import Loadable from "react-loadable";
 import configureStore from "../shared/redux/configureStore";
-import { config as httpConfig } from "./config/http";
 import App from "./App";
 import theme from "./theme";
 
@@ -18,7 +17,6 @@ declare global {
 const initialState = { ...window.__INITIAL_STATE__ };
 delete window.__INITIAL_STATE__;
 const store = configureStore(initialState);
-httpConfig();
 const renderApp = (Comp?: any) => {
 	return hydrate(
 		<MuiThemeProvider theme={theme}>

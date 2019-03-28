@@ -29,6 +29,23 @@ const FoodProviderReducer: ReduxReducer<OrderRollState> = (state = orderRollInit
 			...state,
 			processing: false,
 		};
+		case routines.create.REQUEST: return {
+			...state,
+			processing: true,
+		};
+		case routines.create.SUCCESS: return {
+			...state,
+			data: action.payload.data,
+			loaded: true,
+		};
+		case routines.create.FULFILL: return {
+			...state,
+			processing: false,
+		};
+		case routines.remove.REQUEST: return {
+			...state,
+			data: undefined,
+		};
 		default: return state;
 	}
 };

@@ -8,6 +8,7 @@ import * as UserController from "../../controllers/user";
 import * as ContactController from "../../controllers/contact";
 import * as OrderController from "../../controllers/order";
 import * as OrderRollController from "../../controllers/orderRoll";
+import * as OrderFoodProviderVote from "../../controllers/orderFoodProviderVote";
 import { error, success } from "../../utils/api";
 import { RequestWithErm } from "../../types/request/RequestWithErm";
 import FoodTypeProps from "../../../shared/types/FoodType";
@@ -27,6 +28,12 @@ const populateWithApiRoutes = (app: Express): void => {
 	app.delete("/api/account/provider", PassportConfig.isAuthenticated, UserController.getOauthUnlink);
 	app.get("/api/v1/order", PassportConfig.isAuthenticated, OrderController.apiGet);
 	app.get("/api/v1/orderRoll", PassportConfig.isAuthenticated, OrderController.withOrderMiddleware, OrderRollController.apiGet);
+	app.post("/api/v1/orderRoll", PassportConfig.isAuthenticated, OrderController.withOrderMiddleware, OrderRollController.apiPost);
+	app.delete("/api/v1/orderRoll", PassportConfig.isAuthenticated, OrderController.withOrderMiddleware, OrderRollController.apiDelete);
+	app.get("/api/v1/orderRoll/stats", PassportConfig.isAuthenticated, OrderController.withOrderMiddleware, OrderRollController.apiGetStats);
+	app.get("/api/v1/orderFoodProviderVote", PassportConfig.isAuthenticated, OrderController.withOrderMiddleware, OrderFoodProviderVote.apiGet);
+	app.post("/api/v1/orderFoodProviderVote", PassportConfig.isAuthenticated, OrderController.withOrderMiddleware, OrderFoodProviderVote.apiPost);
+	app.delete("/api/v1/orderFoodProviderVote", PassportConfig.isAuthenticated, OrderController.withOrderMiddleware, OrderFoodProviderVote.apiDelete);
 	restify.serve(router, FoodTypes, {
 		middleware: PassportConfig.isAuthenticated,
 		onError: (err: any, _req: Request, res: Response) => {

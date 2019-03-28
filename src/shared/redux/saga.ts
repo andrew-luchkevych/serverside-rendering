@@ -5,6 +5,8 @@ import FoodProvidersSaga from "./foodProviders/saga";
 import ForceReloadDataSaga from "./forceReloadData/saga";
 import OrderSaga from "./order/saga";
 import OrderRollSaga from "./orderRoll/saga";
+import OrderRollStatsSaga from "./orderRollStats/saga";
+import OrderFoodProviderVotesSaga from "./orderFoodProviderVotes/saga";
 export default function* root() {
 	yield all([
 		fork(UserSaga),
@@ -13,5 +15,7 @@ export default function* root() {
 		fork(ForceReloadDataSaga),
 		fork(OrderSaga),
 		fork(OrderRollSaga),
+		fork(OrderRollStatsSaga),
+		fork(OrderFoodProviderVotesSaga),
 	]);
 }

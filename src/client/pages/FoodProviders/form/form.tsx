@@ -11,10 +11,11 @@ import FormSelectField from "../../../components/Form/MultipleSelect";
 import SubmitButton from "../../../components/Form/SubmitButton";
 import validator from "../../../services/validator";
 import { FoodTypesState } from "../../../../shared/redux/foodTypes";
-import { foodTypes as foodTypesSelector } from "../../../../shared/redux/foodTypes/selectors";
+import { getFoodTypesState } from "../../../../shared/redux/foodTypes/selectors";
 import { CreateFoodProviderApiProps, EditFoodProviderApiProps } from "../../../../shared/redux/foodProviders/api";
 import { get as getFoodTypes } from "../../../../shared/redux/foodTypes/routines";
 import { formStyles } from "../../../components/Layout/FormPage/styles";
+import { ReduxStoreState } from "../../../../shared/types/store/RootReducer";
 export interface FoodProviderFormStyleProps {
 	classes: {
 		form: string;
@@ -89,9 +90,15 @@ export class FoodProviderForm extends React.PureComponent<InjectedFormProps & Fo
 		);
 	}
 }
-const StyledFoodProviderForm = withStyles(formStyles)(FoodProviderForm);
-const ConnectedFoodProviderForm = connect<FoodProviderFormReduxProps, WithDispatch>(foodTypesSelector)(StyledFoodProviderForm);
+
+const mapStateToProps = (state: ReduxStoreState): FoodProviderFormReduxProps => ({
+	foodTypes: getFoodTypesState(state),
+});
 
 export default reduxForm({
 	form: "foodProvider",
-})(withRouter(ConnectedFoodProviderForm));
+})(withRouter(
+	connect<FoodProviderFormReduxProps, WithDispatch>(mapStateToProps)(
+		withStyles(formStyles)(FoodProviderForm),
+	),
+));

@@ -5,6 +5,8 @@ import { FoodProvidersState } from "../../redux/foodProviders";
 import { ForceReloadDataState } from "../../redux/forceReloadData";
 import { OrderState } from "../../redux/order";
 import { OrderRollState } from "../../redux/orderRoll";
+import { OrderRollStatsState } from "../../redux/orderRollStats";
+import { OrderFoodProviderVoteState } from "../../redux/orderFoodProviderVotes";
 import ReduxReducer from "./reducer";
 export interface RootReduser {
 	form: FormReducer;
@@ -14,6 +16,8 @@ export interface RootReduser {
 	forceReloadData: ReduxReducer<ForceReloadDataState>;
 	order: ReduxReducer<OrderState>;
 	orderRoll: ReduxReducer<OrderRollState>;
+	orderRollStats: ReduxReducer<OrderRollStatsState>;
+	orderFoodProviderVotes: ReduxReducer<OrderFoodProviderVoteState>;
 }
 
 export interface ReduxStoreState {
@@ -24,4 +28,6 @@ export interface ReduxStoreState {
 	forceReloadData: ForceReloadDataState;
 	order: OrderState;
 	orderRoll: OrderRollState;
+	orderRollStats: OrderRollStatsState;
+	orderFoodProviderVotes: OrderFoodProviderVoteState;
 }

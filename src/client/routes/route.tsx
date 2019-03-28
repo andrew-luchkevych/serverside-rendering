@@ -2,7 +2,8 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { Route, Redirect } from "react-router-dom";
 import { AppRouteProps } from "../types/RouteProps";
-import { loggedSelector } from "../../shared/redux/user/selectors";
+import { isUserLogged } from "../../shared/redux/user/selectors";
+import { ReduxStoreState } from "../../shared/types/store/RootReducer";
 
 export interface WithAuthState {
 	logged: boolean;
@@ -22,4 +23,7 @@ export const AppRoute = (props: AppRouteProps & WithAuthState) => {
 	}
 	return <Route component={Component} {...rest} />;
 };
-export default connect<WithAuthState, void, AppRouteProps>(loggedSelector, null)(AppRoute) as React.ComponentType<AppRouteProps>;
+const mapStateToProps = (state: ReduxStoreState): WithAuthState => ({
+	logged: isUserLogged(state),
+});
+export default connect<WithAuthState, void, AppRouteProps>(mapStateToProps, null)(AppRoute) as React.ComponentType<AppRouteProps>;

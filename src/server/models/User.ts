@@ -34,8 +34,14 @@ const UserSchema = new mongoose.Schema({
 	tokens: Array,
 
 	profile: {
-		name: String,
-		picture: String,
+		name: {
+			type: String,
+			default: "",
+		},
+		picture: {
+			type: String,
+			default: "https://gravatar.com/avatar/?s=200&d=retro",
+		},
 	},
 }, { timestamps: true });
 
@@ -54,6 +60,12 @@ UserSchema.pre("save", function save(next) {
 
 UserSchema.pre("save", function (next) {
 	const user = this as UserModel;
+	if (!user.profile) {
+		user.profile = {
+			name: "",
+			picture: "",
+		};
+	}
 	if (!user.profile.picture) {
 		user.profile.picture = user.gravatar();
 	}
@@ -85,6 +97,7 @@ const toAuthJSON: toAuthJSONFunction = function () {
 const getData: getUserDataFunction = function () {
 	const user = this as UserModel;
 	return {
+		_id: user._id,
 		email: user.email,
 		profile: user.profile,
 	};
