@@ -1,6 +1,6 @@
 import { ReduxActionPayload } from "../types/store/action";
 
-const createPayload = (data: any = {}, error: Error = undefined): ReduxActionPayload => {
+const createPayload = <T = any>(data: T, error: Error = undefined): ReduxActionPayload<T> => {
 	return {
 		data,
 		error,

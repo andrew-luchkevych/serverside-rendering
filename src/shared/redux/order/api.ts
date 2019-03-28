@@ -1,5 +1,6 @@
 import axios from "axios";
-export const get = async () => axios
+import OrderProps from "../../types/Order/Order";
+export const get = async (): Promise<OrderProps> => axios
 	.get(`/api/v1/Order`)
 	.then(response => response.data);
 export default {

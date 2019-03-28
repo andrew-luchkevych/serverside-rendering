@@ -24,7 +24,6 @@ export function* get() {
 }
 
 function* createUserVote(foodProviderId: string) {
-	console.log({ foodProviderId });
 	const selector = (state: ReduxStoreState) => {
 		const user = getUserData(state);
 		const orderId = getOrderId(state);
@@ -46,11 +45,9 @@ function* createUserVote(foodProviderId: string) {
 
 export function* create({ payload }: { payload: OrderFoodProviderVoteTriggerProps }) {
 	const { create: routine } = routines;
-	console.log({ payload });
 	let p: OrderFoodProviderVoteProps;
 	try {
 		p = yield call(createUserVote, payload.data.foodProviderId);
-		console.log({ p });
 		yield put(routine.request(createPayload(p)));
 		const data: OrderFoodProviderVoteProps = yield call(api.create, payload.data);
 		yield put(routine.success(createPayload(data)));
@@ -69,7 +66,7 @@ export function* remove({ payload }: { payload: OrderFoodProviderVoteTriggerProp
 		p = yield call(createUserVote, payload.data.foodProviderId);
 		yield put(routine.request(createPayload(p)));
 		const data: ApiSuccessResponse = yield call(api.remove, payload.data);
-		yield put(routine.success(createPayload(data)));
+		yield put(routine.success(createPayload(p)));
 		if (data.msg) {
 			SnackService.success(data.msg);
 		}

@@ -1,11 +1,13 @@
 import axios from "axios";
-export const get = async () => axios
+import OrderRollProps from "../../types/Order/OrderRoll";
+import { ApiSuccessResponse } from "../../types/api/responses";
+export const get = async (): Promise<OrderRollProps> => axios
 	.get(`/api/v1/OrderRoll`)
 	.then(response => response.data);
-export const create = async () => axios
+export const create = async (): Promise<OrderRollProps> => axios
 	.post(`/api/v1/OrderRoll`)
 	.then(response => response.data);
-export const remove = async () => axios
+export const remove = async (): Promise<ApiSuccessResponse> => axios
 	.delete(`/api/v1/OrderRoll`)
 	.then(response => response.data);
 export default {

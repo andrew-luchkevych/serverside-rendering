@@ -15,8 +15,10 @@ export const orderFoodProviderVoteInitialState: OrderFoodProviderVoteState = {
 	processing: false,
 	loaded: false,
 };
+
 const mapKey = (v: { user: { _id: string }, foodProviderId: string }): string =>
 	v.user._id + "|" + v.foodProviderId;
+
 export const OrderFoodProviderVoteReducer: ReduxReducer<OrderFoodProviderVoteState> = (state = orderFoodProviderVoteInitialState, action) => {
 	state.data = fixAfterRehydrate(state.data);
 	switch (action.type) {

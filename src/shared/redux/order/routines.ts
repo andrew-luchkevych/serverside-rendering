@@ -1,6 +1,7 @@
 import { createRoutine } from "redux-saga-routines";
 import { BasicRoutine } from "../../types/store/routine";
-export const get: BasicRoutine<void> = createRoutine("ORDER/GET");
+import OrderProps from "../../types/Order/Order";
+export const get: BasicRoutine<void, void, OrderProps> = createRoutine("ORDER/GET");
 export default {
 	get,
 };

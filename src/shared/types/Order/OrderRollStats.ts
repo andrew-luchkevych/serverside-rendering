@@ -4,3 +4,5 @@ export interface OrderRollStatsProps {
 	max?: number;
 	min?: number;
 }
+
+export default OrderRollStatsProps;

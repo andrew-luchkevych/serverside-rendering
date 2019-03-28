@@ -12,7 +12,7 @@ export function* get() {
 	const { get: routine } = routines;
 	try {
 		yield put(routine.request());
-		const data: Array<FoodTypeProps> = yield call(api.get);
+		const data: FoodTypeProps[] = yield call(api.get);
 		yield put(routine.success(createPayload(data)));
 	} catch (e) {
 		yield put(routine.failure(createPayload(undefined, e)));

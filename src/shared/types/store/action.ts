@@ -1,10 +1,10 @@
-export interface ReduxActionPayload {
-	data: any;
+export interface ReduxActionPayload<T = any> {
+	data: T;
 	error?: Error;
 }
-export interface ReduxAction {
+export interface ReduxAction<T = any> {
 	type: string;
-	payload: ReduxActionPayload;
+	payload: ReduxActionPayload<T>;
 }
 
 export default ReduxAction;

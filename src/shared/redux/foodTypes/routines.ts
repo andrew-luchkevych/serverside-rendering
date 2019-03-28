@@ -1,7 +1,9 @@
 import { createRoutine } from "redux-saga-routines";
 import { BasicRoutine } from "../../types/store/routine";
-import { CreateFoodTypeApiProps, EditFoodTypeApiProps, RemoveFoodTypeApiProps } from "./api";
+import { ReduxActionPayload } from "../../types/store/action";
 import { SubmissionControlProps } from "../../utils/formSubmission";
+import { CreateFoodTypeApiProps, EditFoodTypeApiProps, RemoveFoodTypeApiProps } from "./api";
+import FoodTypeProps from "../../types/FoodType";
 export interface CreateFoodTypeTriggerProps {
 	data: CreateFoodTypeApiProps;
 	controller: SubmissionControlProps;
@@ -13,10 +15,15 @@ export interface EditFoodTypeTriggerProps {
 export interface RemoveFoodTypeTriggerProps {
 	data: RemoveFoodTypeApiProps;
 }
-export const get: BasicRoutine<void> = createRoutine("FOOD_TYPE/GET");
-export const create: BasicRoutine<CreateFoodTypeTriggerProps> = createRoutine("FOOD_TYPE/CREATE");
-export const edit: BasicRoutine<EditFoodTypeTriggerProps> = createRoutine("FOOD_TYPE/EDIT");
+
+export const get: BasicRoutine<void, void, FoodTypeProps[]> = createRoutine("FOOD_TYPE/GET");
+
+export const create: BasicRoutine<CreateFoodTypeTriggerProps, void, FoodTypeProps> = createRoutine("FOOD_TYPE/CREATE");
+
+export const edit: BasicRoutine<EditFoodTypeTriggerProps, void, FoodTypeProps> = createRoutine("FOOD_TYPE/EDIT");
+
 export const remove: BasicRoutine<RemoveFoodTypeTriggerProps> = createRoutine("FOOD_TYPE/REMOVE");
+
 export default {
 	get,
 	create,
