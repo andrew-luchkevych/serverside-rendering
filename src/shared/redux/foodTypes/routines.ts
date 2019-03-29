@@ -24,9 +24,12 @@ export const edit: BasicRoutine<EditFoodTypeTriggerProps, void, FoodTypeProps> =
 
 export const remove: BasicRoutine<RemoveFoodTypeTriggerProps> = createRoutine("FOOD_TYPE/REMOVE");
 
+export const hotReload: BasicRoutine<void> = createRoutine("FOOD_TYPE/HOT_RELOAD");
+
 export default {
 	get,
 	create,
 	edit,
 	remove,
+	hotReload,
 };

@@ -1,5 +1,5 @@
-import express, { } from "express";
-import dotenv from "dotenv";
+import express from "express";
+import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import path from "path";
 import helmet from "helmet";
@@ -17,6 +17,7 @@ import webpackDevMiddleware from "webpack-dev-middleware";
 import webpackHotMiddleware from "webpack-hot-middleware";
 import webpackDev from "../../config/webpack.dev.js";
 import populateWithRoutes from "./routes/index";
+import socketService from "./sockets/index";
 export default function init() {
 	const normalizePort = (port: string) => parseInt(port, 10);
 	const PORT = normalizePort(process.env.PORT || "3000");
@@ -32,8 +33,9 @@ export default function init() {
 		saveUninitialized: true,
 		secret: SESSION_SECRET,
 		store: new MongoStore({
-			url: MONGODB_URI,
-			autoReconnect: true,
+			mongooseConnection: mongoose.connection,
+			// url: MONGODB_URI,
+			// autoReconnect: true,
 		}),
 	});
 
@@ -54,7 +56,6 @@ export default function init() {
 		res.locals.user = req.user;
 		next();
 	});
-
 	populateWithRoutes(app);
 	console.log(listEndpoints(app));
 	process.stdin.resume(); // so the program will not close instantly
@@ -96,12 +97,14 @@ export default function init() {
 		app.use(webpackDevMiddleware(compiler, options));
 		app.use(webpackHotMiddleware(compiler));
 		Loadable.preloadAll().then(() => {
-			app.listen(PORT, () => process.stdout.write(`Server started with port: ${PORT} \n`));
+			const server = app.listen(PORT, () => process.stdout.write(`Server started with port: ${PORT} \n`));
+			socketService.init(server);
 		});
 	} else {
 		app.use(express.static(path.join(__dirname, "..", "..", "dist"), { redirect: false }));
 		Loadable.preloadAll().then(() => {
-			app.listen(PORT, () => process.stdout.write(`Started production with port: ${PORT} \n`));
+			const server = app.listen(PORT, () => process.stdout.write(`Started production with port: ${PORT} \n`));
+			socketService.init(server);
 		});
 	}
 }

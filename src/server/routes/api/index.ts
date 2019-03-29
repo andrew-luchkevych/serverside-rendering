@@ -13,6 +13,8 @@ import { error, success } from "../../utils/api";
 import { RequestWithErm } from "../../types/request/RequestWithErm";
 import FoodTypeProps from "../../../shared/types/FoodType";
 import FoodProviderProps from "../../../shared/types/FoodProvider";
+import socketService from "../../sockets/index";
+import SocketMessageTypes from "../../../shared/types/sockets/MessageTypes";
 const router = Router();
 const populateWithApiRoutes = (app: Express): void => {
 	app.get("/api", PassportConfig.isAuthenticated, ApiController.getApi);
@@ -40,7 +42,10 @@ const populateWithApiRoutes = (app: Express): void => {
 			error(res, err);
 		},
 		postCreate: (req: RequestWithErm, res: Response) => {
-			success<FoodTypeProps>(res, { ...req.erm.result.toObject() }, "Food Type created successfully");
+			const item = req.erm.result.toObject();
+			success<FoodTypeProps>(res, item, "Food Type created successfully");
+			socketService.dataItemMessage<FoodTypeProps>("create", req.user._id, "foodTypes", item);
+			socketService.updateDataType(req.user._id, "foodTypes");
 		},
 		postDelete: (_req: RequestWithErm, res: Response) => {
 			success<any>(res, {}, "Food Type removed successfully");

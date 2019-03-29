@@ -1,11 +1,10 @@
 import ReduxReducer from "../../types/store/reducer";
 import OrderRollProps from "../../types/Order/OrderRoll";
 import routines from "./routines";
+import BasicReducerState from "../../types/store/state";
 
-export interface OrderRollState {
+export interface OrderRollState extends BasicReducerState {
 	data?: OrderRollProps;
-	processing: boolean;
-	loaded: boolean;
 }
 
 export const orderRollInitialState: OrderRollState = {
@@ -42,9 +41,14 @@ const FoodProviderReducer: ReduxReducer<OrderRollState> = (state = orderRollInit
 			...state,
 			processing: false,
 		};
-		case routines.remove.REQUEST: return {
+		case routines.remove.SUCCESS: return {
 			...state,
 			data: undefined,
+		};
+		case routines.hotReload.SUCCESS: return {
+			...state,
+			data: action.payload.data,
+			loaded: true,
 		};
 		default: return state;
 	}

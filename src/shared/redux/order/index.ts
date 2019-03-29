@@ -1,11 +1,10 @@
 import ReduxReducer from "../../types/store/reducer";
 import OrderProps from "../../types/Order/Order";
 import routines from "./routines";
+import BasicReducerState from "../../types/store/state";
 
-export interface OrderState {
+export interface OrderState extends BasicReducerState {
 	data?: OrderProps;
-	processing: boolean;
-	loaded: boolean;
 }
 
 export const orderInitialState: OrderState = {
@@ -28,6 +27,11 @@ const FoodProviderReducer: ReduxReducer<OrderState> = (state = orderInitialState
 		case routines.get.FULFILL: return {
 			...state,
 			processing: false,
+		};
+		case routines.hotReload.SUCCESS: return {
+			...state,
+			data: action.payload.data,
+			loaded: true,
 		};
 		default: return state;
 	}

@@ -2,7 +2,6 @@ import { createRoutine } from "redux-saga-routines";
 import { BasicRoutine } from "../../types/store/routine";
 import { CreateFoodProviderApiProps, EditFoodProviderApiProps, RemoveFoodProviderApiProps } from "./api";
 import { SubmissionControlProps } from "../../utils/formSubmission";
-import { ReduxActionPayload } from "../../types/store/action";
 import FoodProviderProps from "../../types/FoodProvider";
 
 export interface CreateFoodProviderTriggerProps {
@@ -31,9 +30,12 @@ export const edit: BasicRoutine<
 	FoodProviderProps
 > = createRoutine("FOOD_PROVIDER/EDIT");
 export const remove: BasicRoutine<RemoveFoodProviderTriggerProps, { _id: string }> = createRoutine("FOOD_PROVIDER/REMOVE");
+
+export const hotReload: BasicRoutine<void> = createRoutine("FOOD_PROVIDER/HOT_RELOAD");
 export default {
 	get,
 	create,
 	edit,
 	remove,
+	hotReload,
 };

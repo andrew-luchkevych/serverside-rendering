@@ -5,13 +5,15 @@ import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import { layout } from "../../../../../theme/index";
 import { OrderRollStatsState } from "../../../../../../shared/redux/orderRollStats";
 import { getOrderRollStatsState } from "../../../../../../shared/redux/orderRollStats/selectors";
 import WithDispatch from "../../../../../../shared/types/store/dispatch";
 import routines from "../../../../../../shared/redux/orderRollStats/routines";
-import Loader from "../../../../../components/Loader";
 import { ReduxStoreState } from "../../../../../../shared/types/store/RootReducer";
+import { shouldDataBeReloaded } from "../../../../../../shared/redux/forceReloadData/selectors";
+import Loader from "../../../../../components/Loader";
+import { layout } from "../../../../../theme/index";
+import { pageDataTypes } from "../../../../../App";
 export interface DailyStatsStyleProps {
 	classes: {
 		fullheight: string;
@@ -21,11 +23,13 @@ export interface DailyStatsStyleProps {
 }
 export interface DailyStatsConnectedProps {
 	orderRollStats: OrderRollStatsState;
+	forceReload: boolean;
 }
 export class DailyStats extends React.PureComponent<DailyStatsStyleProps & DailyStatsConnectedProps & WithDispatch> {
 	componentDidMount() {
-		const { orderRollStats: { loaded }, dispatch } = this.props;
-		if (!loaded) {
+		pageDataTypes.add("orderRollStats");
+		const { forceReload, orderRollStats: { loaded }, dispatch } = this.props;
+		if (!loaded || forceReload) {
 			dispatch(routines.get.trigger());
 		}
 	}
@@ -64,5 +68,6 @@ export class DailyStats extends React.PureComponent<DailyStatsStyleProps & Daily
 }
 const mapStateToProps = (state: ReduxStoreState): DailyStatsConnectedProps => ({
 	orderRollStats: getOrderRollStatsState(state),
+	forceReload: shouldDataBeReloaded("orderRollStats")(state),
 });
 export default connect(mapStateToProps)(withStyles(layout)(DailyStats)) as React.ComponentType<{}>;

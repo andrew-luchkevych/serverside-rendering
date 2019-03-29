@@ -2,25 +2,39 @@ import { put, call, all, takeLatest, takeEvery } from "redux-saga/effects";
 import SnackService from "../../services/SnackService";
 import { ApiSuccessResponse } from "../../types/api/responses";
 import FoodProviderProps from "../../types/FoodProvider";
+import BasicRoutine from "../../types/store/routine";
+import DataTypes from "../../types/dataTypes";
+import forceReloadRoutines from "../forceReloadData/routines";
 import createPayload from "../createPayload";
 import routines, { CreateFoodProviderTriggerProps, EditFoodProviderTriggerProps, RemoveFoodProviderTriggerProps } from "./routines";
-import { remove as reloaded } from "../forceReloadData/routines";
 import api from "./api";
-import DataTypes from "../forceReloadData/types";
 
-export function* get() {
-	const { get: routine } = routines;
+export const DataType: DataTypes = "foodProviders";
+
+export function* getData(routine: BasicRoutine, showError: boolean = true) {
 	try {
 		yield put(routine.request());
 		const data: Array<FoodProviderProps> = yield call(api.get);
 		yield put(routine.success(createPayload(data)));
-		yield put(reloaded.trigger({ dataType: DataTypes.foodType }));
+		yield put(forceReloadRoutines.remove.success(createPayload({ dataType: DataType })));
 	} catch (e) {
 		yield put(routine.failure(createPayload(undefined, e)));
-		SnackService.error(e.message);
+		if (showError) {
+			SnackService.error(e.message);
+		} else {
+			console.warn(e);
+		}
 	} finally {
 		yield put(routine.fulfill());
 	}
+}
+
+export function* get() {
+	yield call(getData, routines.get, true);
+}
+
+export function* hotReload() {
+	yield call(getData, routines.hotReload, false);
 }
 
 export function* create({ payload }: { payload: CreateFoodProviderTriggerProps }) {
@@ -73,6 +87,7 @@ export function* remove({ payload }: { payload: RemoveFoodProviderTriggerProps }
 export default function* root() {
 	yield all([
 		takeLatest(routines.get.TRIGGER, get),
+		takeLatest(routines.hotReload.TRIGGER, hotReload),
 		takeEvery(routines.create.TRIGGER, create),
 		takeEvery(routines.edit.TRIGGER, edit),
 		takeEvery(routines.remove.TRIGGER, remove),

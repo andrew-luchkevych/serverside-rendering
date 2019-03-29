@@ -3,5 +3,4 @@ export interface FoodTypeProps {
 	name: string;
 	picture: string;
 }
-
 export default FoodTypeProps;

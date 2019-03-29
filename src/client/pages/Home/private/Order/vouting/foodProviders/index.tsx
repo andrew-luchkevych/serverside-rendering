@@ -14,19 +14,41 @@ import { ReduxStoreState } from "../../../../../../../shared/types/store/RootRed
 import { getUserId } from "../../../../../../../shared/redux/user/selectors";
 import { getOrderRollStatsState } from "../../../../../../../shared/redux/orderRollStats/selectors";
 import { OrderRollStatsState } from "../../../../../../../shared/redux/orderRollStats";
+import { shouldDataBeReloaded } from "../../../../../../../shared/redux/forceReloadData/selectors";
+import { pageDataTypes } from "../../../../../../App";
 export interface FoodProviderVoutingReduxProps {
 	userId: string;
+
 	orderRollStats: OrderRollStatsState;
+	forceReloadOrderRollStats: boolean;
+
 	foodProviders: FoodProvidersState;
+	forceReloadFoodProviders: boolean;
+
 	orderVotes: OrderFoodProviderVoteState;
+	forceReloadOrderVotes: boolean;
 }
 
 export class FoodProviderVouting extends React.PureComponent<FoodProviderVoutingReduxProps & WithDispatch> {
 	componentDidMount() {
-		if (!this.props.foodProviders.loaded) {
+		const {
+			orderRollStats,
+			foodProviders,
+			orderVotes,
+			forceReloadOrderRollStats,
+			forceReloadFoodProviders,
+			forceReloadOrderVotes,
+		} = this.props;
+		pageDataTypes.add("orderRollStats");
+		pageDataTypes.add("foodProviders");
+		pageDataTypes.add("orderFoodProviderVotes");
+		if (!orderRollStats.loaded || forceReloadOrderRollStats) {
 			this.props.dispatch(foodProviderRoutines.get.trigger());
 		}
-		if (!this.props.orderVotes.loaded) {
+		if (!foodProviders.loaded || forceReloadFoodProviders) {
+			this.props.dispatch(foodProviderRoutines.get.trigger());
+		}
+		if (!orderVotes.loaded || forceReloadOrderVotes) {
 			this.props.dispatch(orderVotesRoutines.get.trigger());
 		}
 	}
@@ -56,17 +78,17 @@ export class FoodProviderVouting extends React.PureComponent<FoodProviderVouting
 	}
 }
 
-const mapStateToProps = (state: ReduxStoreState): FoodProviderVoutingReduxProps => {
-	const foodProviders = getFoodProvidersState(state);
-	const orderVotes = orderVotesSelector(state);
-	const orderRollStats = getOrderRollStatsState(state);
-	const userId = getUserId(state);
-	return {
-		foodProviders,
-		orderVotes,
-		orderRollStats,
-		userId,
-	};
-};
+const mapStateToProps = (state: ReduxStoreState): FoodProviderVoutingReduxProps => ({
+	userId: getUserId(state),
+
+	orderRollStats: getOrderRollStatsState(state),
+	forceReloadOrderRollStats: shouldDataBeReloaded("orderRollStats")(state),
+
+	foodProviders: getFoodProvidersState(state),
+	forceReloadFoodProviders: shouldDataBeReloaded("foodProviders")(state),
+
+	orderVotes: orderVotesSelector(state),
+	forceReloadOrderVotes: shouldDataBeReloaded("orderFoodProviderVotes")(state),
+});
 
 export default connect<FoodProviderVoutingReduxProps, WithDispatch>(mapStateToProps)(FoodProviderVouting) as React.ComponentType<{}>;

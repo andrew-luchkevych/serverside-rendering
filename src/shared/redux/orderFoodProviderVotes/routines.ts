@@ -16,8 +16,10 @@ export const remove: BasicRoutine<
 	OrderFoodProviderVoteProps,
 	OrderFoodProviderVoteProps
 > = createRoutine("ORDER_FOOD_PROVIDER_VOTE/REMOVE");
+export const hotReload: BasicRoutine<void> = createRoutine("ORDER_FOOD_PROVIDER_VOTE/HOT_RELOAD");
 export default {
 	get,
 	create,
 	remove,
+	hotReload,
 };

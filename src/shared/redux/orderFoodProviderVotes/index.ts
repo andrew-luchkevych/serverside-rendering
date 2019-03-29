@@ -1,13 +1,12 @@
-import { Map, fromJS } from "immutable";
+import { Map } from "immutable";
+import BasicReducerState from "../../types/store/state";
 import ReduxReducer from "../../types/store/reducer";
 import OrderFoodProviderVoteProps from "../../types/Order/OrderFoodProviderVote";
 import routines from "./routines";
 import { fixAfterRehydrate } from "../../utils/map";
 
-export interface OrderFoodProviderVoteState {
+export interface OrderFoodProviderVoteState extends BasicReducerState {
 	data: Map<string, OrderFoodProviderVoteProps>;
-	processing: boolean;
-	loaded: boolean;
 }
 
 export const orderFoodProviderVoteInitialState: OrderFoodProviderVoteState = {
@@ -56,13 +55,18 @@ export const OrderFoodProviderVoteReducer: ReduxReducer<OrderFoodProviderVoteSta
 		case routines.create.FULFILL: return {
 			...state,
 		};
-		case routines.remove.REQUEST:
+		case routines.remove.SUCCESS:
 			return {
 				...state,
 				data: action.payload.data
 					? state.data.remove(mapKey(action.payload.data))
 					: state.data,
 			};
+		case routines.hotReload.SUCCESS: return {
+			...state,
+			data: Map(action.payload.data.map((vote: OrderFoodProviderVoteProps) => [mapKey(vote), vote])),
+			loaded: true,
+		};
 		default: return state;
 	}
 };

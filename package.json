@@ -83,6 +83,7 @@
 		"@types/serialize-javascript": "^1.5.0",
 		"@types/sinon": "^7.0.8",
 		"@types/socket.io": "^2.1.2",
+		"@types/socket.io-client": "^1.4.32",
 		"@types/webpack-dev-middleware": "^2.0.2",
 		"@types/webpack-hot-middleware": "^2.16.5",
 		"@types/webpack-node-externals": "^1.6.3",

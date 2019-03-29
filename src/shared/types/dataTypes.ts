@@ -1,8 +1,5 @@
-export const enum DataTypes {
-	foodType = "FoodType",
-	foodProvider = "FoodProvider",
-	order = "Order",
-	orderFoodProviderVote = "OrderFoodProviderVote",
-}
+import { ReduxStoreState } from "./store/RootReducer";
+
+export type DataTypes = keyof ReduxStoreState;
 
 export default DataTypes;

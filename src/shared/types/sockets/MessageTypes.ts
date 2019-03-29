@@ -1,6 +1,6 @@
 export const enum SocketMessageTypes {
 	updateDataType = "UpdateDataType",
-	updateItem = "UpdateItem",
-	createItem = "CreateItem",
+	itemManipulation = "ItemManipulation",
+	info = "Info",
 }
 export default SocketMessageTypes;

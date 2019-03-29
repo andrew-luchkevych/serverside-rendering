@@ -1,12 +1,11 @@
+import BasicReducerState from "../../types/store/state";
 import ReduxReducer from "../../types/store/reducer";
 import FoodProviderProps from "../../types/FoodProvider";
 import { findAndReplaceImmutable, findAndRemoveImmutable } from "../../utils/array";
 import routines from "./routines";
 
-export interface FoodProvidersState {
+export interface FoodProvidersState extends BasicReducerState {
 	data: Array<FoodProviderProps>;
-	processing: boolean;
-	loaded: boolean;
 }
 
 export const foodTypeInitialState: FoodProvidersState = {
@@ -66,6 +65,11 @@ const FoodProviderReducer: ReduxReducer<FoodProvidersState> = (state = foodTypeI
 		case routines.remove.FULFILL: return {
 			...state,
 			processing: false,
+		};
+		case routines.hotReload.SUCCESS: return {
+			...state,
+			data: action.payload.data,
+			loaded: true,
 		};
 		default: return state;
 	}

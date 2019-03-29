@@ -1,4 +1,5 @@
 import FoodTypeProps from "./FoodType";
+import DataTypes from "./dataTypes";
 
 export interface FoodProviderProps {
 	_id: string;
@@ -9,4 +10,5 @@ export interface FoodProviderProps {
 	foodTypes: Array<FoodTypeProps>;
 }
 
+export const dependencies: Array<DataTypes> = ["foodTypes"];
 export default FoodProviderProps;

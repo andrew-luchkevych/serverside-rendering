@@ -1,26 +1,42 @@
 import { put, call, all, takeLatest, takeEvery, select } from "redux-saga/effects";
 import SnackService from "../../services/SnackService";
 import OrderFoodProviderVoteProps from "../../types/Order/OrderFoodProviderVote";
+import { ApiSuccessResponse } from "../../types/api/responses";
+import { ReduxStoreState } from "../../types/store/RootReducer";
+import DataTypes from "../../types/dataTypes";
+import BasicRoutine from "../../types/store/routine";
+import { getUserData } from "../user/selectors";
+import { getOrderId } from "../order/selectors";
+import forceReloadRoutines from "../forceReloadData/routines";
 import createPayload from "../createPayload";
 import routines, { OrderFoodProviderVoteTriggerProps } from "./routines";
 import api from "./api";
-import { ApiSuccessResponse } from "../../types/api/responses";
-import { getUserData } from "../user/selectors";
-import { ReduxStoreState } from "../../types/store/RootReducer";
-import { getOrderId } from "../order/selectors";
 
-export function* get() {
-	const { get: routine } = routines;
+const DataType: DataTypes = "orderFoodProviderVotes";
+
+export function* getData(routine: BasicRoutine, showError = true) {
 	try {
 		yield put(routine.request());
 		const data: Array<OrderFoodProviderVoteProps> = yield call(api.get);
 		yield put(routine.success(createPayload(data)));
+		yield put(forceReloadRoutines.remove.success(createPayload({ dataType: DataType })));
 	} catch (e) {
 		yield put(routine.failure(createPayload(undefined, e)));
-		SnackService.error(e.message);
+		if (showError) {
+			SnackService.error(e.message);
+		} else {
+			console.warn(e);
+		}
 	} finally {
 		yield put(routine.fulfill());
 	}
+}
+export function* get() {
+	yield call(getData, routines.get, true);
+}
+
+export function* hotReload() {
+	yield call(getData, routines.hotReload, false);
 }
 
 function* createUserVote(foodProviderId: string) {
@@ -81,6 +97,7 @@ export function* remove({ payload }: { payload: OrderFoodProviderVoteTriggerProp
 export default function* root() {
 	yield all([
 		takeLatest(routines.get.TRIGGER, get),
+		takeLatest(routines.hotReload.TRIGGER, hotReload),
 		takeEvery(routines.create.TRIGGER, create),
 		takeEvery(routines.remove.TRIGGER, remove),
 	]);

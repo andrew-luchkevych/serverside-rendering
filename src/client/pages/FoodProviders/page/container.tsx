@@ -7,13 +7,14 @@ import routines from "../../../../shared/redux/foodProviders/routines";
 import FoodProvidersView from "./view";
 import { ReduxStoreState } from "../../../../shared/types/store/RootReducer";
 import { shouldDataBeReloaded } from "../../../../shared/redux/forceReloadData/selectors";
-import DataTypes from "../../../../shared/redux/forceReloadData/types";
+import { pageDataTypes } from "../../../App";
 export interface FoodProvidersContainerProps {
 	foodProvidersState: FoodProvidersState;
 	forceReload: boolean;
 }
 export class FoodProvidersContainer extends React.PureComponent<FoodProvidersContainerProps & WithDispatch> {
 	componentDidMount() {
+		pageDataTypes.add("foodProviders");
 		const { dispatch, forceReload, foodProvidersState: { loaded } } = this.props;
 		if (!loaded || forceReload) {
 			dispatch(routines.get.trigger());
@@ -27,7 +28,7 @@ export class FoodProvidersContainer extends React.PureComponent<FoodProvidersCon
 const mapStateToProps = (state: ReduxStoreState): FoodProvidersContainerProps => {
 	return {
 		foodProvidersState: getFoodProvidersState(state),
-		forceReload: shouldDataBeReloaded(DataTypes.foodType)(state),
+		forceReload: shouldDataBeReloaded("foodProviders")(state),
 	};
 };
 export default connect(mapStateToProps)(FoodProvidersContainer) as React.ComponentType;

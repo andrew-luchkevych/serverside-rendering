@@ -1,7 +1,7 @@
 import ReduxReducer from "../../types/store/reducer";
 import routines from "./routines";
-import DataTypes from "./types";
 import { addToSetImmutable, removeFromSetImmutable } from "../../utils/set";
+import DataTypes from "../../types/dataTypes";
 
 export interface ForceReloadDataState {
 	forceReload: Set<DataTypes>;

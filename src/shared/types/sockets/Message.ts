@@ -1,8 +1,10 @@
 import { AnyObject } from "../Basic";
 import SocketMessageTypes from "./MessageTypes";
-
+type userId = string;
+export type SocketMessageInitiator = "server" | userId;
 export interface SocketMessage {
 	type: SocketMessageTypes;
-	data?: AnyObject;
+	initiator: SocketMessageInitiator;
+	data: AnyObject;
 }
 export default SocketMessage;
