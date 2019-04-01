@@ -11,11 +11,14 @@ import validator from "../../../services/validator";
 import { CreateFoodTypeApiProps, EditFoodTypeApiProps } from "../../../../shared/redux/foodTypes/api";
 export class FoodType extends React.PureComponent<InjectedFormProps & WithDispatch & RouteComponentProps> {
 	onSubmit = (data: EditFoodTypeApiProps | CreateFoodTypeApiProps) => {
+		const { props: { initialValues } } = this;
+		const init = initialValues as any;
+		const _id = init && init._id || undefined;
 		const { submission, success, failure } = createSubmisisonPromise();
 		submission.then(() => {
 			this.props.history.push("/food-types");
 		});
-		if ((data as EditFoodTypeApiProps)._id) {
+		if (_id) {
 			this.props.dispatch(edit.trigger({ data: data as EditFoodTypeApiProps, controller: { success, failure } }));
 		} else {
 			this.props.dispatch(create.trigger({ data: data as CreateFoodTypeApiProps, controller: { success, failure } }));

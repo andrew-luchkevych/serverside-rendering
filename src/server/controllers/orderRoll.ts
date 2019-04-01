@@ -8,6 +8,8 @@ import configureStore from "../../shared/redux/configureStore";
 import { success, error } from "../utils/api/index";
 import OrderRollProps from "../../shared/types/Order/OrderRoll";
 import { OrderRollStatsProps } from "../../shared/types/Order/OrderRollStats";
+import socketService from "../sockets";
+import { removeVotesOfUserFromOrder } from "./orderFoodProviderVote";
 const notFoundError = new Error("Order Roll not found!");
 const addOrderRollToReduxStore = (req: RequestWithStore, orderRoll?: OrderRollModel) => {
 	if (!req.reduxStore) {
@@ -61,6 +63,7 @@ const create = (req: RequestWithUser & RequestWithOrder): Promise<OrderRollModel
 		userId,
 		orderId,
 		roll,
+		active: true,
 	};
 	const orderRoll = new OrderRoll(orderRollData);
 	return orderRoll.save() as Promise<OrderRollModel>;
@@ -69,7 +72,13 @@ const create = (req: RequestWithUser & RequestWithOrder): Promise<OrderRollModel
 const getOrCreate = (req: RequestWithUser & RequestWithOrder) => new Promise(
 	(resolve: (orderRoll: OrderRollModel) => any, reject: (e: Error) => any) => {
 		get(req)
-			.then((v) => resolve(v))
+			.then((v) => {
+				if (!v.active) {
+					v.active = true;
+					v.save();
+				}
+				resolve(v);
+			})
 			.catch(() => {
 				create(req)
 					.then((v) => resolve(v))
@@ -85,7 +94,7 @@ const getStats = async (req: RequestWithUser & RequestWithOrder) => {
 		max: undefined,
 		participants: 0,
 	};
-	const docs = await OrderRoll.find({ orderId: req.order._id.toString() }) as Array<OrderRollModel>;
+	const docs = await OrderRoll.find({ orderId: req.order._id.toString(), active: true }) as Array<OrderRollModel>;
 	stats.participants = docs.length;
 	if (stats.participants) {
 		stats.min = 100;
@@ -104,7 +113,7 @@ const getStats = async (req: RequestWithUser & RequestWithOrder) => {
 };
 export const withOrderRollMiddleware = (req: RequestWithStore & RequestWithUser & RequestWithOrder, _res: Response, next: NextFunction) => {
 	get(req).then(orderRoll => {
-		addOrderRollToReduxStore(req, orderRoll);
+		addOrderRollToReduxStore(req, orderRoll.active ? orderRoll : undefined);
 		next();
 	}).catch(() => {
 		addOrderRollToReduxStore(req);
@@ -120,22 +129,33 @@ export const withOrderRollStatsMiddleware = (req: RequestWithStore & RequestWith
 };
 
 export const apiGet = (req: RequestWithUser & RequestWithOrder, res: Response) => {
-	get(req).then(orderRoll => success(res, orderRoll.toObject())).catch(() => error(res, "", 404));
+	get(req).then(orderRoll => {
+		if (orderRoll.active) {
+			success(res, orderRoll.toObject());
+		} else {
+			error(res, "", 404);
+		}
+	}).catch(() => error(res, "", 404));
 };
 export const apiPost = (req: RequestWithUser & RequestWithOrder, res: Response) => {
-	getOrCreate(req).then(orderRoll => success(res, orderRoll.toObject())).catch(e => error(res, e));
+	getOrCreate(req).then(orderRoll => {
+		success(res, orderRoll.toObject());
+		socketService.updateDataType(req.user._id, "orderRoll");
+	}).catch(e => error(res, e));
 };
 export const apiDelete = (req: RequestWithUser & RequestWithOrder, res: Response) => {
 	const msg = "Your participating in today order canceled.";
 	get(req).then((orderRoll) => {
-		orderRoll.remove((err: Error) => {
-			if (err) {
-				return error(res, err);
-			}
-			success(res, {}, msg);
+		orderRoll.active = false;
+		orderRoll.save().then(() => {
+			return removeVotesOfUserFromOrder(req.user._id, req.order._id).then(() => {
+				success(res, {}, msg);
+				socketService.updateDataType(req.user._id, "orderFoodProviderVotes");
+				socketService.updateDataType(req.user._id, "orderRoll");
+			});
 		});
-	}).catch(() => {
-		success(res, {}, msg);
+	}).catch((e) => {
+		error(res, e);
 	});
 };
 

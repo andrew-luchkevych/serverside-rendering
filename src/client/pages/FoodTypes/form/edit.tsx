@@ -10,11 +10,14 @@ import FoodTypeProps from "../../../../shared/types/FoodType";
 export interface EditFoodTypePageProps {
 	foodType?: FoodTypeProps;
 }
-export const EditFoodTypePage = (props: EditFoodTypePageProps & RouteComponentProps) => {
-	return (
-		<FormPage title="Edit Food Type" icon={<FastfoodIcon />} form={<Form initialValues={props.foodType} />} />
-	);
-};
+export class EditFoodTypePage extends React.PureComponent<EditFoodTypePageProps & RouteComponentProps> {
+	render() {
+		console.log("render");
+		return (
+			<FormPage title="Edit Food Type" icon={<FastfoodIcon />} form={<Form initialValues={this.props.foodType} />} />
+		);
+	}
+}
 const mapStateToProps = (state: ReduxStoreState, props: RouteComponentProps): EditFoodTypePageProps => {
 	const r: EditFoodTypePageProps = {};
 	const { id } = props.match.params as any;

@@ -25,7 +25,7 @@ export class FormPage extends React.PureComponent<FormPageStyleProps & FormPageO
 		return (
 			<div className={classes.main}>
 				<Helmet>
-					<title>{title}</title>
+					<title key={new Date().getTime()}>{title}</title>
 				</Helmet>
 				<Paper className={classes.paper}>
 					<Avatar className={classes.avatar}>

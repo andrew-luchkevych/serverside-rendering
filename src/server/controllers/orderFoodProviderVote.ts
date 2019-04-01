@@ -10,11 +10,24 @@ import OrderFoodProviderVoteReducer from "../../shared/redux/orderFoodProviderVo
 import createPayload from "../../shared/redux/createPayload";
 import routines from "../../shared/redux/orderFoodProviderVotes/routines";
 import configureStore from "../../shared/redux/configureStore";
+import socketService from "../sockets/index";
 const getVotes = (req: RequestWithUser & RequestWithOrder) => new Promise(
 	(resolve: (data: OrderFoodProviderVoteModel[]) => any, reject: (e: Error) => any) => {
 		OrderFoodProviderVote.find({ orderId: req.order._id }).then((results: OrderFoodProviderVoteModel[]) => {
 			resolve(results);
 		}).catch(e => reject(e));
+	},
+);
+
+export const removeVotesOfUserFromOrder = (userId: string, orderId: string) => new Promise(
+	(resolve, reject) => {
+		OrderFoodProviderVote.deleteMany({ user: userId, orderId: orderId }, (err) => {
+			if (err) {
+				reject(err);
+			} else {
+				resolve();
+			}
+		});
 	},
 );
 
@@ -47,7 +60,10 @@ export const apiPost = (req: RequestWithUser & RequestWithOrder, res: Response) 
 			foodProviderId,
 		};
 		OrderFoodProviderVote.create(vote).then((v) => {
-			success(res, v.toObject());
+			const item = v.toObject();
+			socketService.dataItemMessage("create", req.user._id, "orderFoodProviderVotes", item);
+			socketService.updateDataType(req.user._id, "orderFoodProviderVotes");
+			success(res, item);
 		}).catch(e => error(res, e));
 	}).catch(() => error(res, "Cant find that Food Provider"));
 };
@@ -59,7 +75,10 @@ export const apiDelete = (req: RequestWithUser & RequestWithOrder, res: Response
 	}
 	FoodProvider.findById(foodProviderId).then(() => {
 		OrderFoodProviderVote.findOne({ user: req.user._id, orderId: req.order._id, foodProviderId }).then((vote) => {
+			const item = vote.toObject();
 			OrderFoodProviderVote.remove(vote).then(() => {
+				socketService.dataItemMessage("remove", req.user._id, "orderFoodProviderVotes", item);
+				socketService.updateDataType(req.user._id, "orderFoodProviderVotes");
 				success(res);
 			}).catch(e => error(res, e));
 		}).catch(() => error(res, "You didnt vote for that Food Provider"));

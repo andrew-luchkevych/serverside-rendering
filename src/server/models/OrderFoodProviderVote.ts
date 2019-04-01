@@ -15,14 +15,23 @@ const OrderFoodProviderVoteSchema = new mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "FoodProvider",
 	},
+	voteId: {
+		type: String,
+		unique: true,
+	},
 });
 const populate = (doc: OrderFoodProviderVoteModel, next: Function) => {
 	doc.populate("user").execPopulate().then(() => next());
 };
+OrderFoodProviderVoteSchema.pre("save", function (next) {
+	const vote = this as any;
+	vote.voteId = vote.user + "|" + vote.orderId + "|" + vote.foodProviderId;
+	console.log(vote);
+	next();
+});
 OrderFoodProviderVoteSchema.post("init", populate);
 OrderFoodProviderVoteSchema.post("save", populate);
 OrderFoodProviderVoteSchema.post("save", transformMongooseErrors("You are already voted for this provider"));
-OrderFoodProviderVoteSchema.index({ userId: 1, orderId: 1, foodProviderId: 1 }, { unique: true });
 
 const OrderFoodProviderVote = mongoose.model("OrderFoodProviderVote", OrderFoodProviderVoteSchema);
 export default OrderFoodProviderVote;

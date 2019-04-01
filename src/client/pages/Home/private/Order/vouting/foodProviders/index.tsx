@@ -16,8 +16,11 @@ import { getOrderRollStatsState } from "../../../../../../../shared/redux/orderR
 import { OrderRollStatsState } from "../../../../../../../shared/redux/orderRollStats";
 import { shouldDataBeReloaded } from "../../../../../../../shared/redux/forceReloadData/selectors";
 import { pageDataTypes } from "../../../../../../App";
+import { isParticipant } from "../../../../../../../shared/redux/orderRoll/selectors";
 export interface FoodProviderVoutingReduxProps {
 	userId: string;
+
+	isParticipant: boolean;
 
 	orderRollStats: OrderRollStatsState;
 	forceReloadOrderRollStats: boolean;
@@ -53,12 +56,14 @@ export class FoodProviderVouting extends React.PureComponent<FoodProviderVouting
 		}
 	}
 	render() {
-		const { foodProviders, orderVotes, userId, orderRollStats: { data: { participants } } } = this.props;
+		const { foodProviders, orderVotes, isParticipant, userId, orderRollStats } = this.props;
 		return (
 			<Grid container>
 				<Grid item xs={12}>
 					{
-						foodProviders.loaded && orderVotes.loaded
+						foodProviders.loaded
+							&& orderVotes.loaded
+							&& orderRollStats.loaded
 							? foodProviders
 								.data
 								.map(fp => (
@@ -66,7 +71,8 @@ export class FoodProviderVouting extends React.PureComponent<FoodProviderVouting
 										key={fp._id}
 										provider={fp}
 										votes={orderVotes.data.filter(v => v.foodProviderId === fp._id)}
-										participants={participants}
+										participants={orderRollStats.data.participants}
+										isParticipant={isParticipant}
 										userId={userId}
 									/>
 								))
@@ -80,6 +86,8 @@ export class FoodProviderVouting extends React.PureComponent<FoodProviderVouting
 
 const mapStateToProps = (state: ReduxStoreState): FoodProviderVoutingReduxProps => ({
 	userId: getUserId(state),
+
+	isParticipant: isParticipant(state),
 
 	orderRollStats: getOrderRollStatsState(state),
 	forceReloadOrderRollStats: shouldDataBeReloaded("orderRollStats")(state),

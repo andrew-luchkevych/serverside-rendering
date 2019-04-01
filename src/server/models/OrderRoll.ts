@@ -11,6 +11,10 @@ const OrderRollSchema = new mongoose.Schema({
 		ref: "Order",
 	},
 	roll: Number,
+	active: {
+		type: Boolean,
+		default: true,
+	},
 });
 OrderRollSchema.pre("findOneAndUpdate", function (next) {
 	(this as any).options.runValidators = true;

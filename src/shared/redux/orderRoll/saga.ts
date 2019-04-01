@@ -30,7 +30,7 @@ export function* getData(routine: BasicRoutine, showError = true) {
 }
 
 export function* get() {
-	yield call(getData, routines.get, true);
+	yield call(getData, routines.get, false);
 }
 
 export function* hotReload() {

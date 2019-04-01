@@ -15,6 +15,7 @@ import { providerStyles } from "./styles";
 import routines from "../../../../../../../shared/redux/orderFoodProviderVotes/routines";
 
 export interface FoodProviderVoteItemOwnProps {
+	isParticipant: boolean;
 	provider: FoodProviderProps;
 	votes: Map<string, OrderFoodProviderVoteProps>;
 	participants: number;
@@ -78,16 +79,18 @@ export class FoodProviderVoteItem extends React.Component<FoodProviderVoteItemPr
 					</Grid>
 					<Grid item md={2} sm={2} xs={2} className={classes.flexRowCenter}>
 						{
-							this.props.votes.find(v => v.user._id === userId)
-								? (
-									<Fab color="secondary" aria-label="Remove" size="small" onClick={this.remove}>
-										<RemoveIcon />
-									</Fab>
-								) : (
-									<Fab color="primary" aria-label="Add" size="small" onClick={this.add}>
-										<AddIcon />
-									</Fab>
-								)
+							this.props.isParticipant
+								? this.props.votes.find(v => v.user._id === userId)
+									? (
+										<Fab color="secondary" aria-label="Remove" size="small" onClick={this.remove}>
+											<RemoveIcon />
+										</Fab>
+									) : (
+										<Fab color="primary" aria-label="Add" size="small" onClick={this.add}>
+											<AddIcon />
+										</Fab>
+									)
+								: null
 						}
 					</Grid>
 				</Grid>

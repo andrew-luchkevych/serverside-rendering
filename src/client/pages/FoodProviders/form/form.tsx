@@ -31,11 +31,14 @@ export class FoodProviderForm extends React.PureComponent<InjectedFormProps & Fo
 		}
 	}
 	onSubmit = (data: EditFoodProviderApiProps | CreateFoodProviderApiProps) => {
+		const { props: { initialValues } } = this;
+		const init = initialValues as any;
+		const _id = init && init._id || undefined;
 		const { submission, success, failure } = createSubmisisonPromise();
 		submission.then(() => {
 			this.props.history.push("/food-providers");
 		});
-		if ((data as EditFoodProviderApiProps)._id) {
+		if (_id) {
 			this.props.dispatch(edit.trigger({ data: data as EditFoodProviderApiProps, controller: { success, failure } }));
 		} else {
 			this.props.dispatch(create.trigger({ data: data as CreateFoodProviderApiProps, controller: { success, failure } }));

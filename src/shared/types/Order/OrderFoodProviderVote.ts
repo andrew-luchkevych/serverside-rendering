@@ -6,5 +6,5 @@ export interface OrderFoodProviderVoteProps {
 	foodProviderId: string;
 }
 
-export const dependencies: Array<DataTypes> = ["user"];
+export const dependencies: Array<DataTypes> = ["user", "orderRoll"];
 export default OrderFoodProviderVoteProps;

@@ -28,14 +28,14 @@ const populateWithApiRoutes = (app: Express): void => {
 	app.post("/api/account/password", PassportConfig.isAuthenticated, UserController.postUpdatePassword);
 	app.delete("/api/account", PassportConfig.isAuthenticated, UserController.postDeleteAccount);
 	app.delete("/api/account/provider", PassportConfig.isAuthenticated, UserController.getOauthUnlink);
-	app.get("/api/v1/order", PassportConfig.isAuthenticated, OrderController.apiGet);
-	app.get("/api/v1/orderRoll", PassportConfig.isAuthenticated, OrderController.withOrderMiddleware, OrderRollController.apiGet);
-	app.post("/api/v1/orderRoll", PassportConfig.isAuthenticated, OrderController.withOrderMiddleware, OrderRollController.apiPost);
-	app.delete("/api/v1/orderRoll", PassportConfig.isAuthenticated, OrderController.withOrderMiddleware, OrderRollController.apiDelete);
-	app.get("/api/v1/orderRoll/stats", PassportConfig.isAuthenticated, OrderController.withOrderMiddleware, OrderRollController.apiGetStats);
-	app.get("/api/v1/orderFoodProviderVote", PassportConfig.isAuthenticated, OrderController.withOrderMiddleware, OrderFoodProviderVote.apiGet);
-	app.post("/api/v1/orderFoodProviderVote", PassportConfig.isAuthenticated, OrderController.withOrderMiddleware, OrderFoodProviderVote.apiPost);
-	app.delete("/api/v1/orderFoodProviderVote", PassportConfig.isAuthenticated, OrderController.withOrderMiddleware, OrderFoodProviderVote.apiDelete);
+	app.get("/api/v1/Order", PassportConfig.isAuthenticated, OrderController.apiGet);
+	app.get("/api/v1/OrderRoll", PassportConfig.isAuthenticated, OrderController.withOrderMiddleware, OrderRollController.apiGet);
+	app.post("/api/v1/OrderRoll", PassportConfig.isAuthenticated, OrderController.withOrderMiddleware, OrderRollController.apiPost);
+	app.delete("/api/v1/OrderRoll", PassportConfig.isAuthenticated, OrderController.withOrderMiddleware, OrderRollController.apiDelete);
+	app.get("/api/v1/OrderRoll/stats", PassportConfig.isAuthenticated, OrderController.withOrderMiddleware, OrderRollController.apiGetStats);
+	app.get("/api/v1/OrderFoodProviderVote", PassportConfig.isAuthenticated, OrderController.withOrderMiddleware, OrderFoodProviderVote.apiGet);
+	app.post("/api/v1/OrderFoodProviderVote", PassportConfig.isAuthenticated, OrderController.withOrderMiddleware, OrderFoodProviderVote.apiPost);
+	app.delete("/api/v1/OrderFoodProviderVote", PassportConfig.isAuthenticated, OrderController.withOrderMiddleware, OrderFoodProviderVote.apiDelete);
 	restify.serve(router, FoodTypes, {
 		middleware: PassportConfig.isAuthenticated,
 		onError: (err: any, _req: Request, res: Response) => {
@@ -47,8 +47,16 @@ const populateWithApiRoutes = (app: Express): void => {
 			socketService.dataItemMessage<FoodTypeProps>("create", req.user._id, "foodTypes", item);
 			socketService.updateDataType(req.user._id, "foodTypes");
 		},
-		postDelete: (_req: RequestWithErm, res: Response) => {
+		postUpdate: (req: RequestWithErm, res: Response) => {
+			const item = req.erm.result.toObject();
+			success<FoodTypeProps>(res, item, "Food Type updated successfully");
+			socketService.dataItemMessage<FoodTypeProps>("edit", req.user._id, "foodTypes", item);
+			socketService.updateDataType(req.user._id, "foodTypes");
+		},
+		postDelete: (req: RequestWithErm, res: Response) => {
 			success<any>(res, {}, "Food Type removed successfully");
+			socketService.dataItemMessage("remove", req.user._id, "foodTypes", { _id: req.params.id });
+			socketService.updateDataType(req.user._id, "foodTypes");
 		},
 	});
 	restify.serve(router, FoodProvider, {
@@ -58,10 +66,21 @@ const populateWithApiRoutes = (app: Express): void => {
 			error(res, err);
 		},
 		postCreate: (req: RequestWithErm, res: Response) => {
-			success<FoodProviderProps>(res, { ...req.erm.result.toObject() }, "Food Provider created successfully");
+			const item = req.erm.result.toObject();
+			success<FoodProviderProps>(res, req.erm.result.toObject(), "Food Provider created successfully");
+			socketService.dataItemMessage<FoodProviderProps>("create", req.user._id, "foodProviders", item);
+			socketService.updateDataType(req.user._id, "foodProviders");
 		},
-		postDelete: (_req: RequestWithErm, res: Response) => {
+		postUpdate: (req: RequestWithErm, res: Response) => {
+			const item = req.erm.result.toObject();
+			success<FoodProviderProps>(res, item, "Food Provider updated successfully");
+			socketService.dataItemMessage<FoodProviderProps>("edit", req.user._id, "foodProviders", item);
+			socketService.updateDataType(req.user._id, "foodProviders");
+		},
+		postDelete: (req: RequestWithErm, res: Response) => {
 			success<any>(res, {}, "Food Provider removed successfully");
+			socketService.dataItemMessage("remove", req.user._id, "foodProviders", { _id: req.params.id });
+			socketService.updateDataType(req.user._id, "foodProviders");
 		},
 	});
 	app.use(router);

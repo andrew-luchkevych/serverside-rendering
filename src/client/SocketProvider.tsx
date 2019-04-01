@@ -37,11 +37,13 @@ export class SocketProvider extends React.PureComponent<SocketProviderProps & So
 		return this.props.dispatch(reloadDataRoutines.add.success(createPayload({ dataType })));
 	}
 	onUpdateDataType = (message: UpdateDataTypeMessage) => {
+		console.log("onUpdateDataType", message);
 		const dataToUpdate = findDependentDataTypes(message.data.dataType);
 		dataToUpdate.forEach(this.reloadDataType);
 	}
 
 	onDataItemMessage = (message: DataItemMessage<any>) => {
+		console.log("onDataItemMessage", message);
 		const { initiator, data: { dataType, manipulation, item } } = message;
 		if (initiator === this.props.userId) {
 			return;

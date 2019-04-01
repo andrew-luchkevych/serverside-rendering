@@ -26,6 +26,7 @@ const FoodProviderReducer: ReduxReducer<OrderRollState> = (state = orderRollInit
 		};
 		case routines.get.FULFILL: return {
 			...state,
+			loaded: true,
 			processing: false,
 		};
 		case routines.create.REQUEST: return {
