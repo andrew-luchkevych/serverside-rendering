@@ -3,5 +3,6 @@ import { Document } from "mongoose";
 export interface RequestWithErm extends Request {
 	erm: {
 		result: Document;
+		document: Document;
 	};
 }

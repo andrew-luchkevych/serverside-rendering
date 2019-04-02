@@ -7,6 +7,7 @@ import { OrderState } from "../../redux/order";
 import { OrderRollState } from "../../redux/orderRoll";
 import { OrderRollStatsState } from "../../redux/orderRollStats";
 import { OrderFoodProviderVoteState } from "../../redux/orderFoodProviderVotes";
+import { MessagesState } from "../../redux/messages";
 import ReduxReducer from "./reducer";
 export interface RootReduser {
 	form: FormReducer;
@@ -18,6 +19,7 @@ export interface RootReduser {
 	orderRoll: ReduxReducer<OrderRollState>;
 	orderRollStats: ReduxReducer<OrderRollStatsState>;
 	orderFoodProviderVotes: ReduxReducer<OrderFoodProviderVoteState>;
+	messages: ReduxReducer<MessagesState>;
 }
 
 export interface ReduxStoreState {
@@ -30,4 +32,5 @@ export interface ReduxStoreState {
 	orderRoll: OrderRollState;
 	orderRollStats: OrderRollStatsState;
 	orderFoodProviderVotes: OrderFoodProviderVoteState;
+	messages: MessagesState;
 }

@@ -174,6 +174,10 @@ export const layout = (theme: Theme) => ({
 	fullheight: <CSSProperties>{
 		minHeight: "100%",
 	},
+	fullHeightHiddenOverflow: <CSSProperties>{
+		height: "100%",
+		overflow: "hidden",
+	},
 	fullsize: <CSSProperties>{
 		height: "100%",
 		width: "100%",
@@ -181,9 +185,16 @@ export const layout = (theme: Theme) => ({
 	flex: <CSSProperties>{
 		display: "flex",
 	},
+	flexRow: <CSSProperties>{
+		display: "flex",
+		flexDirection: "row",
+	},
 	flexColumn: <CSSProperties>{
 		display: "flex",
 		flexDirection: "column",
+	},
+	flexOne: <CSSProperties>{
+		flex: 1,
 	},
 	flexRowCenter: <CSSProperties>{
 		display: "flex",
@@ -196,7 +207,10 @@ export const layout = (theme: Theme) => ({
 		display: "flex",
 		flexDirection: "column",
 		justifyContent: "center",
-	}
+	},
+	overflowYOverlay: <CSSProperties><any>{
+		overflowY: "overlay",
+	},
 });
 
 export default theme;

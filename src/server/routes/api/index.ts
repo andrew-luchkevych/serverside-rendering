@@ -2,6 +2,7 @@ import { Express, Router, Request, Response } from "express";
 import restify from "express-restify-mongoose";
 import FoodTypes from "../../models/FoodTypes";
 import FoodProvider from "../../models/FoodProvider";
+import Message from "../../models/Message";
 import * as PassportConfig from "../../config/passport";
 import * as ApiController from "../../controllers/api";
 import * as UserController from "../../controllers/user";
@@ -9,12 +10,13 @@ import * as ContactController from "../../controllers/contact";
 import * as OrderController from "../../controllers/order";
 import * as OrderRollController from "../../controllers/orderRoll";
 import * as OrderFoodProviderVote from "../../controllers/orderFoodProviderVote";
+import * as MessagesController from "../../controllers/message";
 import { error, success } from "../../utils/api";
 import { RequestWithErm } from "../../types/request/RequestWithErm";
 import FoodTypeProps from "../../../shared/types/FoodType";
 import FoodProviderProps from "../../../shared/types/FoodProvider";
 import socketService from "../../sockets/index";
-import SocketMessageTypes from "../../../shared/types/sockets/MessageTypes";
+import MessageProps from "../../../shared/types/Message";
 const router = Router();
 const populateWithApiRoutes = (app: Express): void => {
 	app.get("/api", PassportConfig.isAuthenticated, ApiController.getApi);
@@ -37,6 +39,7 @@ const populateWithApiRoutes = (app: Express): void => {
 	app.post("/api/v1/OrderFoodProviderVote", PassportConfig.isAuthenticated, OrderController.withOrderMiddleware, OrderFoodProviderVote.apiPost);
 	app.delete("/api/v1/OrderFoodProviderVote", PassportConfig.isAuthenticated, OrderController.withOrderMiddleware, OrderFoodProviderVote.apiDelete);
 	restify.serve(router, FoodTypes, {
+		runValidators: true,
 		middleware: PassportConfig.isAuthenticated,
 		onError: (err: any, _req: Request, res: Response) => {
 			error(res, err);
@@ -61,13 +64,14 @@ const populateWithApiRoutes = (app: Express): void => {
 	});
 	restify.serve(router, FoodProvider, {
 		lean: false,
+		runValidators: true,
 		middleware: PassportConfig.isAuthenticated,
 		onError: (err: any, _req: Request, res: Response) => {
 			error(res, err);
 		},
 		postCreate: (req: RequestWithErm, res: Response) => {
 			const item = req.erm.result.toObject();
-			success<FoodProviderProps>(res, req.erm.result.toObject(), "Food Provider created successfully");
+			success<FoodProviderProps>(res, item, "Food Provider created successfully");
 			socketService.dataItemMessage<FoodProviderProps>("create", req.user._id, "foodProviders", item);
 			socketService.updateDataType(req.user._id, "foodProviders");
 		},
@@ -82,6 +86,26 @@ const populateWithApiRoutes = (app: Express): void => {
 			socketService.dataItemMessage("remove", req.user._id, "foodProviders", { _id: req.params.id });
 			socketService.updateDataType(req.user._id, "foodProviders");
 		},
+	});
+	restify.serve(router, Message, {
+		lean: false,
+		runValidators: true,
+		findOneAndRemove: false,
+		middleware: PassportConfig.isAuthenticated,
+		onError: (err: any, _req: Request, res: Response) => {
+			error(res, err);
+		},
+		postCreate: (req: RequestWithErm, res: Response) => {
+			const item = req.erm.result.toObject();
+			success<MessageProps>(res, item);
+			// socketService.dataItemMessage<MessageProps>("create", req.user._id, "foodProviders", item);
+		},
+		postUpdate: (req: RequestWithErm, res: Response) => {
+			const item = req.erm.result.toObject();
+			success<MessageProps>(res, item);
+			// socketService.dataItemMessage<MessageProps>("edit", req.user._id, "foodProviders", item);
+		},
+		preDelete: MessagesController.apiRemove,
 	});
 	app.use(router);
 };

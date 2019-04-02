@@ -1,5 +1,7 @@
 import * as React from "react";
+import classNames from "classnames";
 import { connect } from "react-redux";
+import { withStyles } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import WithDispatch from "../../../../../shared/types/store/dispatch";
 import routines from "../../../../../shared/redux/order/routines";
@@ -9,13 +11,20 @@ import { shouldDataBeReloaded } from "../../../../../shared/redux/forceReloadDat
 import { pageDataTypes } from "../../../../App";
 import Padder from "../../../../components/Layout/Padder";
 import Loader from "../../../../components/Loader/";
+import { layout } from "../../../../theme/index";
 import OrderStats from "./stats";
 import Vouting from "./vouting";
+export interface OrderStyleProps {
+	classes: {
+		fullHeightHiddenOverflow: string;
+		flexColumn: string;
+	};
+}
 export interface OrderConnectedProps {
 	loaded: boolean;
 	forceReload: boolean;
 }
-export class Order extends React.PureComponent<OrderConnectedProps & WithDispatch> {
+export class Order extends React.PureComponent<OrderStyleProps & OrderConnectedProps & WithDispatch> {
 	componentDidMount() {
 		pageDataTypes.add("order");
 		const { loaded, forceReload, dispatch } = this.props;
@@ -24,9 +33,9 @@ export class Order extends React.PureComponent<OrderConnectedProps & WithDispatc
 		}
 	}
 	render() {
-		const { loaded } = this.props;
+		const { loaded, classes } = this.props;
 		return (
-			<Padder>
+			<Padder className={classNames(classes.fullHeightHiddenOverflow, classes.flexColumn)}>
 				<Typography variant="h4" align="center" gutterBottom>
 					Order
 				</Typography>
@@ -49,4 +58,4 @@ const mapStateToProps = (state: ReduxStoreState): OrderConnectedProps => ({
 	loaded: isOrderLoaded(state),
 	forceReload: shouldDataBeReloaded("order")(state),
 });
-export default connect<OrderConnectedProps, WithDispatch>(mapStateToProps)(Order) as React.ComponentType<{}>;
+export default connect<OrderConnectedProps, WithDispatch>(mapStateToProps)(withStyles(layout)(Order)) as React.ComponentType<{}>;

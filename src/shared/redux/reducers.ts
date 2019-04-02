@@ -8,6 +8,7 @@ import order from "./order";
 import orderRoll from "./orderRoll";
 import orderRollStats from "./orderRollStats";
 import orderFoodProviderVotes from "./orderFoodProviderVotes";
+import messages from "./messages";
 const rootReducer: RootReduser = {
 	form,
 	user,
@@ -18,6 +19,7 @@ const rootReducer: RootReduser = {
 	orderRoll,
 	orderRollStats,
 	orderFoodProviderVotes,
+	messages,
 };
 
 export default rootReducer;
