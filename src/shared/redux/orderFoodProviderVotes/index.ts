@@ -3,7 +3,7 @@ import BasicReducerState from "../../types/store/state";
 import ReduxReducer from "../../types/store/reducer";
 import OrderFoodProviderVoteProps from "../../types/Order/OrderFoodProviderVote";
 import routines from "./routines";
-import { fixAfterRehydrate } from "../../utils/map";
+import { fixAfterRehydrateMap } from "../../utils/map";
 
 export interface OrderFoodProviderVoteState extends BasicReducerState {
 	data: Map<string, OrderFoodProviderVoteProps>;
@@ -19,7 +19,7 @@ const mapKey = (v: { user: { _id: string }, foodProviderId: string }): string =>
 	v.user._id + "|" + v.foodProviderId;
 
 export const OrderFoodProviderVoteReducer: ReduxReducer<OrderFoodProviderVoteState> = (state = orderFoodProviderVoteInitialState, action) => {
-	state.data = fixAfterRehydrate(state.data);
+	state.data = fixAfterRehydrateMap(state.data);
 	switch (action.type) {
 		case routines.get.REQUEST: return {
 			...state,

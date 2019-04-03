@@ -1,4 +1,5 @@
 import * as React from "react";
+import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import InputBase from "@material-ui/core/InputBase";
 import IconButton from "@material-ui/core/IconButton";
@@ -52,7 +53,7 @@ export class MessagesFooter extends React.PureComponent<MessagesFooterStyleProps
 					multiline
 					className={classes.flexOne}
 				/>
-				<IconButton color="primary" disabled={!this.state.submitting} onClick={this.onSubmit}>
+				<IconButton color="primary" disabled={this.state.submitting} onClick={this.onSubmit}>
 					<SendIcon />
 				</IconButton>
 			</div>
@@ -60,4 +61,4 @@ export class MessagesFooter extends React.PureComponent<MessagesFooterStyleProps
 	}
 }
 
-export default withStyles(combineStyles(styles, layout))(MessagesFooter);
+export default connect()(withStyles(combineStyles(styles, layout))(MessagesFooter)) as React.ComponentType;

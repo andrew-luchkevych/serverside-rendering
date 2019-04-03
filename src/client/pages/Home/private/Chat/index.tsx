@@ -17,21 +17,23 @@ export interface ChatContainerStylesProps {
 		fullHeightHiddenOverflow: string;
 	};
 }
-export const Chat = (props: ChatContainerStylesProps) => {
-	const { classes } = props;
-	return (
-		<Padder className={classNames(classes.fullHeightHiddenOverflow, classes.flexColumn)}>
-			<Typography variant="h4" align="center" gutterBottom>
-				Chat
-			</Typography>
-			<Card className={classNames(classes.flexRow, classes.flexOne)}>
-				<CardContent className={classNames(classes.flexColumn, classes.flexOne)} style={{ paddingBottom: 0 }}>
-					<MessagesList />
-					<MessagesFooter />
-				</CardContent>
-			</Card>
-		</Padder>
-	);
-};
+export class Chat extends React.PureComponent<ChatContainerStylesProps> {
+	render() {
+		const { classes } = this.props;
+		return (
+			<Padder className={classNames(classes.fullHeightHiddenOverflow, classes.flexColumn)}>
+				<Typography variant="h4" align="center" gutterBottom>
+					Chat
+				</Typography>
+				<Card className={classNames(classes.flexRow, classes.flexOne)}>
+					<CardContent className={classNames(classes.flexColumn, classes.flexOne)} style={{ paddingBottom: 0 }}>
+						<MessagesList />
+						<MessagesFooter />
+					</CardContent>
+				</Card>
+			</Padder>
+		);
+	};
+}
 
 export default withStyles(layout)(Chat);

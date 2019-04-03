@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import MessageProps from "../../shared/types/Message";
 import transformMongooseErrors from "../utils/models/errors";
+import { UserModel } from "./User";
 export type gravatarFunction = () => string;
 
 export type MessageModel = mongoose.Document & MessageProps;
@@ -11,10 +12,10 @@ const MessageSchema = new mongoose.Schema({
 		required: [true, "Message text is required"],
 		maxlength: [600, "Message is longer than the maximum allowed length (600)"],
 	},
-	author: [{
+	author: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "User",
-	}],
+	},
 	deleted: {
 		type: Boolean,
 		default: false,
@@ -27,7 +28,10 @@ MessageSchema.pre("findOneAndUpdate", function (next) {
 MessageSchema.post("save", transformMongooseErrors());
 MessageSchema.post("findOneAndUpdate", transformMongooseErrors());
 const populate = (doc: MessageModel, next: Function) => {
-	doc.populate("foodTypes").execPopulate().then(() => next());
+	doc.populate("author").execPopulate().then((v) => {
+		v.author = (v.author as UserModel).getData();
+		next();
+	});
 };
 MessageSchema.post("init", populate);
 MessageSchema.post("save", populate);

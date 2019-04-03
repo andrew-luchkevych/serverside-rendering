@@ -16,11 +16,15 @@ export interface RemoveMessageTriggerProps {
 	data: RemoveMessageApiProps;
 }
 
+export interface GetMessagesSuccessProps {
+	items: MessageProps[];
+}
+
 export interface MoreMessagesSuccessProps {
 	items: MessageProps[];
 	page: number;
 }
-export const get: BasicRoutine<void, void, MessageProps[]> = createRoutine("MESSAGES/GET");
+export const get: BasicRoutine<void, void, GetMessagesSuccessProps> = createRoutine("MESSAGES/GET");
 
 export const more: BasicRoutine<void, void, MoreMessagesSuccessProps> = createRoutine("MESSAGES/MORE");
 
@@ -36,7 +40,7 @@ export const edit: BasicRoutine<
 	MessageProps
 > = createRoutine("MESSAGES/EDIT");
 
-export const remove: BasicRoutine<RemoveMessageTriggerProps, { _id: string }> = createRoutine("MESSAGES/REMOVE");
+export const remove: BasicRoutine<RemoveMessageTriggerProps, { _id: string }, MessageProps> = createRoutine("MESSAGES/REMOVE");
 
 export default {
 	get,

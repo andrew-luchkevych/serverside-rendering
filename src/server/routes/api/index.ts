@@ -17,6 +17,7 @@ import FoodTypeProps from "../../../shared/types/FoodType";
 import FoodProviderProps from "../../../shared/types/FoodProvider";
 import socketService from "../../sockets/index";
 import MessageProps from "../../../shared/types/Message";
+import { RequestWithUser } from "../../types/request/RequestWithUser";
 const router = Router();
 const populateWithApiRoutes = (app: Express): void => {
 	app.get("/api", PassportConfig.isAuthenticated, ApiController.getApi);
@@ -95,17 +96,21 @@ const populateWithApiRoutes = (app: Express): void => {
 		onError: (err: any, _req: Request, res: Response) => {
 			error(res, err);
 		},
+		preCreate: (req: RequestWithUser, res: Response, next) => {
+			req.body.author = req.user._id;
+			next();
+		},
+		preDelete: MessagesController.apiRemove,
 		postCreate: (req: RequestWithErm, res: Response) => {
 			const item = req.erm.result.toObject();
 			success<MessageProps>(res, item);
-			// socketService.dataItemMessage<MessageProps>("create", req.user._id, "foodProviders", item);
+			socketService.dataItemMessage<MessageProps>("create", req.user._id, "messages", item);
 		},
 		postUpdate: (req: RequestWithErm, res: Response) => {
 			const item = req.erm.result.toObject();
 			success<MessageProps>(res, item);
-			// socketService.dataItemMessage<MessageProps>("edit", req.user._id, "foodProviders", item);
+			socketService.dataItemMessage<MessageProps>("edit", req.user._id, "messages", item);
 		},
-		preDelete: MessagesController.apiRemove,
 	});
 	app.use(router);
 };

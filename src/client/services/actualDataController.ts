@@ -7,8 +7,8 @@ import orderRoutines from "../../shared/redux/order/routines";
 import orderFoodProviderVotesRoutines from "../../shared/redux/orderFoodProviderVotes/routines";
 import orderRollRoutines from "../../shared/redux/orderRoll/routines";
 import orderRollStatsRoutines from "../../shared/redux/orderRollStats/routines";
+import messagesRoutines from "../../shared/redux/messages/routines";
 import DataTypes from "../../shared/types/dataTypes";
-import ReduxAction from "../../shared/types/store/action";
 
 export type DataTypeDependencies = Partial<{
 	[key in DataTypes]: Array<DataTypes>;
@@ -41,4 +41,5 @@ export const dataTypesRoutines: DataTypeRoutines = {
 	orderFoodProviderVotes: orderFoodProviderVotesRoutines,
 	orderRoll: orderRollRoutines,
 	orderRollStats: orderRollStatsRoutines,
+	messages: messagesRoutines,
 };

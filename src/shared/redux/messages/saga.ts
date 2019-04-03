@@ -14,8 +14,8 @@ export function* get() {
 	const { get: routine } = routines;
 	try {
 		yield put(routine.request());
-		const data: Array<MessageProps> = yield call(api.get, { page: 0 });
-		yield put(routine.success(createPayload(data)));
+		const items: Array<MessageProps> = yield call(api.get, { page: 0 });
+		yield put(routine.success(createPayload({ items })));
 	} catch (e) {
 		yield put(routine.failure(createPayload(undefined, e)));
 		SnackService.error(e.message);
@@ -30,8 +30,8 @@ export function* more() {
 		let page = select(getMessagesPage) as any;
 		page++;
 		yield put(routine.request());
-		const data: Array<MessageProps> = yield call(api.get, { page });
-		yield put(routine.success(createPayload(data)));
+		const items: Array<MessageProps> = yield call(api.get, { page });
+		yield put(routine.success(createPayload({ items, page })));
 	} catch (e) {
 		yield put(routine.failure(createPayload(undefined, e)));
 		SnackService.error(e.message);
@@ -44,8 +44,8 @@ export function* create({ payload }: { payload: CreateMessageTriggerProps }) {
 	const { create: routine } = routines;
 	try {
 		yield put(routine.request());
-		const foodType: MessageProps = yield call(api.create, payload.data);
-		yield put(routine.success(createPayload(foodType)));
+		const item: MessageProps = yield call(api.create, payload.data);
+		yield put(routine.success(createPayload(item)));
 		payload.controller.success();
 	} catch (e) {
 		yield put(routine.failure(createPayload(undefined, e)));
@@ -60,8 +60,8 @@ export function* edit({ payload }: { payload: EditMessageTriggerProps }) {
 	const { edit: routine } = routines;
 	try {
 		yield put(routine.request());
-		const foodType: MessageProps = yield call(api.edit, payload.data);
-		yield put(routine.success(createPayload(foodType)));
+		const item: MessageProps = yield call(api.edit, payload.data);
+		yield put(routine.success(createPayload(item)));
 		payload.controller.success();
 	} catch (e) {
 		yield put(routine.failure(createPayload(undefined, e)));
@@ -75,10 +75,9 @@ export function* edit({ payload }: { payload: EditMessageTriggerProps }) {
 export function* remove({ payload }: { payload: RemoveMessageTriggerProps }) {
 	const { remove: routine } = routines;
 	try {
-		yield put(routine.request());
-		const response: ApiSuccessResponse = yield call(api.remove, payload.data);
-		SnackService.success(response.msg);
-		yield put(routine.success(payload));
+		yield put(routine.request(createPayload(payload.data)));
+		const item: MessageProps = yield call(api.remove, payload.data);
+		yield put(routine.success(createPayload(item)));
 	} catch (e) {
 		yield put(routine.failure(createPayload(undefined, e)));
 		SnackService.error(e.message);

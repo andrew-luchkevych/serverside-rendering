@@ -1,27 +1,27 @@
-import { Map as ImmutableMap } from "immutable";
+import { OrderedMap } from "immutable";
 import BasicReducerState from "../../types/store/state";
 import ReduxReducer from "../../types/store/reducer";
 import routines from "./routines";
 import MessageProps from "../../types/Message";
-import { fixAfterRehydrate } from "../../utils/map";
+import { fixAfterRehydrateOrderedMap } from "../../utils/map";
 
 export interface MessagesState extends BasicReducerState {
-	data: ImmutableMap<string, MessageProps>;
+	data: OrderedMap<string, MessageProps>;
 	page: number;
 }
 
 export const messagesInitialState: MessagesState = {
-	data: ImmutableMap(),
+	data: OrderedMap(),
 	page: 0,
 	processing: false,
 	loaded: false,
 };
 
-const mapObjToImmutableMapArr = (item: MessageProps) => [item._id, item];
-const mapArrToImmutableMapArr = (items: Array<MessageProps>) => items.map(mapObjToImmutableMapArr) as any;
+const mapObjToOrderedMapArr = (item: MessageProps) => [item._id, item];
+const mapArrToOrderedMapArr = (items: Array<MessageProps>) => items.map(mapObjToOrderedMapArr) as any;
 
 const MessagesReducer: ReduxReducer<MessagesState> = (state = messagesInitialState, action) => {
-	fixAfterRehydrate(state);
+	state.data = fixAfterRehydrateOrderedMap(state.data);
 	switch (action.type) {
 		case routines.get.REQUEST: return {
 			...state,
@@ -29,7 +29,7 @@ const MessagesReducer: ReduxReducer<MessagesState> = (state = messagesInitialSta
 		};
 		case routines.get.SUCCESS: return {
 			...state,
-			data: ImmutableMap(mapArrToImmutableMapArr(action.payload.data.items)),
+			data: OrderedMap(mapArrToOrderedMapArr(action.payload.data.items)),
 			page: 0,
 			loaded: true,
 		};
@@ -43,7 +43,7 @@ const MessagesReducer: ReduxReducer<MessagesState> = (state = messagesInitialSta
 		};
 		case routines.more.SUCCESS: return {
 			...state,
-			data: state.data.merge(mapArrToImmutableMapArr(action.payload.data.items)),
+			data: state.data.merge(mapArrToOrderedMapArr(action.payload.data.items)),
 			page: action.payload.data.page,
 			loaded: true,
 		};
@@ -51,31 +51,26 @@ const MessagesReducer: ReduxReducer<MessagesState> = (state = messagesInitialSta
 			...state,
 			processing: false,
 		};
-		case routines.create.REQUEST: return {
-			...state,
-			processing: true,
-		};
 		case routines.create.SUCCESS: return {
 			...state,
 			data: state.data.set(action.payload.data._id, action.payload.data),
-		};
-		case routines.create.FULFILL: return {
-			...state,
-			processing: false,
-		};
-		case routines.edit.REQUEST: return {
-			...state,
-			processing: true,
 		};
 		case routines.edit.SUCCESS:
 			return {
 				...state,
 				data: state.data.set(action.payload.data._id, action.payload.data),
 			};
-		case routines.edit.FULFILL: return {
+		case routines.remove.REQUEST: return {
 			...state,
-			processing: false,
+			data: state.data.has(action.payload.data._id)
+				? state.data.update(action.payload.data._id, v => ({ ...v, deleted: true }))
+				: state.data,
 		};
+		case routines.remove.SUCCESS:
+			return {
+				...state,
+				data: state.data.set(action.payload.data._id, action.payload.data),
+			};
 		default: return state;
 	}
 };
