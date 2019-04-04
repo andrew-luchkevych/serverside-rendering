@@ -9,3 +9,4 @@ export const getMessageById = (id: string) =>
 		data.find(m => m._id === id);
 export const isMessagesProcessing = ({ messages: { processing } }: ReduxStoreState) => processing;
 export const isMessagesLoaded = ({ messages: { loaded } }: ReduxStoreState) => loaded;
+export const canLoadMoreMessages = ({ messages: { canLoadMore } }: ReduxStoreState) => canLoadMore;

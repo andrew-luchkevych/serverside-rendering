@@ -7,4 +7,7 @@ export const styles = {
 		flexDirection: "row",
 		borderTop: "solid thin #ccc",
 	},
+	input: <CSSProperties>{
+		fontSize: 14,
+	},
 };

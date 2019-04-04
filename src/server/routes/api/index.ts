@@ -96,17 +96,17 @@ const populateWithApiRoutes = (app: Express): void => {
 		onError: (err: any, _req: Request, res: Response) => {
 			error(res, err);
 		},
-		preCreate: (req: RequestWithUser, res: Response, next) => {
+		preCreate: (req: RequestWithUser, res: Response, next: Function) => {
 			req.body.author = req.user._id;
 			next();
 		},
 		preDelete: MessagesController.apiRemove,
-		postCreate: (req: RequestWithErm, res: Response) => {
+		postCreate: (req: RequestWithErm, res: Response, _next: Function) => {
 			const item = req.erm.result.toObject();
 			success<MessageProps>(res, item);
 			socketService.dataItemMessage<MessageProps>("create", req.user._id, "messages", item);
 		},
-		postUpdate: (req: RequestWithErm, res: Response) => {
+		postUpdate: (req: RequestWithErm, res: Response, _next: Function) => {
 			const item = req.erm.result.toObject();
 			success<MessageProps>(res, item);
 			socketService.dataItemMessage<MessageProps>("edit", req.user._id, "messages", item);

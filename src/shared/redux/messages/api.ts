@@ -2,7 +2,7 @@ import axios from "axios";
 import { ApiSuccessResponse } from "../../types/api/responses";
 import MessageProps from "../../types/Message";
 
-const LIMIT = 20;
+export const LIMIT = 20;
 
 export interface GetMessagesApiProps {
 	page: number;
