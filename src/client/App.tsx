@@ -9,11 +9,11 @@ import routes from "./routes";
 import SocketProvider from "./SocketProvider";
 import DataTypes from "../shared/types/dataTypes";
 export const pageDataTypes: Set<DataTypes> = new Set();
-class App extends React.Component<RouteComponentProps> {
+export class App extends React.Component<RouteComponentProps> {
 	componentDidMount() {
 		config();
 	}
-	componentDidUpdate(prevProps) {
+	componentDidUpdate(prevProps: RouteComponentProps) {
 		if (this.props.location !== prevProps.location) {
 			this.onRouteChanged();
 		}

@@ -14,6 +14,7 @@ function getErrorFromResponse(response, defaultMessage = "Opps... Server error. 
 	}
 	return false;
 }
+
 export function config() {
 	const token = localStorage.getItem("token");
 	axios.defaults.headers = {

@@ -14,13 +14,14 @@ import { getUserId } from "../shared/redux/user/selectors";
 import DataItemMessage from "../shared/types/sockets/messages/ItemMessage";
 import DataTypes from "../shared/types/dataTypes";
 
-export interface SocketProviderProps {
+export interface SocketProviderOwnProps {
 	children: React.ReactNode;
 }
 export interface SocketProviderConnectedProps {
 	userId?: string;
 }
-export class SocketProvider extends React.PureComponent<SocketProviderProps & SocketProviderConnectedProps & WithDispatch> {
+export type SocketProviderProps = SocketProviderOwnProps & SocketProviderConnectedProps & WithDispatch;
+export class SocketProvider extends React.PureComponent<SocketProviderProps> {
 	socket: SocketIOClient.Socket;
 	componentDidMount() {
 		this.socket = SocketIO();
@@ -37,13 +38,11 @@ export class SocketProvider extends React.PureComponent<SocketProviderProps & So
 		return this.props.dispatch(reloadDataRoutines.add.success(createPayload({ dataType })));
 	}
 	onUpdateDataType = (message: UpdateDataTypeMessage) => {
-		console.log("onUpdateDataType", message);
 		const dataToUpdate = findDependentDataTypes(message.data.dataType);
 		dataToUpdate.forEach(this.reloadDataType);
 	}
 
 	onDataItemMessage = (message: DataItemMessage<any>) => {
-		console.log("onDataItemMessage", message);
 		const { initiator, data: { dataType, manipulation, item } } = message;
 		if (initiator === this.props.userId) {
 			return;
@@ -72,9 +71,13 @@ export class SocketProvider extends React.PureComponent<SocketProviderProps & So
 		try {
 			this.props.dispatch(routine.success(createPayload(item)));
 		} catch (e) {
-			console.warn(e);
 			this.reloadDataType(dataType);
 		}
+	}
+	componentWillUnmount() {
+		this.socket.removeListener(SocketMessageTypes.updateDataType, this.onUpdateDataType);
+		this.socket.removeListener(SocketMessageTypes.itemManipulation, this.onDataItemMessage);
+		this.socket.close();
 	}
 
 	render() {
@@ -84,4 +87,4 @@ export class SocketProvider extends React.PureComponent<SocketProviderProps & So
 const mapStateToProps = (state: ReduxStoreState): SocketProviderConnectedProps => ({
 	userId: getUserId(state),
 });
-export default connect(mapStateToProps)(SocketProvider) as React.ComponentType<SocketProviderProps>;
+export default connect(mapStateToProps)(SocketProvider) as React.ComponentType<SocketProviderOwnProps>;

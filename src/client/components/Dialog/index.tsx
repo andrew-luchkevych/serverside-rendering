@@ -27,7 +27,7 @@ export interface ConfirmationDialogProps extends ConfirmationDialogDefaultProps 
 export interface ConfirmationDialogState {
 	opened: boolean;
 }
-class ConfirmationDialog extends React.Component<ConfirmationDialogProps, ConfirmationDialogState> {
+export class ConfirmationDialog extends React.Component<ConfirmationDialogProps, ConfirmationDialogState> {
 	static defaultProps: ConfirmationDialogDefaultProps = {
 		controller: {
 			open: () => null,

@@ -11,7 +11,7 @@
 		"start": "export NODE_ENV=production&& nodemon ./src/server/server.ts",
 		"clean": "rimraf dist && mkdir dist",
 		"lint": "tslint -c ./tslint.json -p ./tsconfig.json -t stylish",
-		"test": "export NODE_ENV=test&& jest --watch --no-cache",
+		"test": "export NODE_ENV=test && jest --watch --no-cache",
 		"test:coverage": "export NODE_ENV=test&& jest --coverage"
 	},
 	"repository": {
@@ -52,6 +52,7 @@
 		"@types/connect-mongo": "0.0.41",
 		"@types/cookie-parser": "^1.4.1",
 		"@types/dotenv": "^6.1.0",
+		"@types/enzyme": "^3.9.1",
 		"@types/errorhandler": "0.0.32",
 		"@types/express": "^4.16.1",
 		"@types/express-session": "^1.15.12",
@@ -110,6 +111,7 @@
 		"sinon": "^7.2.4",
 		"source-map-loader": "^0.2.4",
 		"style-loader": "^0.23.1",
+		"ts-jest": "^24.0.1",
 		"ts-loader": "^5.3.3",
 		"ts-node": "^8.0.3",
 		"tslint": "^5.13.1",
@@ -192,16 +194,15 @@
 			"^.+\\.(ts|tsx)$": "ts-jest"
 		},
 		"testMatch": [
-			"**/tests/*.spec.(ts|tsx|js)"
+			"**/tests/**/*.(ts|tsx|js)"
 		],
 		"setupFiles": [
 			"<rootDir>config/jest/bootstrap.js"
 		],
 		"collectCoverageFrom": [
-			"src/client/**/*.ts",
-			"src/client/**/*.tsx",
+			"src/**/*.ts",
+			"src/**/*.tsx",
 			"!src/client/index.tsx",
-			"!src/client/routes.tsx",
 			"!**/node_modules/**",
 			"!**/dist/**"
 		],
