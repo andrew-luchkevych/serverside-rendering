@@ -27,7 +27,8 @@ export function* get() {
 export function* more() {
 	const { more: routine } = routines;
 	try {
-		let page = select(getMessagesPage) as any;
+		let page = yield select(getMessagesPage) as any;
+		console.log({ page });
 		page++;
 		yield put(routine.request());
 		const items: Array<MessageProps> = yield call(api.get, { page });

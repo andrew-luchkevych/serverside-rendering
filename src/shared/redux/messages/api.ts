@@ -22,7 +22,7 @@ export interface RemoveMessageApiProps {
 }
 
 export const get = async (args: GetMessagesApiProps): Promise<MessageProps[]> => axios
-	.get(`/api/v1/Message`, { params: { limit: LIMIT, skip: LIMIT * args.page } })
+	.get(`/api/v1/Message?sort={"createdAt":-1}&limit=${LIMIT}&skip=${args.page * LIMIT}&page=${args.page}`)
 	.then(response => response.data);
 
 export const create = async (data: CreateMessageApiProps): Promise<MessageProps> => axios

@@ -148,7 +148,7 @@ passport.use(new FacebookStrategy({
  */
 export let isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
 	if (req.headers.authorization) {
-		passport.authenticate("jwt", { session: false }, function (err, user, info) {
+		passport.authenticate("jwt", { session: true }, function (err, user, info) {
 			if ((!err || !info) && user) {
 				req.user = user;
 				return next();

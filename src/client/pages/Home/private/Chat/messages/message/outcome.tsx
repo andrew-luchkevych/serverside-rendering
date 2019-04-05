@@ -96,12 +96,14 @@ export class OutcomeMessageItem extends React.PureComponent<OutcomeMessageItemPr
 									hidden={true}
 								>
 									<SpeedDialAction
+										color="primary"
 										icon={<EditIcon />}
 										tooltipTitle="Edit"
 										tooltipPlacement="bottom"
 										onClick={this.onEdit}
 									/>
 									<SpeedDialAction
+										color="secondary"
 										icon={<DeleteIcon />}
 										tooltipTitle="Delete"
 										tooltipPlacement="bottom"

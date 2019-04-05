@@ -21,4 +21,7 @@ export const messageStyles = {
 		display: "flex",
 		flexDirection: "row-reverse",
 	},
+	editedText: <CSSProperties>{
+		fontSize: "0.7rem",
+	},
 };

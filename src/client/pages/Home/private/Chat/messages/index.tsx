@@ -34,15 +34,21 @@ export type MessagesListProps = MessagesListOwnProps & MessagesListStyleProps & 
 export class MessagesList extends React.PureComponent<MessagesListProps> {
 	wrapperRef: React.RefObject<HTMLDivElement> = React.createRef();
 	shouldScrollToBottom = false;
+	loadMoreTime: number;
 	componentDidMount() {
 		if (!this.props.loaded) {
 			this.props.dispatch(routines.get.trigger());
 		}
+		this.loadMoreTime = (new Date()).getTime();
 		this.wrapperRef.current.addEventListener("scroll", this.loadMore);
 	}
 	loadMore = () => {
 		if (this.wrapperRef.current.scrollTop < 500 && !this.props.processing && this.props.canLoadMore) {
-			this.props.dispatch(routines.more.trigger());
+			const time = (new Date()).getTime();
+			if (this.loadMoreTime + 3000 < time) {
+				this.loadMoreTime = time;
+				this.props.dispatch(routines.more.trigger());
+			}
 		}
 	}
 	getSnapshotBeforeUpdate(prevProps: MessagesListProps) {
@@ -50,7 +56,8 @@ export class MessagesList extends React.PureComponent<MessagesListProps> {
 			const target = this.wrapperRef.current;
 			const currentScroll = target.scrollTop;
 			const scrollHeight = target.scrollHeight;
-			if (scrollHeight - currentScroll < 300) {
+			console.log({ scrollHeight, currentScroll, diff: scrollHeight - currentScroll });
+			if (scrollHeight - currentScroll < 500) {
 				return true;
 			}
 		}
@@ -76,7 +83,7 @@ export class MessagesList extends React.PureComponent<MessagesListProps> {
 		const { classes, messages, processing, loaded, onMessageEdit, onMessageRemove } = this.props;
 		return (
 			<div className={classes.messagesListWrapper} ref={this.wrapperRef}>
-				<List dense>
+				<List dense className={classes.list}>
 					{messages.valueSeq().map(v => (
 						<MessageItem
 							key={v._id}

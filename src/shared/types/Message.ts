@@ -5,6 +5,8 @@ export interface MessageProps {
 	author: UserProps;
 	text: string;
 	deleted?: boolean;
+	createdAt: string;
+	updatedAt: string;
 }
 
 export default MessageProps;

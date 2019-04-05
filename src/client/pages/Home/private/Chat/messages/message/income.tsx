@@ -15,6 +15,7 @@ export interface IncomeMessageItemStyleProps {
 		currentUserMessage: string;
 		messageContainer: string;
 		currentUserMessageContainer: string;
+		editedText: string;
 	};
 }
 export class IncomeMessageItem extends React.PureComponent<IncomeMessageItemProps & IncomeMessageItemStyleProps> {
@@ -35,6 +36,14 @@ export class IncomeMessageItem extends React.PureComponent<IncomeMessageItemProp
 								: m.text
 						}
 					</Typography>
+					{
+						!m.deleted && m.createdAt !== m.updatedAt
+							? (
+								<Typography color="textSecondary" className={c.editedText}>
+									Edited
+								</Typography>
+							) : null
+					}
 				</div>
 			</div>
 		);

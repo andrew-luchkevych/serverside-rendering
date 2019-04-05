@@ -35,7 +35,7 @@ export default function init() {
 		store: new MongoStore({
 			mongooseConnection: mongoose.connection,
 			// url: MONGODB_URI,
-			// autoReconnect: true,
+			autoReconnect: true,
 		}),
 	});
 

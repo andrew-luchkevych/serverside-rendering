@@ -68,7 +68,7 @@ const MessagesReducer: ReduxReducer<MessagesState> = (state = messagesInitialSta
 		};
 		case routines.create.SUCCESS: return {
 			...state,
-			data: state.data.set(action.payload.data._id, action.payload.data),
+			data: OrderedMap().merge([[action.payload.data._id, action.payload.data]], state.data),
 		};
 		case routines.edit.SUCCESS:
 			return {
