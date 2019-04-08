@@ -46,10 +46,10 @@ export interface HeaderState {
 	userMenuOpen: boolean;
 }
 
-export interface HeaderProps extends HeaderOwnProps, HeaderConnectedProps, WithDispatch, HeaderStylesProps { }
+export type HeaderProps = HeaderOwnProps & HeaderConnectedProps & WithDispatch & HeaderStylesProps;
 
 export class Header extends React.PureComponent<HeaderProps, HeaderState> {
-	menuAnchor: any;
+	userMenuAnchor: any;
 	state = { title: "Serverside Rendering", userMenuOpen: false };
 	updateTitle = ({ title }) => this.setState({ title });
 	handleMenuToggle = () => {
@@ -95,10 +95,15 @@ export class Header extends React.PureComponent<HeaderProps, HeaderState> {
 										</Tooltip>
 									</Grid>
 									<Grid item>
-										<IconButton color="inherit" className={classes.iconButtonAvatar} buttonRef={ref => this.menuAnchor = ref} onClick={this.handleMenuToggle}>
+										<IconButton
+											color="inherit"
+											className={classes.iconButtonAvatar}
+											buttonRef={ref => this.userMenuAnchor = ref}
+											onClick={this.handleMenuToggle}
+										>
 											<Avatar className={classes.avatar} src={user.profile.picture} />
 										</IconButton>
-										<Popper open={this.state.userMenuOpen} anchorEl={this.menuAnchor} transition disablePortal>
+										<Popper open={this.state.userMenuOpen} anchorEl={this.userMenuAnchor} transition disablePortal>
 											{({ TransitionProps, placement }) => (
 												<Grow
 													{...TransitionProps}

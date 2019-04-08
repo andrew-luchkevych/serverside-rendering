@@ -28,8 +28,8 @@ export interface FormSelectProps {
 	meta: WrappedFieldMetaProps;
 	options: Array<FormSelectFieldOption>;
 }
-
-export class FormSelectField extends React.PureComponent<FormSelectProps & FormSelectStyleProps> {
+export type FormSelectFieldProps = FormSelectProps & FormSelectStyleProps;
+export class FormSelectField extends React.PureComponent<FormSelectFieldProps> {
 	ITEM_HEIGHT = 48;
 	ITEM_PADDING_TOP = 8;
 	MenuProps = {
@@ -53,7 +53,7 @@ export class FormSelectField extends React.PureComponent<FormSelectProps & FormS
 	)
 	renderOption = (option: FormSelectFieldOption) => (
 		<MenuItem key={option._id} value={option._id}>
-			<Checkbox checked={this.props.input.value.indexOf(option._id) !== -1} />
+			<Checkbox checked={(this.props.input.value || []).indexOf(option._id) !== -1} />
 			<ListItemText primary={option.name} />
 		</MenuItem>
 	)

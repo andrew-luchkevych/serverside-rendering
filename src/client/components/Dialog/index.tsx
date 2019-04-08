@@ -6,7 +6,6 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Slide, { SlideProps } from "@material-ui/core/Slide";
-const Transition = (props: SlideProps) => (<Slide direction="up" {...props} />);
 
 export interface ConfirmationDialogControllerProps {
 	open: () => void;
@@ -40,6 +39,7 @@ export class ConfirmationDialog extends React.Component<ConfirmationDialogProps,
 		autoclose: true,
 	};
 	state = { opened: false };
+	transition = (props: SlideProps) => (<Slide direction="up" {...props} />);
 	componentDidMount() {
 		this.props.controller.open = this.open;
 		this.props.controller.close = this.close;
@@ -75,7 +75,7 @@ export class ConfirmationDialog extends React.Component<ConfirmationDialogProps,
 			<div>
 				<Dialog
 					open={this.state.opened}
-					TransitionComponent={Transition}
+					TransitionComponent={this.transition}
 					onClose={close}
 				>
 					<DialogTitle>

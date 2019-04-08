@@ -20,3 +20,5 @@ export const FormTextField = (props: FormTextFieldProps) => {
 		/>
 	);
 };
+
+export default FormTextField;

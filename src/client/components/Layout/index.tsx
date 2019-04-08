@@ -21,7 +21,6 @@ export interface RootLayoutStyleProps {
 }
 export interface RootLayoutProps extends RootLayoutStyleProps, withSnackbarProps {
 	children: React.ReactElement;
-	title?: string;
 }
 
 export interface RootLayoutState {
@@ -39,7 +38,7 @@ export class RootLayout extends React.Component<RootLayoutProps, RootLayoutState
 	}
 	toggleMenu = () => this.setState(({ showDrawer }) => ({ showDrawer: !showDrawer }));
 	render() {
-		const { props: { classes, children, title }, state: { showDrawer } } = this;
+		const { props: { classes, children }, state: { showDrawer } } = this;
 		return (
 			<div className={classes.root}>
 				<CssBaseline />

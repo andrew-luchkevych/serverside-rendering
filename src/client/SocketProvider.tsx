@@ -54,15 +54,15 @@ export class SocketProvider extends React.PureComponent<SocketProviderProps> {
 		let routine: any;
 		switch (manipulation) {
 			case "create":
-				routine = routines.create || undefined;
+				routine = routines.create || null;
 				break;
 			case "edit":
-				routine = routines.edit || undefined;
+				routine = routines.edit || null;
 				break;
 			case "remove":
-				routine = routines.remove || undefined;
+				routine = routines.remove || null;
 				break;
-			default: routine = undefined;
+			default: routine = null;
 		}
 		if (!routine) {
 			this.reloadDataType(dataType);
