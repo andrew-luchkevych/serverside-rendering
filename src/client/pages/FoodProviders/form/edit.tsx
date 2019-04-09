@@ -11,15 +11,17 @@ import FoodTypeProps from "../../../../shared/types/FoodType";
 export interface EditFoodProviderPageProps {
 	foodProvider?: FoodProviderProps;
 }
-export const EditFoodProviderPage = (props: EditFoodProviderPageProps & RouteComponentProps) => {
-	const { foodProvider: f } = props;
-	const initialValues: any = { ...f };
-	initialValues.foodTypes = initialValues.foodTypes.map((i: FoodTypeProps) => i._id);
+export const EditFoodProviderPage = (props: EditFoodProviderPageProps) => {
+	let initialValues: any = {};
+	if (props.foodProvider) {
+		initialValues = { ...props.foodProvider };
+		initialValues.foodTypes = initialValues.foodTypes.map((i: FoodTypeProps) => i._id);
+	}
 	return (
 		<FormPage title="Edit Food Provider" icon={<RestaurantIcon />} form={<Form initialValues={initialValues} />} />
 	);
 };
-const mapStateToProps = (state: ReduxStoreState, props: RouteComponentProps): EditFoodProviderPageProps => {
+export const mapStateToProps = (state: ReduxStoreState, props: RouteComponentProps): EditFoodProviderPageProps => {
 	const r: EditFoodProviderPageProps = {};
 	const { id } = props.match.params as any;
 	const f = getFoodProviderById(id)(state);
@@ -28,4 +30,4 @@ const mapStateToProps = (state: ReduxStoreState, props: RouteComponentProps): Ed
 	}
 	return r;
 };
-export default withRouter(connect(mapStateToProps)(EditFoodProviderPage));
+export default withRouter(connect(mapStateToProps)(EditFoodProviderPage) as React.ComponentType<RouteComponentProps>);

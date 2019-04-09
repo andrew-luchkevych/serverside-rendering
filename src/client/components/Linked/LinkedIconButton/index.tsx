@@ -8,9 +8,7 @@ export interface LinkedIconButtonProps extends IconButtonProps {
 	replace?: boolean;
 }
 
-const LinkedIconButton = (props: LinkedIconButtonProps) => (
-	<CustomButton {...props} component={Link} />
-);
+const LinkedIconButton = (props: LinkedIconButtonProps) => <CustomButton {...props} component={Link} />;
 
 LinkedIconButton.dispayName = "LinkedIconButton";
 export default LinkedIconButton;

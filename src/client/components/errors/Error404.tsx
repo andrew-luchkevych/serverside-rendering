@@ -1,11 +1,11 @@
 import * as React from "react";
 
-export interface IError404Props {
+export interface Error404Props {
 	staticContext?: any;
 }
 
-export default class Error404 extends React.Component<IError404Props, any> {
-	constructor(props: IError404Props) {
+export default class Error404 extends React.Component<Error404Props> {
+	constructor(props: Error404Props) {
 		super(props);
 		const { staticContext }: any = props;
 		if (staticContext) {

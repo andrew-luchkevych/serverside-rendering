@@ -14,8 +14,8 @@ export interface NavigatorOwnProps {
 export interface NavigatorConnectedProps {
 	logged: boolean;
 }
-const Navigator = (props: NavigatorOwnProps & NavigatorConnectedProps) => {
-	const mapper = (m: NavigatorMenuItem, i: number) => <PrimaryItem {...m} key={i} />;
+const mapper = (m: NavigatorMenuItem, i: number) => <PrimaryItem {...m} key={i} />;
+export const Navigator = (props: NavigatorOwnProps & NavigatorConnectedProps) => {
 	const { logged, drawer } = props;
 	return (
 		<Drawer {...drawer}>

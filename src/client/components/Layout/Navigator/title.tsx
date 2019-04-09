@@ -15,7 +15,7 @@ export const MenuTitle = (props: MenuTitleProps) => {
 	const { classes } = props;
 	return (
 		<ListItem className={classNames(classes.firebase, classes.item, classes.itemCategory)}>
-			Testing. Saga.
+			Food Dicer
 		</ListItem>
 	);
 };

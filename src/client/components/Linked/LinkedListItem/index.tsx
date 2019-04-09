@@ -7,9 +7,7 @@ export interface LinkedListItemProps extends ListItemProps {
 	replace?: boolean;
 }
 
-const LinkedListItem = (props: LinkedListItemProps) => (
-	<ListItem {...props} component={Link} />
-);
+const LinkedListItem = (props: LinkedListItemProps) => <ListItem {...props} component={Link} />;
 
 LinkedListItem.dispayName = "LinkedListItem";
 export default LinkedListItem;

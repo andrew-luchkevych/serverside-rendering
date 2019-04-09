@@ -39,8 +39,6 @@ describe("/client/components/Layout/Header", () => {
 				user={user}
 			/>,
 		);
-		c.dive();
-		expect(c.instance().userMenuAnchor).toBeDefined();
 	});
 
 	it("updateTitle", () => {

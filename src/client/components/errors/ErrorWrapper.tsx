@@ -1,12 +1,9 @@
 import * as React from "react";
+import { ErrorBoundaryState } from "./ErrorBoundary";
 
-export const withError = (WrappedComponent: any) => {
-	return class ErrorBoundary extends React.Component<{}, any> {
-		constructor(props: any) {
-			super(props);
-			this.state = { error: null, errorInfo: null };
-		}
-
+export const withError = (WrappedComponent: React.ComponentType) => {
+	return class ErrorBoundary extends React.Component<typeof WrappedComponent, ErrorBoundaryState> {
+		state = { error: null, errorInfo: null };
 		componentDidCatch(error: any, errorInfo: React.ErrorInfo) {
 			this.setState({
 				error,
@@ -31,3 +28,5 @@ export const withError = (WrappedComponent: any) => {
 		}
 	};
 };
+
+export default withError;

@@ -8,9 +8,7 @@ export interface LinkedButtonProps extends ButtonProps {
 	replace?: boolean;
 }
 
-const LinkedButton = (props: LinkedButtonProps) => (
-	<CustomButton {...props} component={Link} />
-);
+const LinkedButton = (props: LinkedButtonProps) => <CustomButton {...props} component={Link} />;
 
 LinkedButton.dispayName = "LinkedButton";
 export default LinkedButton;
