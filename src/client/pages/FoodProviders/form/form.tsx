@@ -24,7 +24,8 @@ export interface FoodProviderFormStyleProps {
 export interface FoodProviderFormReduxProps {
 	foodTypes: FoodTypesState;
 }
-export class FoodProviderForm extends React.PureComponent<InjectedFormProps & FoodProviderFormReduxProps & WithDispatch & RouteComponentProps> {
+export type FoodProviderFormProps = InjectedFormProps & FoodProviderFormReduxProps & WithDispatch & RouteComponentProps;
+export class FoodProviderForm extends React.PureComponent<FoodProviderFormProps> {
 	componentDidMount() {
 		if (!this.props.foodTypes.loaded) {
 			this.props.dispatch(getFoodTypes.trigger());

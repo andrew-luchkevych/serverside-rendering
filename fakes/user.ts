@@ -1,5 +1,5 @@
 import UserProps from "../src/shared/types/User";
-export const user: UserProps = {
+export const fakeUser: UserProps = {
 	_id: "fakeuser",
 	email: "fake@email.com",
 	profile: {
@@ -7,3 +7,5 @@ export const user: UserProps = {
 		picture: "https://fake.com",
 	},
 };
+
+export default fakeUser;

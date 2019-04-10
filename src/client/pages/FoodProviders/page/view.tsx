@@ -10,7 +10,7 @@ export interface FoodProvidersViewProps {
 	items: Array<FoodProviderProps>;
 }
 
-export default class FoodProvidersView extends React.PureComponent<FoodProvidersViewProps> {
+export class FoodProvidersView extends React.PureComponent<FoodProvidersViewProps> {
 	mapper = (f: FoodProviderProps) => <FoodProviderListItem {...f} key={f._id} />;
 	render() {
 		const { items, loading, loaded } = this.props;
@@ -32,3 +32,5 @@ export default class FoodProvidersView extends React.PureComponent<FoodProviders
 		);
 	}
 }
+
+export default FoodProvidersView;

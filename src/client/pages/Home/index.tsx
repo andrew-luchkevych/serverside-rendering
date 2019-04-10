@@ -12,5 +12,5 @@ export const Home = (props: HomeConnectedProps) => {
 		? <PrivateHome />
 		: <PublicHome />;
 };
-const mapStateToProps = (state: ReduxStoreState) => ({ logged: isUserLogged(state) });
-export default connect<HomeConnectedProps>(mapStateToProps)(Home) as React.ComponentType<{}>;
+export const mapStateToProps = (state: ReduxStoreState): HomeConnectedProps => ({ logged: isUserLogged(state) });
+export default connect(mapStateToProps)(Home) as React.ComponentType;

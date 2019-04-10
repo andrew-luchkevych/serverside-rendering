@@ -9,7 +9,10 @@ import { FormTextField } from "../../../components/Form/TextField";
 import SubmitButton from "../../../components/Form/SubmitButton";
 import validator from "../../../services/validator";
 import { CreateFoodTypeApiProps, EditFoodTypeApiProps } from "../../../../shared/redux/foodTypes/api";
-export class FoodType extends React.PureComponent<InjectedFormProps & WithDispatch & RouteComponentProps> {
+
+export type FoodTypeFormProps = InjectedFormProps & WithDispatch & RouteComponentProps;
+
+export class FoodTypeForm extends React.PureComponent<FoodTypeFormProps> {
 	onSubmit = (data: EditFoodTypeApiProps | CreateFoodTypeApiProps) => {
 		const { props: { initialValues } } = this;
 		const init = initialValues as any;
@@ -49,8 +52,6 @@ export class FoodType extends React.PureComponent<InjectedFormProps & WithDispat
 	}
 }
 
-const ConnectedFoodType = connect(null)(FoodType);
-
 export default reduxForm({
 	form: "foodType",
-})(withRouter(ConnectedFoodType));
+})(withRouter(connect(null)(FoodTypeForm)));

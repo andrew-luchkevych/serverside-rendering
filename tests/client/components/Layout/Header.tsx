@@ -1,7 +1,7 @@
 import * as React from "react";
 import { shallow, ShallowWrapper } from "enzyme";
 import sinon from "sinon";
-import { user } from "../../../../fakes/user";
+import user from "../../../../fakes/user";
 import { Header, HeaderProps, HeaderState } from "../../../../src/client/components/Layout/Header";
 describe("/client/components/Layout/Header", () => {
 	let c: ShallowWrapper<HeaderProps, HeaderState, Header>;

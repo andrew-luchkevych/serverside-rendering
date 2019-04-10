@@ -15,12 +15,15 @@ import LinkedIconButton from "../../../components/Linked/LinkedIconButton/index"
 import ConfirmationDialog, { ConfirmationDialogControllerProps } from "../../../components/Dialog";
 import routines from "../../../../shared/redux/foodTypes/routines";
 
-export class FoodTypeListItem extends React.PureComponent<FoodTypeProps & RouteComponentProps & WithDispatch> {
-	deleteConfirmationDialogController: ConfirmationDialogControllerProps = {
+export type FoodTypeListItemProps = FoodTypeProps & WithDispatch;
+
+export class FoodTypeListItem extends React.PureComponent<FoodTypeListItemProps> {
+	removeConfirmationDialogController: ConfirmationDialogControllerProps = {
 		open: () => null,
 		close: () => null,
 	};
-	delete = () => this.props.dispatch(routines.remove.trigger({ data: { _id: this.props._id } }));
+	onRemoveClick = () => this.removeConfirmationDialogController.open();
+	remove = () => this.props.dispatch(routines.remove.trigger({ data: { _id: this.props._id } }));
 	render() {
 		const { _id, picture, name } = this.props;
 		return (
@@ -34,20 +37,20 @@ export class FoodTypeListItem extends React.PureComponent<FoodTypeProps & RouteC
 						<LinkedIconButton aria-label="Edit" to={`/food-types/${_id}`}>
 							<EditIcon />
 						</LinkedIconButton>
-						<IconButton aria-label="Delete" onClick={() => this.deleteConfirmationDialogController.open()}>
+						<IconButton aria-label="Delete" onClick={this.onRemoveClick}>
 							<DeleteIcon />
 						</IconButton>
 					</ListItemSecondaryAction>
 				</ListItem>
 				<ConfirmationDialog
-					controller={this.deleteConfirmationDialogController}
+					controller={this.removeConfirmationDialogController}
 					title={`Please confirm removing ${name}`}
 					description={`Are you sure you want remove ${name}? You can not undo this action.`}
-					onAgree={this.delete}
+					onAgree={this.remove}
 				/>
 			</React.Fragment>
 		);
 	}
 }
 
-export default connect(null)(withRouter(FoodTypeListItem)) as React.ComponentType<FoodTypeProps>;
+export default connect(null)(FoodTypeListItem) as React.ComponentType<FoodTypeProps>;

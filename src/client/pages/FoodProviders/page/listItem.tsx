@@ -22,14 +22,15 @@ export interface FoodProviderListItemStyleProps {
 		avatar: string;
 	};
 }
-export class FoodProviderListItem extends React.PureComponent<
-	FoodProviderProps & RouteComponentProps & WithDispatch & FoodProviderListItemStyleProps
-	> {
-	deleteConfirmationDialogController: ConfirmationDialogControllerProps = {
+
+export type FoodProviderListItemProps = FoodProviderProps & WithDispatch & FoodProviderListItemStyleProps;
+export class FoodProviderListItem extends React.PureComponent<FoodProviderListItemProps> {
+	removeConfirmationDialogController: ConfirmationDialogControllerProps = {
 		open: () => null,
 		close: () => null,
 	};
-	delete = () => this.props.dispatch(routines.remove.trigger({ data: { _id: this.props._id } }));
+	onRemoveClick = () => this.removeConfirmationDialogController.open();
+	remove = () => this.props.dispatch(routines.remove.trigger({ data: { _id: this.props._id } }));
 	render() {
 		const { _id, picture, name, foodTypes, minOrderCost, description, classes } = this.props;
 		return (
@@ -55,16 +56,16 @@ export class FoodProviderListItem extends React.PureComponent<
 						<LinkedIconButton aria-label="Edit" to={`/food-providers/${_id}`}>
 							<EditIcon />
 						</LinkedIconButton>
-						<IconButton aria-label="Delete" onClick={() => this.deleteConfirmationDialogController.open()}>
+						<IconButton aria-label="Remove" onClick={this.onRemoveClick}>
 							<DeleteIcon />
 						</IconButton>
 					</ListItemSecondaryAction>
 				</ListItem>
 				<ConfirmationDialog
-					controller={this.deleteConfirmationDialogController}
+					controller={this.removeConfirmationDialogController}
 					title={`Please confirm removing ${name}`}
 					description={`Are you sure you want remove ${name}? You can not undo this action.`}
-					onAgree={this.delete}
+					onAgree={this.remove}
 				/>
 			</React.Fragment>
 		);
@@ -72,9 +73,7 @@ export class FoodProviderListItem extends React.PureComponent<
 }
 
 export default connect(null)(
-	withRouter(
-		withStyles(listItemStyles)(
-			FoodProviderListItem,
-		),
+	withStyles(listItemStyles)(
+		FoodProviderListItem,
 	),
 ) as React.ComponentType<FoodProviderProps>;

@@ -21,7 +21,6 @@ const configureStore = (preloadedState?: any, isBackEnd?: boolean): ReduxStore =
 			store.replaceReducer(nextReducer);
 		});
 	}
-	console.log({ state: store.getState() });
 	return store;
 };
 

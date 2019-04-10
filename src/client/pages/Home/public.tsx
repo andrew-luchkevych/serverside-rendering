@@ -5,7 +5,7 @@ import Padder from "../../components/Layout/Padder/index";
 import { Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
-export const Home = () => (
+export const PublicHome = () => (
 	<PaperWrapper>
 		<Helmet>
 			<title>Home</title>
@@ -23,4 +23,4 @@ export const Home = () => (
 	</PaperWrapper>
 );
 
-export default Home;
+export default PublicHome;

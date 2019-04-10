@@ -7,19 +7,21 @@ import Form from "./form";
 import { ReduxStoreState } from "../../../../shared/types/store/RootReducer";
 import { getFoodTypeById } from "../../../../shared/redux/foodTypes/selectors";
 import FoodTypeProps from "../../../../shared/types/FoodType";
-export interface EditFoodTypePageProps {
+export interface EditFoodTypePageConnectedProps {
 	foodType?: FoodTypeProps;
 }
-export class EditFoodTypePage extends React.PureComponent<EditFoodTypePageProps & RouteComponentProps> {
+
+export type EditFoodTypePageProps = EditFoodTypePageConnectedProps;
+
+export class EditFoodTypePage extends React.PureComponent<EditFoodTypePageConnectedProps> {
 	render() {
-		console.log("render");
 		return (
 			<FormPage title="Edit Food Type" icon={<FastfoodIcon />} form={<Form initialValues={this.props.foodType} />} />
 		);
 	}
 }
-const mapStateToProps = (state: ReduxStoreState, props: RouteComponentProps): EditFoodTypePageProps => {
-	const r: EditFoodTypePageProps = {};
+export const mapStateToProps = (state: ReduxStoreState, props: RouteComponentProps): EditFoodTypePageConnectedProps => {
+	const r: EditFoodTypePageConnectedProps = {};
 	const { id } = props.match.params as any;
 	const f = getFoodTypeById(id)(state);
 	if (id && f) {
@@ -27,4 +29,4 @@ const mapStateToProps = (state: ReduxStoreState, props: RouteComponentProps): Ed
 	}
 	return r;
 };
-export default withRouter(connect(mapStateToProps)(EditFoodTypePage));
+export default withRouter(connect(mapStateToProps)(EditFoodTypePage) as React.ComponentType<RouteComponentProps>);

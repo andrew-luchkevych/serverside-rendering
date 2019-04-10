@@ -27,7 +27,9 @@ export interface ChatState {
 	messageForEdit?: MessageProps;
 	idForRemove?: string;
 }
-export class Chat extends React.PureComponent<ChatContainerStylesProps & WithDispatch, ChatState> {
+
+export type ChatProps = ChatContainerStylesProps & WithDispatch;
+export class Chat extends React.PureComponent<ChatProps, ChatState> {
 	state = {
 		messageForEdit: undefined,
 		idForRemove: undefined,

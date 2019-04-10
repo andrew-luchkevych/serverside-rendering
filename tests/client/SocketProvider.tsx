@@ -2,7 +2,7 @@ import * as React from "react";
 import sinon from "sinon";
 import { shallow, ShallowWrapper } from "enzyme";
 import { SocketProvider, SocketProviderProps } from "../../src/client/SocketProvider";
-import { user } from "../../fakes/user";
+import user from "../../fakes/user";
 import DataItemMessage from "../../src/shared/types/sockets/messages/ItemMessage";
 import SocketMessageTypes from "../../src/shared/types/sockets/MessageTypes";
 import { pageDataTypes } from "../../src/client/App";
