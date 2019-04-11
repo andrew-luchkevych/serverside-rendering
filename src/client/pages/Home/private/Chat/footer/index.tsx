@@ -44,16 +44,21 @@ export class MessagesFooter extends React.PureComponent<MessagesFooterProps, Mes
 		this.setState({ text: e.target.value });
 	}
 	onSubmit = () => {
-		const { text } = this.state;
+		const { text: t } = this.state;
+		if (!t) {
+			return;
+		}
+		const text = t.replace(/\s+/g, " ").trim();
 		if (!text) {
 			return;
 		}
-		const { message } = this.props;
+		this.setState({ submitting: true });
+		const { message, onEditComplete } = this.props;
 		const isEdit = !!this.props.message;
 		const controller = createSubmisisonPromise();
 		controller.submission
 			.then(() => {
-				if (isEdit) {
+				if (isEdit && onEditComplete) {
 					this.props.onEditComplete();
 				}
 				this.setState({ text: "", submitting: false });

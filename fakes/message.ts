@@ -7,6 +7,6 @@ export const fakeMessage: MessageProps = {
 	text: "message",
 	createdAt: (new Date()).toISOString(),
 	updatedAt: (new Date()).toISOString(),
-}
+};
 
 export default fakeMessage;

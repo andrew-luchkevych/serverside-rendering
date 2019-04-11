@@ -56,7 +56,6 @@ export class MessagesList extends React.PureComponent<MessagesListProps> {
 			const target = this.wrapperRef.current;
 			const currentScroll = target.scrollTop;
 			const scrollHeight = target.scrollHeight;
-			console.log({ scrollHeight, currentScroll, diff: scrollHeight - currentScroll });
 			if (scrollHeight - currentScroll < 500) {
 				return true;
 			}

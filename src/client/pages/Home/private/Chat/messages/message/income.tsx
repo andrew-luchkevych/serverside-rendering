@@ -5,7 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import MessageProps from "../../../../../../../shared/types/Message";
 import { messageStyles } from "./styles";
 
-export interface IncomeMessageItemProps {
+export interface IncomeMessageItemOwnProps {
 	message: MessageProps;
 }
 
@@ -18,7 +18,8 @@ export interface IncomeMessageItemStyleProps {
 		editedText: string;
 	};
 }
-export class IncomeMessageItem extends React.PureComponent<IncomeMessageItemProps & IncomeMessageItemStyleProps> {
+export type IncomeMessageItemProps = IncomeMessageItemOwnProps & IncomeMessageItemStyleProps;
+export class IncomeMessageItem extends React.PureComponent<IncomeMessageItemProps> {
 	render() {
 		const { classes: c, message: m } = this.props;
 		const { author: { profile: p } } = m;
