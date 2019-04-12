@@ -25,7 +25,9 @@ export interface DailyStatsConnectedProps {
 	orderRollStats: OrderRollStatsState;
 	forceReload: boolean;
 }
-export class DailyStats extends React.PureComponent<DailyStatsStyleProps & DailyStatsConnectedProps & WithDispatch> {
+
+export type DailyStatsProps = DailyStatsStyleProps & DailyStatsConnectedProps & WithDispatch;
+export class DailyStats extends React.PureComponent<DailyStatsProps> {
 	componentDidMount() {
 		pageDataTypes.add("orderRollStats");
 		const { forceReload, orderRollStats: { loaded }, dispatch } = this.props;
@@ -41,25 +43,26 @@ export class DailyStats extends React.PureComponent<DailyStatsStyleProps & Daily
 					{
 						!loaded || processing
 							? <Loader />
-							: (
-								<React.Fragment>
-									<Typography variant="h6" color="textSecondary">
-										Daily Stats
+							: data
+								? (
+									<React.Fragment>
+										<Typography variant="h6" color="textSecondary">
+											Daily Stats
 									</Typography>
-									<Typography>
-										Participants: {" "}
-										<b>{data.participants}</b>
-									</Typography>
-									<Typography>
-										Rolled minimum: {" "}
-										<b>{data.min || "-"}</b>
-									</Typography>
-									<Typography>
-										Rolled maximum: {" "}
-										<b>{data.max || "-"}</b>
-									</Typography>
-								</React.Fragment>
-							)
+										<Typography>
+											Participants: {" "}
+											<b>{data.participants}</b>
+										</Typography>
+										<Typography>
+											Rolled minimum: {" "}
+											<b>{data.min || "-"}</b>
+										</Typography>
+										<Typography>
+											Rolled maximum: {" "}
+											<b>{data.max || "-"}</b>
+										</Typography>
+									</React.Fragment>
+								) : null
 					}
 				</CardContent>
 			</Card>
@@ -70,4 +73,4 @@ const mapStateToProps = (state: ReduxStoreState): DailyStatsConnectedProps => ({
 	orderRollStats: getOrderRollStatsState(state),
 	forceReload: shouldDataBeReloaded("orderRollStats")(state),
 });
-export default connect(mapStateToProps)(withStyles(layout)(DailyStats)) as React.ComponentType<{}>;
+export default connect(mapStateToProps)(withStyles(layout)(DailyStats)) as React.ComponentType;

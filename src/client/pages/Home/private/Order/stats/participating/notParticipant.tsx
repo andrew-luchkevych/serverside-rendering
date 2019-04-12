@@ -19,7 +19,8 @@ export interface NotParticipantStyleProps {
 export interface NotParticipantConnectedProps {
 	processing: boolean;
 }
-export class NotParticipant extends React.PureComponent<NotParticipantStyleProps & NotParticipantConnectedProps & WithDispatch> {
+export type NotParticipantProps = NotParticipantStyleProps & NotParticipantConnectedProps & WithDispatch;
+export class NotParticipant extends React.PureComponent<NotParticipantProps> {
 	participate = () => this.props.dispatch(routines.create.trigger());
 	render() {
 		const { classes, processing } = this.props;

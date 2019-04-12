@@ -24,10 +24,11 @@ export interface ParticipatingStatsStyleProps {
 }
 export interface ParticipatingStatsConnectedProps {
 	loaded: boolean;
-	stats: OrderRollProps;
+	stats?: OrderRollProps;
 	forceReload: boolean;
 }
-export class ParticipatingStats extends React.PureComponent<ParticipatingStatsStyleProps & ParticipatingStatsConnectedProps & WithDispatch> {
+export type ParticipatingStatsProps = ParticipatingStatsStyleProps & ParticipatingStatsConnectedProps & WithDispatch;
+export class ParticipatingStats extends React.PureComponent<ParticipatingStatsProps> {
 	componentDidMount() {
 		pageDataTypes.add("orderRollStats");
 		const { loaded, forceReload, dispatch } = this.props;

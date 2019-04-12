@@ -24,7 +24,9 @@ export interface OrderConnectedProps {
 	loaded: boolean;
 	forceReload: boolean;
 }
-export class Order extends React.PureComponent<OrderStyleProps & OrderConnectedProps & WithDispatch> {
+
+export type OrderProps = OrderStyleProps & OrderConnectedProps & WithDispatch;
+export class Order extends React.PureComponent<OrderProps> {
 	componentDidMount() {
 		pageDataTypes.add("order");
 		const { loaded, forceReload, dispatch } = this.props;
@@ -54,8 +56,8 @@ export class Order extends React.PureComponent<OrderStyleProps & OrderConnectedP
 	}
 }
 
-const mapStateToProps = (state: ReduxStoreState): OrderConnectedProps => ({
+export const mapStateToProps = (state: ReduxStoreState): OrderConnectedProps => ({
 	loaded: isOrderLoaded(state),
 	forceReload: shouldDataBeReloaded("order")(state),
 });
-export default connect<OrderConnectedProps, WithDispatch>(mapStateToProps)(withStyles(layout)(Order)) as React.ComponentType<{}>;
+export default connect<OrderConnectedProps, WithDispatch>(mapStateToProps)(withStyles(layout)(Order)) as React.ComponentType;

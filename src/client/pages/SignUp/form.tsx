@@ -19,7 +19,7 @@ export interface ConnectedFormFields {
 		password: string;
 	};
 }
-
+export type SignUpFormProps = InjectedFormProps & WithDispatch & RouteComponentProps & ConnectedFormFields;
 export class SignUpForm extends React.PureComponent<InjectedFormProps & WithDispatch & RouteComponentProps & ConnectedFormFields> {
 	onSubmit = (data: ApiSignUpProps) => {
 		const { submission, success, failure } = createSubmisisonPromise();
@@ -31,7 +31,6 @@ export class SignUpForm extends React.PureComponent<InjectedFormProps & WithDisp
 	}
 	render() {
 		const { props: { handleSubmit, formValues } } = this;
-		console.log({ formValues });
 		return (
 			<form onSubmit={handleSubmit(this.onSubmit)}>
 				<Field
@@ -92,7 +91,8 @@ export class SignUpForm extends React.PureComponent<InjectedFormProps & WithDisp
 const ReduxForm = reduxForm({
 	form: "signup",
 })(withRouter(SignUpForm));
-const mapStateToProps = (state: ReduxStoreState): ConnectedFormFields => ({
+
+export const mapStateToProps = (state: ReduxStoreState): ConnectedFormFields => ({
 	formValues: formValuesSelector(state, "signup", ["password"]),
 });
 const ConnectedSignUpForm = connect(mapStateToProps)(ReduxForm);

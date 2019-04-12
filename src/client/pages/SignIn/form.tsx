@@ -11,6 +11,7 @@ import { login } from "../../../shared/redux/user/routines";
 import { FormTextField } from "../../components/Form/TextField";
 import SubmitButton from "../../components/Form/SubmitButton";
 import validator from "../../services/validator";
+export type LoginFormProps = InjectedFormProps & WithDispatch & RouteComponentProps;
 export class LoginForm extends React.PureComponent<InjectedFormProps & WithDispatch & RouteComponentProps> {
 	onSubmit = (data: ApiLoginProps) => {
 		const { submission, success, failure } = createSubmisisonPromise();
@@ -59,9 +60,10 @@ export class LoginForm extends React.PureComponent<InjectedFormProps & WithDispa
 		);
 	}
 }
-
-const ConnectedLoginForm = connect(null)(LoginForm);
-
 export default reduxForm({
 	form: "login",
-})(withRouter(ConnectedLoginForm));
+})(
+	withRouter(
+		connect(null)(LoginForm),
+	),
+);

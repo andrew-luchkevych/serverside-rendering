@@ -15,6 +15,7 @@ import { getUserId } from "../../../../../../../shared/redux/user/selectors";
 import { getOrderRollStatsState } from "../../../../../../../shared/redux/orderRollStats/selectors";
 import { OrderRollStatsState } from "../../../../../../../shared/redux/orderRollStats";
 import { shouldDataBeReloaded } from "../../../../../../../shared/redux/forceReloadData/selectors";
+import orderRollStatsRoutines from "../../../../../../../shared/redux/orderRollStats/routines";
 import { pageDataTypes } from "../../../../../../App";
 import { isParticipant } from "../../../../../../../shared/redux/orderRoll/selectors";
 export interface FoodProviderVoutingReduxProps {
@@ -31,8 +32,8 @@ export interface FoodProviderVoutingReduxProps {
 	orderVotes: OrderFoodProviderVoteState;
 	forceReloadOrderVotes: boolean;
 }
-
-export class FoodProviderVouting extends React.PureComponent<FoodProviderVoutingReduxProps & WithDispatch> {
+export type FoodProviderVoutingProps = FoodProviderVoutingReduxProps & WithDispatch;
+export class FoodProviderVouting extends React.PureComponent<FoodProviderVoutingProps> {
 	componentDidMount() {
 		const {
 			orderRollStats,
@@ -46,7 +47,7 @@ export class FoodProviderVouting extends React.PureComponent<FoodProviderVouting
 		pageDataTypes.add("foodProviders");
 		pageDataTypes.add("orderFoodProviderVotes");
 		if (!orderRollStats.loaded || forceReloadOrderRollStats) {
-			this.props.dispatch(foodProviderRoutines.get.trigger());
+			this.props.dispatch(orderRollStatsRoutines.get.trigger());
 		}
 		if (!foodProviders.loaded || forceReloadFoodProviders) {
 			this.props.dispatch(foodProviderRoutines.get.trigger());

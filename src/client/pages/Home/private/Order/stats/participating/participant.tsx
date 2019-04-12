@@ -22,8 +22,8 @@ export interface ParticipantConnectedProps {
 	processing: boolean;
 	data?: OrderRollProps;
 }
-
-export class Participant extends React.PureComponent<ParticipantStyleProps & ParticipantConnectedProps & WithDispatch> {
+export type ParticipantProps = ParticipantStyleProps & ParticipantConnectedProps & WithDispatch;
+export class Participant extends React.PureComponent<ParticipantProps> {
 	cancelParticipation = () => this.props.dispatch(routines.remove.trigger());
 	render() {
 		const { classes, data, processing } = this.props;

@@ -1,18 +1,16 @@
 import * as React from "react";
 import Loadable from "react-loadable";
 import Loader from "../components/Loader";
-const Loading = (props: any) => {
-	let comp: any = null;
+export const Loading = (props: any) => {
 	if (props.error) {
-		comp = <div>Error!</div>;
+		return <div>Error!</div>;
 	} else if (props.pastDelay) {
-		comp = <Loader />;
+		return <Loader />;
 	}
-
-	return comp;
+	return null;
 };
 
-const LoadableComponent = (importFunction: () => Promise<any>) => Loadable({
+export const LoadableComponent = (importFunction: () => Promise<any>) => Loadable({
 	loading: Loading,
 	loader: importFunction,
 	delay: 300,
